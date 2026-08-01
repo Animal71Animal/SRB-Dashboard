@@ -1,0 +1,109 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { modules } from "./data/modules";
+
+const CARD = {
+  background: "var(--card)",
+  border: "1px solid var(--border)",
+  borderRadius: 12,
+  padding: "20px 24px",
+};
+
+function KpiCard({ label, value, icon }: { label: string; value: string | number; icon: string }) {
+  return (
+    <div style={{ ...CARD, display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ fontSize: "2rem" }}>{icon}</div>
+      <div>
+        <div style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--accent2)", lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: 4 }}>{label}</div>
+      </div>
+    </div>
+  );
+}
+
+function ModuleCard({ href, icon, title, desc }: { href: string; icon: string; title: string; desc: string }) {
+  return (
+    <Link href={href} style={{ textDecoration: "none" }}>
+      <div style={{
+        ...CARD, cursor: "pointer", transition: "border-color 0.15s, background 0.15s",
+        minHeight: 100,
+      }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--accent)";
+          (e.currentTarget as HTMLDivElement).style.background = "rgba(201,0,43,0.07)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)";
+          (e.currentTarget as HTMLDivElement).style.background = "var(--card)";
+        }}>
+        <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>{icon}</div>
+        <div style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: 4 }}>{title}</div>
+        <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>{desc}</div>
+      </div>
+    </Link>
+  );
+}
+
+export default function OverviewPage() {
+  const [events, setEvents] = useState<any[]>([]);
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [influencers, setInfluencers] = useState<any[]>([]);
+  const [socialPosts, setSocialPosts] = useState<any[]>([]);
+
+  useEffect(() => {
+    fetch("/api/events").then((r) => r.json()).then((d) => {
+      // Flatten { oneOffs, series } into a single date list for KPIs
+      const oneOffs = (d?.oneOffs ?? []).map((e: any) => ({ ...e, _kind: "oneoff" }));
+      const seriesDates = (d?.series ?? []).flatMap((s: any) => (s.dates ?? []).map((date: string) => ({ id: s.id, date, name: s.name, theme: s.theme, status: s.status, _kind: "series" })));
+      setEvents([...oneOffs, ...seriesDates]);
+    }).catch(() => {});
+    fetch("/api/campaigns").then((r) => r.json()).then(setCampaigns).catch(() => {});
+    fetch("/api/influencers").then((r) => r.json()).then(setInfluencers).catch(() => {});
+    fetch("/api/social-calendar").then((r) => r.json()).then(setSocialPosts).catch(() => {});
+  }, []);
+
+  const today = new Date().toISOString().split("T")[0];
+  const nextWeek = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];
+  const thisWeekEvents = events.filter((e) => e.date >= today && e.date <= nextWeek).length;
+  const activeCampaigns = campaigns.filter((c) => c.status === "Active").length;
+  const activeInfluencers = influencers.filter((i) => i.partnershipStatus === "Active").length;
+  const scheduledPosts = socialPosts.filter((p) => p.status === "Scheduled").length;
+
+  const now = new Date();
+  const dateStr = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  return (
+    <div>
+      {/* Header */}
+      <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>
+        <img src="/images/torch-logo.png" alt="The Torch" style={{ width: 56, height: 56, objectFit: "contain" }} />
+        <div>
+          <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--accent)", margin: 0 }}>
+            The Torch Marketing Hub
+          </h1>
+          <div style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>{dateStr}</div>
+        </div>
+      </div>
+
+      {/* KPI Cards */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+        <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
+        <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
+        <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
+        <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
+      </div>
+
+      {/* Module Grid */}
+      <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
+        Quick Access
+      </h2>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+        {modules.map((m) => (
+          <ModuleCard key={m.href} href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
+        ))}
+      </div>
+    </div>
+  );
+}

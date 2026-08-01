@@ -1,0 +1,66 @@
+[
+  {
+    "id": "asset-002",
+    "name": "Torch Radio Logo",
+    "type": "Logo",
+    "dateCreated": "2026-05-15",
+    "description": "Official Torch Radio logo. Transparent PNG, 1080x1080.",
+    "link": "/images/torch-radio-logo.png"
+  },
+  {
+    "id": "asset-003",
+    "name": "Level Up Wednesday Promo",
+    "type": "Flyer",
+    "dateCreated": "2026-05-20",
+    "description": "Weekly Wednesday flyer template. Editable PSD.",
+    "link": "/images/party-flyers/level-up.jpg"
+  },
+  {
+    "id": "asset-004",
+    "name": "Industry Night Flyer",
+    "type": "Flyer",
+    "dateCreated": "2026-05-11",
+    "description": "Sunday Industry Night / Clocked Out Sundays promotional flyer.",
+    "link": "/images/party-flyers/clocked-out-sundays.jpg"
+  },
+  {
+    "id": "asset-006",
+    "name": "Lingerie Lounge Flyer",
+    "type": "Flyer",
+    "dateCreated": "2026-05-11",
+    "description": "Tuesday Lingerie Lounge promotional flyer.",
+    "link": "/images/party-flyers/lingerie-lounge.jpg"
+  },
+  {
+    "id": "asset-007",
+    "name": "Chicks 'n' Kicks Thursday Flyer",
+    "type": "Flyer",
+    "dateCreated": "2026-05-11",
+    "description": "Thursday Chicks 'n' Kicks sneaker culture night promotional flyer.",
+    "link": "/images/party-flyers/chicks-n-kicks.jpg"
+  },
+  {
+    "id": "asset-008",
+    "name": "Femme Fatale Fridays Flyer",
+    "type": "Flyer",
+    "dateCreated": "2026-05-11",
+    "description": "Friday Femme Fatale Fridays promotional flyer. High-end glamour theme.",
+    "link": "/images/party-flyers/femme-fatale-fridays.jpg"
+  },
+  {
+    "id": "asset-009",
+    "name": "AFTER DARK Flyer",
+    "type": "Flyer",
+    "dateCreated": "2026-05-11",
+    "description": "Saturday AFTER DARK presented by Torch Radio promotional flyer.",
+    "link": "/images/party-flyers/after-dark.jpg"
+  },
+  {
+    "id": "asset-010",
+    "name": "Featured Entertainer Flyer Page",
+    "type": "Web",
+    "dateCreated": "2026-06-01",
+    "description": "Dynamic featured entertainer flyer. Generated per weekend via featured-entertainer.vercel.app.",
+    "link": "https://featured-entertainer.vercel.app/flyer.html"
+  }
+]

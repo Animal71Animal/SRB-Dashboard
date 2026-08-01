@@ -1,0 +1,29 @@
+[
+  {
+    "id": "sc-002",
+    "platform": "TikTok",
+    "postType": "Video",
+    "captionPreview": "Level Up Wednesday — get in free before 10! 🎉 #BoiseNightlife #TheTorchBoise",
+    "scheduledDate": "2026-06-11",
+    "scheduledTime": "17:00",
+    "status": "Draft"
+  },
+  {
+    "id": "sc-003",
+    "platform": "Facebook",
+    "postType": "Post",
+    "captionPreview": "This Saturday: AFTER DARK presented by Torch Radio. Live DJ sets all night.",
+    "scheduledDate": "2026-06-12",
+    "scheduledTime": "12:00",
+    "status": "Scheduled"
+  },
+  {
+    "id": "sc-004",
+    "platform": "Instagram",
+    "postType": "Story",
+    "captionPreview": "Chicks 'n' Kicks Thursday is TONIGHT. Ladies free before 11! 👠",
+    "scheduledDate": "2026-06-12",
+    "scheduledTime": "16:00",
+    "status": "Draft"
+  }
+]
