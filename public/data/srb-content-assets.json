@@ -1,13 +1,5 @@
 [
   {
-    "id": "asset-009",
-    "name": "AFTER DARK Flyer",
-    "type": "Flyer",
-    "dateCreated": "2026-05-11",
-    "description": "Saturday AFTER DARK presented by Torch Radio promotional flyer.",
-    "link": "/images/party-flyers/after-dark.jpg"
-  },
-  {
     "id": "asset-010",
     "name": "Featured Entertainer Flyer Page",
     "type": "Web",
