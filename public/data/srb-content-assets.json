@@ -1,13 +1,5 @@
 [
   {
-    "id": "asset-002",
-    "name": "Torch Radio Logo",
-    "type": "Logo",
-    "dateCreated": "2026-05-15",
-    "description": "Official Torch Radio logo. Transparent PNG, 1080x1080.",
-    "link": "/images/torch-radio-logo.png"
-  },
-  {
     "id": "asset-003",
     "name": "Level Up Wednesday Promo",
     "type": "Flyer",
