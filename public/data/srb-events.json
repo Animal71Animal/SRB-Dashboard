@@ -307,22 +307,8 @@
       "games": "Showtime Showcase at midnight. Featured Entertainer performs a carefully curated, high-production set. After 2am — Late Night kicks in: guest DJs, full kitchen with Breakfast Specials.",
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/after-dark.jpg",
-      "dates": [
-        "2026-10-03",
-        "2026-10-10",
-        "2026-10-17",
-        "2026-10-24",
-        "2026-10-31",
-        "2026-11-07",
-        "2026-11-14",
-        "2026-11-21",
-        "2026-11-28",
-        "2026-12-05",
-        "2026-12-12",
-        "2026-12-19",
-        "2026-12-26"
-      ],
-      "startDate": ""
+      "dates": [],
+      "startDate": "2026-10-03"
     },
     {
       "id": "ser-featured-entertainer",
