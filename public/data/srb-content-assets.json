@@ -1,13 +1,5 @@
 [
   {
-    "id": "asset-007",
-    "name": "Chicks 'n' Kicks Thursday Flyer",
-    "type": "Flyer",
-    "dateCreated": "2026-05-11",
-    "description": "Thursday Chicks 'n' Kicks sneaker culture night promotional flyer.",
-    "link": "/images/party-flyers/chicks-n-kicks.jpg"
-  },
-  {
     "id": "asset-008",
     "name": "Femme Fatale Fridays Flyer",
     "type": "Flyer",
