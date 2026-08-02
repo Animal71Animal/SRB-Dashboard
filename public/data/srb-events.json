@@ -173,11 +173,11 @@
     },
     {
       "id": "ser-001",
-      "name": "Level Up Wednesdays",
+      "name": "Level Up ",
       "theme": "College Night x Gaming x Cosplay",
       "status": "Planned",
       "icon": "🎉",
-      "day": "Wednesday",
+      "day": "",
       "who": "College crowd + — 21-40",
       "format": "High-energy, exciting atmosphere.  Mario Kart periodically on the big screen --- entertainer vs customer",
       "drinks": "The Keg Stand (beer tower special), Jungle Juice (fruit punch + vodka), Body Shots (tequila + lime + salt), The Funnel (shared cocktail pitcher), Beach Bum (malibu + pineapple), Red Solo Cup (mixed drink in a giant cup), The Dorm Room (cheap beer bucket special)",
@@ -197,7 +197,7 @@
         "2026-10-21",
         "2026-10-28"
       ],
-      "startDate": "2026-08-19"
+      "startDate": ""
     },
     {
       "id": "ser-002",
