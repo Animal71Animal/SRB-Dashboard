@@ -291,7 +291,7 @@
       "id": "ser-featured-entertainer-showcase",
       "name": "Featured Entertainer",
       "theme": "One entertainer per weekend · Fully produced showcase",
-      "status": "Confirmed",
+      "status": "Planned",
       "icon": "🎭",
       "day": "Friday/Saturday",
       "who": "All guests",
@@ -300,21 +300,8 @@
       "games": "",
       "costuming": "",
       "flyerImage": "",
-      "dates": [
-        "2026-07-24",
-        "2026-07-25",
-        "2026-08-21",
-        "2026-08-22",
-        "2026-09-18",
-        "2026-09-19",
-        "2026-10-23",
-        "2026-10-24",
-        "2026-11-20",
-        "2026-11-21",
-        "2026-12-18",
-        "2026-12-19"
-      ],
-      "startDate": "2026-07-24",
+      "dates": [],
+      "startDate": "2026-10-31",
       "shows": [
         {
           "dates": [
