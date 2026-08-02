@@ -1,10 +1,1 @@
-[
-  {
-    "id": "asset-010",
-    "name": "Featured Entertainer Flyer Page",
-    "type": "Web",
-    "dateCreated": "2026-06-01",
-    "description": "Dynamic featured entertainer flyer. Generated per weekend via featured-entertainer.vercel.app.",
-    "link": "https://featured-entertainer.vercel.app/flyer.html"
-  }
-]
+[]
