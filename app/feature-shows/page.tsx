@@ -10,9 +10,7 @@ interface Show {
   height?: number;
 }
 
-const SHOWS: Show[] = [
-  { key: "amityville-horrors", label: "Amityville Horrors", icon: "👻", url: "https://amityvillehorrors.abacusai.app", height: 800 },
-];
+const SHOWS: Show[] = [];
 
 export default function FeatureShowsPage() {
   const [activeShow, setActiveShow] = useState<string>(SHOWS[0]?.key ?? "");
