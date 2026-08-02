@@ -1,13 +1,5 @@
 [
   {
-    "id": "asset-008",
-    "name": "Femme Fatale Fridays Flyer",
-    "type": "Flyer",
-    "dateCreated": "2026-05-11",
-    "description": "Friday Femme Fatale Fridays promotional flyer. High-end glamour theme.",
-    "link": "/images/party-flyers/femme-fatale-fridays.jpg"
-  },
-  {
     "id": "asset-009",
     "name": "AFTER DARK Flyer",
     "type": "Flyer",
