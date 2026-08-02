@@ -1,14 +1,5 @@
 [
   {
-    "id": "sc-003",
-    "platform": "Facebook",
-    "postType": "Post",
-    "captionPreview": "This Saturday: AFTER DARK presented by Torch Radio. Live DJ sets all night.",
-    "scheduledDate": "2026-06-12",
-    "scheduledTime": "12:00",
-    "status": "Scheduled"
-  },
-  {
     "id": "sc-004",
     "platform": "Instagram",
     "postType": "Story",
