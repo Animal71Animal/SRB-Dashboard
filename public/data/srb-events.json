@@ -163,13 +163,13 @@
       "icon": "🧸",
       "day": "Tuesday",
       "who": "No specific demographic target",
-      "format": "Lingerie night with a sophisticated, upscale vibe. Think Victoria's Secret runway meets speakeasy. Cross-promotion with Adam & Eve",
+      "format": "Lingerie night with a sophisticated, upscale vibe. Think Victoria's Secret runway meets speakeasy. Cross-promotion with Adam & Eve or a local womens lingerie store",
       "drinks": "The Teddy (white chocolate + raspberry martini), Silk Sheets (vanilla vodka + cream), Lace & Leather (smoky mezcal + honey), Champagne Room (bottle service special), The Runway (glitter champagne cocktail), Black Lace (blackberry + gin + activated charcoal)",
       "games": "",
       "costuming": "Entertainers in teddys, lingerie, and bedroom wear",
       "flyerImage": "/images/party-flyers/lingerie-lounge.jpg",
       "dates": [],
-      "startDate": "0001-01-01"
+      "startDate": ""
     },
     {
       "id": "ser-001",
