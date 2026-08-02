@@ -303,19 +303,26 @@
       "day": "Saturday",
       "who": "The after-hours crowd — people who want to keep the party going when everything else closes",
       "format": "After hours — we go until the early hours of the morning. Underground vibe. Guest DJs regularly. The only spot to BE after 2am in Boise on Saturdays — full kitchen serving breakfast items. Higher cover charge after 2am.",
-      "drinks": "Breakfast Specials — push food sales hard. Full kitchen open after 2am: breakfast items, late-night bites. Food revenue and Cover charge ared the key profit driver for this night.",
+      "drinks": "Cover charge ared the key profit driver for this night.",
       "games": "Showtime Showcase at midnight. Featured Entertainer performs a carefully curated, high-production set. After 2am — Late Night kicks in: guest DJs, full kitchen with Breakfast Specials.",
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/after-dark.jpg",
       "dates": [
-        "2026-09-26",
         "2026-10-03",
         "2026-10-10",
         "2026-10-17",
         "2026-10-24",
-        "2026-10-31"
+        "2026-10-31",
+        "2026-11-07",
+        "2026-11-14",
+        "2026-11-21",
+        "2026-11-28",
+        "2026-12-05",
+        "2026-12-12",
+        "2026-12-19",
+        "2026-12-26"
       ],
-      "startDate": "2026-09-26"
+      "startDate": "2026-10-03"
     },
     {
       "id": "ser-featured-entertainer",
