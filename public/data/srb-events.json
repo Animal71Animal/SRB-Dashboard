@@ -284,8 +284,8 @@
     {
       "id": "ser-featured-entertainer",
       "name": "Midnight Showcase",
-      "theme": "Dedicated entertainer showcase · After Midnight Showtime",
-      "status": "Confirmed",
+      "theme": "Dedicated entertainer showcase · Midnight Showtime",
+      "status": "Planned",
       "icon": "⭐",
       "day": "Friday/Saturday",
       "who": "All guests",
@@ -296,7 +296,7 @@
       "costuming": "",
       "flyerImage": "",
       "dates": [],
-      "startDate": "2026-08-28",
+      "startDate": "",
       "_format_featured_entertainer": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience"
     },
     {
