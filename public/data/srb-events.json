@@ -143,7 +143,7 @@
       "id": "ser-clockwork-sunday",
       "name": "Clockwork Sunday",
       "theme": "Industry Night",
-      "status": "Confirmed",
+      "status": "Planned",
       "icon": "🕰️",
       "day": "Sunday",
       "who": "Service workers, bartenders, dancers, staff from other spots",
@@ -164,7 +164,7 @@
         "2026-10-18",
         "2026-10-25"
       ],
-      "startDate": "2026-08-23"
+      "startDate": ""
     },
     {
       "id": "ser-005",
