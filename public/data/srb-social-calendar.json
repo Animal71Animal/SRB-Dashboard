@@ -1,14 +1,5 @@
 [
   {
-    "id": "sc-002",
-    "platform": "TikTok",
-    "postType": "Video",
-    "captionPreview": "Level Up Wednesday — get in free before 10! 🎉 #BoiseNightlife #TheTorchBoise",
-    "scheduledDate": "2026-06-11",
-    "scheduledTime": "17:00",
-    "status": "Draft"
-  },
-  {
     "id": "sc-003",
     "platform": "Facebook",
     "postType": "Post",
