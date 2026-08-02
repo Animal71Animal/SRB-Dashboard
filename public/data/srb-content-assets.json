@@ -1,13 +1,5 @@
 [
   {
-    "id": "asset-006",
-    "name": "Lingerie Lounge Flyer",
-    "type": "Flyer",
-    "dateCreated": "2026-05-11",
-    "description": "Tuesday Lingerie Lounge promotional flyer.",
-    "link": "/images/party-flyers/lingerie-lounge.jpg"
-  },
-  {
     "id": "asset-007",
     "name": "Chicks 'n' Kicks Thursday Flyer",
     "type": "Flyer",
