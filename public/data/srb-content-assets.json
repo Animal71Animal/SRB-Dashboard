@@ -1,13 +1,5 @@
 [
   {
-    "id": "asset-004",
-    "name": "Industry Night Flyer",
-    "type": "Flyer",
-    "dateCreated": "2026-05-11",
-    "description": "Sunday Industry Night / Clocked Out Sundays promotional flyer.",
-    "link": "/images/party-flyers/clocked-out-sundays.jpg"
-  },
-  {
     "id": "asset-006",
     "name": "Lingerie Lounge Flyer",
     "type": "Flyer",
