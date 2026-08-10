@@ -65,9 +65,10 @@ export default function LoggedHoursPage() {
 
   // ----- Manual state -----
   const today = new Date().toISOString().split("T")[0];
-  const [manualDate, setManualDate] = useState(today);
-  const [manualIn, setManualIn] = useState("");
-  const [manualOut, setManualOut] = useState("");
+  const [manualInDate, setManualInDate] = useState(today);
+  const [manualInTime, setManualInTime] = useState("");
+  const [manualOutDate, setManualOutDate] = useState(today);
+  const [manualOutTime, setManualOutTime] = useState("");
   const [manualTask, setManualTask] = useState("");
 
   // ----- Edit modal -----
@@ -133,12 +134,12 @@ export default function LoggedHoursPage() {
 
   // ----- Manual -----
   const addManual = async () => {
-    if (!manualDate || !manualIn || !manualOut) {
-      alert("Date, clock-in, and clock-out are all required.");
+    if (!manualInDate || !manualInTime || !manualOutDate || !manualOutTime) {
+      alert("Clock-in date/time and clock-out date/time are all required.");
       return;
     }
-    const clockInIso = new Date(manualDate + "T" + manualIn + ":00").toISOString();
-    const clockOutIso = new Date(manualDate + "T" + manualOut + ":00").toISOString();
+    const clockInIso = new Date(manualInDate + "T" + manualInTime + ":00").toISOString();
+    const clockOutIso = new Date(manualOutDate + "T" + manualOutTime + ":00").toISOString();
     if (new Date(clockOutIso).getTime() <= new Date(clockInIso).getTime()) {
       alert("Clock-out must be after clock-in.");
       return;
@@ -154,7 +155,7 @@ export default function LoggedHoursPage() {
           mode: "manual",
         }),
       });
-      setManualIn(""); setManualOut(""); setManualTask("");
+      setManualInTime(""); setManualOutTime(""); setManualTask("");
       await load();
     } finally { setLoading(false); }
   };
@@ -303,18 +304,20 @@ export default function LoggedHoursPage() {
       {/* Manual Log */}
       {mode === "manual" && (
         <div style={CARD}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
-              <label style={labelStyle}>Date</label>
-              <input style={inputStyle} type="date" value={manualDate} onChange={(e) => setManualDate(e.target.value)} />
+              <label style={labelStyle}>Clock In (Date + Time)</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                <input style={inputStyle} type="date" value={manualInDate} onChange={(e) => setManualInDate(e.target.value)} />
+                <input style={inputStyle} type="time" value={manualInTime} onChange={(e) => setManualInTime(e.target.value)} />
+              </div>
             </div>
             <div>
-              <label style={labelStyle}>Clock In</label>
-              <input style={inputStyle} type="time" value={manualIn} onChange={(e) => setManualIn(e.target.value)} />
-            </div>
-            <div>
-              <label style={labelStyle}>Clock Out</label>
-              <input style={inputStyle} type="time" value={manualOut} onChange={(e) => setManualOut(e.target.value)} />
+              <label style={labelStyle}>Clock Out (Date + Time)</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+                <input style={inputStyle} type="date" value={manualOutDate} onChange={(e) => setManualOutDate(e.target.value)} />
+                <input style={inputStyle} type="time" value={manualOutTime} onChange={(e) => setManualOutTime(e.target.value)} />
+              </div>
             </div>
             <div style={{ gridColumn: "1 / -1" }}>
               <label style={labelStyle}>Activity</label>
