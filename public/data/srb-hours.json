@@ -1,9 +1,9 @@
 [
   {
     "id": "hrs-1786404822081",
-    "date": "2026-08-04",
-    "clockIn": "2026-08-04T02:00:00.000Z",
-    "clockOut": "2026-08-04T04:00:00.000Z",
+    "date": "2026-08-03",
+    "clockIn": "2026-08-03T02:00:00.000Z",
+    "clockOut": "2026-08-03T04:00:00.000Z",
     "hours": 2,
     "note": "On Site Observation",
     "mode": "manual"
