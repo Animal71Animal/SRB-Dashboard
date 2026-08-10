@@ -129,7 +129,8 @@ export default function OverviewPage() {
         <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
         <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
         <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
-        <KpiCard label="Logged Hours (This Week)" value={loading ? "…" : `${weekHours.toFixed(1)}h`} icon="⏱️" />
+        <KpiCard label="Logged Hours (1st–15th)" value={loading ? "…" : `${period1Hours.toFixed(1)}h`} icon="📅" />
+        <KpiCard label="Logged Hours (16th–EOM)" value={loading ? "…" : `${period2Hours.toFixed(1)}h`} icon="📅" />
         <KpiCard label="Logged Hours (All Time)" value={loading ? "…" : `${allHours.toFixed(1)}h`} icon="📊" />
       </div>
 
