@@ -51,17 +51,43 @@ export default function OverviewPage() {
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [influencers, setInfluencers] = useState<any[]>([]);
   const [socialPosts, setSocialPosts] = useState<any[]>([]);
+  const [allHours, setAllHours] = useState(0);
+  const [weekHours, setWeekHours] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/events").then((r) => r.json()).then((d) => {
-      // Flatten { oneOffs, series } into a single date list for KPIs
-      const oneOffs = (d?.oneOffs ?? []).map((e: any) => ({ ...e, _kind: "oneoff" }));
-      const seriesDates = (d?.series ?? []).flatMap((s: any) => (s.dates ?? []).map((date: string) => ({ id: s.id, date, name: s.name, theme: s.theme, status: s.status, _kind: "series" })));
+    Promise.all([
+      fetch("/api/events").then((r) => r.json()).catch(() => ({})),
+      fetch("/api/campaigns").then((r) => r.json()).catch(() => []),
+      fetch("/api/influencers").then((r) => r.json()).catch(() => []),
+      fetch("/api/social-calendar").then((r) => r.json()).catch(() => []),
+      fetch("/api/hours").then((r) => r.json()).catch(() => []),
+    ]).then(([eventsData, campaignsData, influencersData, socialData, hoursData]) => {
+      // Flatten events
+      const oneOffs = (eventsData?.oneOffs ?? []).map((e: any) => ({ ...e, _kind: "oneoff" }));
+      const seriesDates = (eventsData?.series ?? []).flatMap((s: any) =>
+        (s.dates ?? []).map((date: string) => ({ id: s.id, date, name: s.name, theme: s.theme, status: s.status, _kind: "series" }))
+      );
       setEvents([...oneOffs, ...seriesDates]);
-    }).catch(() => {});
-    fetch("/api/campaigns").then((r) => r.json()).then(setCampaigns).catch(() => {});
-    fetch("/api/influencers").then((r) => r.json()).then(setInfluencers).catch(() => {});
-    fetch("/api/social-calendar").then((r) => r.json()).then(setSocialPosts).catch(() => {});
+      setCampaigns(campaignsData);
+      setInfluencers(influencersData);
+      setSocialPosts(socialData);
+
+      // Hours
+      const logs = Array.isArray(hoursData) ? hoursData : [];
+      const now = Date.now();
+      const weekStart = getStartOfWeek(new Date());
+      let all = 0;
+      let week = 0;
+      for (const l of logs) {
+        all += l.hours || 0;
+        const ts = new Date(l.clockIn || l.date).getTime();
+        if (ts >= weekStart && ts <= now) week += l.hours || 0;
+      }
+      setAllHours(all);
+      setWeekHours(week);
+      setLoading(false);
+    });
   }, []);
 
   const today = new Date().toISOString().split("T")[0];
@@ -93,6 +119,8 @@ export default function OverviewPage() {
         <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
         <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
         <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
+        <KpiCard label="Logged Hours (This Week)" value={loading ? "…" : `${weekHours.toFixed(1)}h`} icon="⏱️" />
+        <KpiCard label="Logged Hours (All Time)" value={loading ? "…" : `${allHours.toFixed(1)}h`} icon="📊" />
       </div>
 
       {/* Module Grid */}
@@ -106,4 +134,13 @@ export default function OverviewPage() {
       </div>
     </div>
   );
+}
+
+function getStartOfWeek(d: Date): number {
+  const date = new Date(d);
+  const day = date.getDay();
+  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Monday
+  date.setDate(diff);
+  date.setHours(0, 0, 0, 0);
+  return date.getTime();
 }
