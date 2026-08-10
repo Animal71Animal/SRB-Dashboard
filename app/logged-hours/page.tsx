@@ -76,7 +76,7 @@ export default function LoggedHoursPage() {
   const [editOut, setEditOut] = useState("");
   const [editNote, setEditNote] = useState("");
 
-  const load = () => fetch("/api/hours").then((r) => r.json()).then(setLogs).catch(() => {});
+  const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(a.clockIn).getTime() - new Date(b.clockIn).getTime()))).catch(() => {});
   useEffect(() => { load(); }, []);
 
   const startOfWeek = useMemo(() => getStartOfWeek(new Date()), []);
