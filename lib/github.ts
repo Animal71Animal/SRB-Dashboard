@@ -25,11 +25,17 @@ function apiUrl(filePath: string) {
 }
 
 export async function readFromGitHub<T>(filePath: string): Promise<{ data: T; sha: string }> {
-  const res = await fetch(apiUrl(filePath), {
+  const url = apiUrl(filePath);
+  console.error(`[github] GET ${url}`);
+  const res = await fetch(url, {
     headers: ghHeaders(),
     cache: "no-store",
   });
-  if (!res.ok) throw new Error(`GitHub GET ${filePath} failed: ${res.status}`);
+  if (!res.ok) {
+    const body = await res.text();
+    console.error(`[github] GET ${filePath} failed: ${res.status} ${body.substring(0, 200)}`);
+    throw new Error(`GitHub GET ${filePath} failed: ${res.status}`);
+  }
   const json = await res.json();
   const data: T = JSON.parse(Buffer.from(json.content, "base64").toString("utf-8"));
   return { data, sha: json.sha };
@@ -41,20 +47,25 @@ export async function writeToGitHub<T>(
   sha: string,
   message: string
 ): Promise<void> {
-  const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`, {
+  const url = `https://api.github.com/repos/${GITHUB_REPO}/contents/${filePath}`;
+  const body = JSON.stringify({
+    message,
+    content: Buffer.from(JSON.stringify(data, null, 2)).toString("base64"),
+    sha,
+    branch: GITHUB_BRANCH,
+  });
+  console.error(`[github] PUT ${url} sha=${sha.substring(0, 8)}`);
+  const res = await fetch(url, {
     method: "PUT",
     headers: ghHeaders(),
-    body: JSON.stringify({
-      message,
-      content: Buffer.from(JSON.stringify(data, null, 2)).toString("base64"),
-      sha,
-      branch: GITHUB_BRANCH,
-    }),
+    body,
   });
   if (!res.ok) {
     const txt = await res.text();
+    console.error(`[github] PUT ${filePath} failed: ${res.status} ${txt.substring(0, 300)}`);
     throw new Error(`GitHub PUT ${filePath} failed: ${res.status} ${txt}`);
   }
+  console.error(`[github] PUT ${filePath} OK`);
 }
 
 // Local fallback helpers
@@ -86,7 +97,8 @@ export function writeLocal<T>(filePath: string, data: T): void {
 export async function safeRead<T>(filePath: string, fallback: T): Promise<{ data: T; sha: string }> {
   try {
     return await readFromGitHub<T>(filePath);
-  } catch {
+  } catch (e) {
+    console.error(`[safeRead] GitHub failed, falling back: ${String(e).substring(0, 150)}`);
     const local = readLocal<T>(filePath);
     return { data: local ?? fallback, sha: "" };
   }
@@ -94,6 +106,11 @@ export async function safeRead<T>(filePath: string, fallback: T): Promise<{ data
 
 /** Write to GitHub and local */
 export async function safeWrite<T>(filePath: string, data: T, sha: string, message: string): Promise<void> {
-  if (sha) await writeToGitHub(filePath, data, sha, message);
+  try {
+    if (sha) await writeToGitHub(filePath, data, sha, message);
+    else console.error('[safeWrite] No SHA, skipping GitHub write');
+  } catch (e) {
+    console.error(`[safeWrite] GitHub write failed: ${String(e).substring(0, 200)}`);
+  }
   writeLocal(filePath, data);
 }
