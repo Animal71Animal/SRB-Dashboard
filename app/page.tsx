@@ -52,7 +52,8 @@ export default function OverviewPage() {
   const [influencers, setInfluencers] = useState<any[]>([]);
   const [socialPosts, setSocialPosts] = useState<any[]>([]);
   const [allHours, setAllHours] = useState(0);
-  const [weekHours, setWeekHours] = useState(0);
+  const [period1Hours, setPeriod1Hours] = useState(0);
+  const [period2Hours, setPeriod2Hours] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -73,19 +74,28 @@ export default function OverviewPage() {
       setInfluencers(influencersData);
       setSocialPosts(socialData);
 
-      // Hours
+      // Hours — all time + two pay periods per month
       const logs = Array.isArray(hoursData) ? hoursData : [];
-      const now = Date.now();
-      const weekStart = getStartOfWeek(new Date());
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth(); // 0-indexed
+      // Period 1: 1st–15th. Period 2: 16th–end of month.
+      const period1Start = new Date(year, month, 1).getTime();
+      const period1End = new Date(year, month, 15, 23, 59, 59, 999).getTime();
+      const period2Start = new Date(year, month, 16).getTime();
+      const period2End = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
       let all = 0;
-      let week = 0;
+      let p1 = 0;
+      let p2 = 0;
       for (const l of logs) {
         all += l.hours || 0;
         const ts = new Date(l.clockIn || l.date).getTime();
-        if (ts >= weekStart && ts <= now) week += l.hours || 0;
+        if (ts >= period1Start && ts <= period1End) p1 += l.hours || 0;
+        else if (ts >= period2Start && ts <= period2End) p2 += l.hours || 0;
       }
       setAllHours(all);
-      setWeekHours(week);
+      setPeriod1Hours(p1);
+      setPeriod2Hours(p2);
       setLoading(false);
     });
   }, []);
@@ -134,13 +144,4 @@ export default function OverviewPage() {
       </div>
     </div>
   );
-}
-
-function getStartOfWeek(d: Date): number {
-  const date = new Date(d);
-  const day = date.getDay();
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Monday
-  date.setDate(diff);
-  date.setHours(0, 0, 0, 0);
-  return date.getTime();
 }
