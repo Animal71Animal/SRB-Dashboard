@@ -1,5 +1,14 @@
 [
   {
+    "id": "hrs-1786405911556",
+    "date": "2026-08-03",
+    "clockIn": "2026-08-03T22:00:00.000Z",
+    "clockOut": "2026-08-04T09:00:00.000Z",
+    "hours": 11,
+    "note": "DJ and Doorman Responsibilities",
+    "mode": "manual"
+  },
+  {
     "id": "hrs-1786404822081",
     "date": "2026-08-03",
     "clockIn": "2026-08-03T02:00:00.000Z",
