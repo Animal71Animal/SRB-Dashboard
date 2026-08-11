@@ -149,14 +149,14 @@ export default function Sidebar() {
           </div>
           <div style={{ borderRadius: 8, overflow: "hidden", border: "1px solid var(--border)", background: "#000", aspectRatio: "16/9", position: "relative" }}>
             <iframe
-              src="https://cloudtv.link/en/player?id=torch-radio&autoplay=1&mute=1"
+              src="https://12b0afb612.abacusai.cloud/watch"
               style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
               allow="autoplay; fullscreen"
             />
           </div>
-          <a href="https://cloudtv.link/en/admin" target="_blank" rel="noopener noreferrer"
+          <a href="https://12b0afb612.abacusai.cloud/admin" target="_blank" rel="noopener noreferrer"
             style={{ display: "block", marginTop: 8, fontSize: "0.65rem", color: "var(--accent2)", textDecoration: "none", fontWeight: 600 }}>
-            Open /admin Systems →
+            Open Studio Console →
           </a>
         </div>
 
