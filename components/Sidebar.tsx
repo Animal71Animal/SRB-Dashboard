@@ -139,6 +139,24 @@ export default function Sidebar() {
           ))}
         </nav>
 
+        {/* CloudTV Studio Sidebar Integration */}
+        <div style={{ marginTop: "auto", padding: "16px 20px", borderTop: "1px solid var(--border)" }}>
+          <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 12 }}>
+            CloudTV Studio — Live
+          </div>
+          <div style={{ borderRadius: 8, overflow: "hidden", border: "1px solid var(--border)", background: "#000", aspectRatio: "16/9", position: "relative" }}>
+            <iframe
+              src="https://cloudtv.link/en/player?id=torch-radio&autoplay=1&mute=1"
+              style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: "none" }}
+              allow="autoplay; fullscreen"
+            />
+          </div>
+          <a href="https://cloudtv.link/en/admin" target="_blank" rel="noopener noreferrer"
+            style={{ display: "block", marginTop: 8, fontSize: "0.65rem", color: "var(--accent2)", textDecoration: "none", fontWeight: 600 }}>
+            Open /admin Systems →
+          </a>
+        </div>
+
         {/* Footer */}
         <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)" }}>
           <div>PriScylla 🦞 online</div>
