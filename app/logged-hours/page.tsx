@@ -14,14 +14,6 @@ interface HoursLog {
   mode: "timer" | "manual";
 }
 
-function getStartOfWeek(d: Date): number {
-  const date = new Date(d);
-  const day = date.getDay();
-  const diff = date.getDate() - day + (day === 0 ? -6 : 1); // Monday
-  date.setDate(diff);
-  date.setHours(0, 0, 0, 0);
-  return date.getTime();
-}
 
 function fmtClock(iso: string): string {
   if (!iso) return "—";
@@ -80,12 +72,22 @@ export default function LoggedHoursPage() {
   const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(a.clockIn).getTime() - new Date(b.clockIn).getTime()))).catch(() => {});
   useEffect(() => { load(); }, []);
 
-  const startOfWeek = useMemo(() => getStartOfWeek(new Date()), []);
-  const weeklyLogs = useMemo(
-    () => logs.filter((l) => new Date(l.clockIn).getTime() >= startOfWeek),
-    [logs, startOfWeek]
-  );
-  const weeklyTotal = useMemo(() => weeklyLogs.reduce((s, l) => s + (l.hours || 0), 0), [weeklyLogs]);
+  const periodTotals = useMemo(() => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = now.getMonth();
+    const p1Start = new Date(year, month, 1).getTime();
+    const p1End = new Date(year, month, 15, 23, 59, 59, 999).getTime();
+    const p2Start = new Date(year, month, 16).getTime();
+    const p2End = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
+    let p1 = 0, p2 = 0;
+    for (const l of logs) {
+      const ts = new Date(l.clockIn || l.date).getTime();
+      if (ts >= p1Start && ts <= p1End) p1 += l.hours || 0;
+      else if (ts >= p2Start && ts <= p2End) p2 += l.hours || 0;
+    }
+    return { p1, p2 };
+  }, [logs]);
   const allTimeTotal = useMemo(() => logs.reduce((s, l) => s + (l.hours || 0), 0), [logs]);
 
   const elapsedMs = runStartedAt ? Date.now() - new Date(runStartedAt).getTime() : 0;
@@ -224,9 +226,14 @@ export default function LoggedHoursPage() {
       {/* KPIs */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
         <div style={CARD}>
-          <div style={labelStyle}>This Week</div>
-          <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(weeklyTotal)}</div>
-          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>{weeklyLogs.length} entries</div>
+          <div style={labelStyle}>1st–15th</div>
+          <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(periodTotals.p1)}</div>
+          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>Current pay period</div>
+        </div>
+        <div style={CARD}>
+          <div style={labelStyle}>16th–EOM</div>
+          <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(periodTotals.p2)}</div>
+          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>Current pay period</div>
         </div>
         <div style={CARD}>
           <div style={labelStyle}>All Time</div>
@@ -342,7 +349,7 @@ export default function LoggedHoursPage() {
             Master List — Itemized Entries
           </h3>
           <span style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
-            {logs.length} total · {fmtDuration(weeklyTotal)} this week
+            {logs.length} total · {fmtDuration(allTimeTotal)} logged
           </span>
         </div>
 
