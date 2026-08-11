@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const STATUS_COLORS: Record<string, string> = { Draft: "var(--muted)", Scheduled: "var(--accent2)", Posted: "#00a86b" };
@@ -8,7 +9,7 @@ const PLATFORM_ICONS: Record<string, string> = { Instagram: "ðŸ“¸", TikTok: "ðŸŽ
 
 interface SocialPost {
   id: string; platform: string; postType: string; captionPreview: string;
-  scheduledDate: string; scheduledTime: string; status: string;
+  scheduledDate: string; scheduledTime: string; status: string; venue?: string;
 }
 
 const empty: Partial<SocialPost> = { platform: "Instagram", postType: "Post", captionPreview: "", scheduledDate: "", scheduledTime: "", status: "Draft" };
@@ -18,14 +19,15 @@ export default function SocialCalendarPage() {
   const [form, setForm] = useState<Partial<SocialPost>>(empty);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const venue = useVenue();
 
-  const load = () => fetch("/api/social-calendar").then((r) => r.json()).then(setPosts).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = () => fetch(`/api/social-calendar?venue=${venue}`).then((r) => r.json()).then(setPosts).catch(() => {});
+  useEffect(() => { load(); }, [venue]);
 
   const save = async () => {
     setLoading(true);
     try {
-      await fetch("/api/social-calendar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+      await fetch("/api/social-calendar", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, venue: form.venue ?? venue }) });
       setForm(empty); setShowForm(false); await load();
     } finally { setLoading(false); }
   };

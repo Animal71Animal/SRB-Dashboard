@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const BADGE: Record<string, string> = {
@@ -12,7 +13,7 @@ type SRBStatus = "Confirmed" | "Planned" | "Cancelled";
 interface OneOffEvent {
   id: string; date: string; name: string; theme: string; status: SRBStatus;
   icon?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string;
-  shows?: ShowEntry[];
+  shows?: ShowEntry[]; venue?: string;
 }
 interface ShowEntry {
   dates: string[];
@@ -93,18 +94,21 @@ export default function EventsPage() {
   const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
   const [openOneOffId, setOpenOneOffId] = useState<string | null>(null);
 
+  const venue = useVenue();
   const load = () => {
-    fetch("/api/events").then((r) => r.json()).then((d) => setData(d ?? { oneOffs: [], series: [] })).catch(() => {});
+    fetch(`/api/events?venue=${venue}`).then((r) => r.json()).then((d) => setData(d ?? { oneOffs: [], series: [] })).catch(() => {});
   };
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [venue]);
 
   const save = async () => {
     setLoading(true);
     try {
+      // Auto-tag new items with the active venue if user didn't pick one.
+      const payload = { ...form, venue: form.venue ?? venue };
       if (editing) {
-        await fetch("/api/events", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, ...form }) });
+        await fetch("/api/events", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, ...payload }) });
       } else {
-        await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+        await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       }
       setForm(emptyOneOff); setEditing(null); setShowForm(false); await load();
     } finally { setLoading(false); }
@@ -140,8 +144,10 @@ export default function EventsPage() {
     if (!editingSeries) return;
     setSeriesSaving(true);
     try {
-      const payload = { ...seriesForm };
+      const payload: any = { ...seriesForm };
       if (previewDates !== null) payload.dates = previewDates;
+      // Persist current venue selection unless the editor already set one.
+      if (!payload.venue) payload.venue = venue;
       await fetch("/api/events", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

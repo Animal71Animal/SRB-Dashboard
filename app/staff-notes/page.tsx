@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 
@@ -14,6 +15,7 @@ export default function StaffNotesPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const venue = useVenue(); // Used only to tag notes on create — display is NOT filtered by venue.
 
   const today = new Date().toISOString().split("T")[0];
   const load = () => fetch("/api/staff-notes").then((r) => r.json()).then(setNotes).catch(() => {});
@@ -31,7 +33,7 @@ export default function StaffNotesPage() {
       } else {
         await fetch("/api/staff-notes", {
           method: "POST", headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ ...form, date: form.date || today }),
+          body: JSON.stringify({ ...form, date: form.date || today, venue }),
         });
       }
       setForm({ title: "", content: "", date: "" }); setEditing(null); setShowForm(false); await load();

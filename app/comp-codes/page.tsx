@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 
 interface CompCode {
-  id: string; code: string; recipientName: string; issuedDate: string; expiryDate: string; used: boolean; notes: string;
+  id: string; code: string; recipientName: string; issuedDate: string; expiryDate: string; used: boolean; notes: string; venue?: string;
 }
 
 const empty: Partial<CompCode> = { code: "", recipientName: "", issuedDate: "", expiryDate: "", used: false, notes: "" };
@@ -18,9 +19,10 @@ export default function CompCodesPage() {
   const [items, setItems] = useState<CompCode[]>([]);
   const [form, setForm] = useState<Partial<CompCode>>(empty);
   const [loading, setLoading] = useState(false);
+  const venue = useVenue();
 
-  const load = () => fetch("/api/comp-codes").then((r) => r.json()).then(setItems).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = () => fetch(`/api/comp-codes?venue=${venue}`).then((r) => r.json()).then(setItems).catch(() => {});
+  useEffect(() => { load(); }, [venue]);
 
   const add = async () => {
     if (!form.recipientName) { alert("Recipient name required"); return; }
@@ -29,7 +31,7 @@ export default function CompCodesPage() {
       const code = form.code || genCode();
       await fetch("/api/comp-codes", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, code }),
+        body: JSON.stringify({ ...form, code, venue: form.venue ?? venue }),
       });
       setForm(empty); await load();
     } finally { setLoading(false); }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useVenue } from "@/components/VenueSwitcher";
 
 interface SocialProfile {
   handle: string;
@@ -18,6 +19,7 @@ interface Influencer {
   facebook?: SocialProfile;
   status: "active" | "contacted" | "pending" | "passed";
   notes: string;
+  venue?: string;
 }
 
 const STATUS_COLORS: Record<string, string> = {
@@ -51,19 +53,20 @@ export default function InfluencerMasterListPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<ReturnType<typeof blankForm>>(blankForm());
   const [editId, setEditId] = useState<string | null>(null);
+  const venue = useVenue();
 
   useEffect(() => {
-    fetch("/api/influencers")
+    fetch(`/api/influencers?venue=${venue}`)
       .then((r) => r.json())
       .then((data) => {
         setInfluencers(Array.isArray(data) ? data : []);
         setLoading(false);
       })
       .catch(() => {
-        setInfluencerList([]);
+        setInfluencers([]);
         setLoading(false);
       });
-  }, []);
+  }, [venue]);
 
   const setInfluencerList = (list: Influencer[]) => {
     setInfluencers(list);
@@ -86,6 +89,7 @@ export default function InfluencerMasterListPage() {
         id: Date.now().toString(),
         ...form,
         status: "pending",
+        venue,
       };
       setInfluencerList([...influencers, newInfluencer]);
     }

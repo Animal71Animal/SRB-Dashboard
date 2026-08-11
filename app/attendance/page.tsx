@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const DAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 
 interface AttendanceEntry {
   id: string; date: string; dayOfWeek: string; eventTheme: string;
-  headcount: number; coverRevenue: string; notes: string;
+  headcount: number; coverRevenue: string; notes: string; venue?: string;
 }
 
 const empty: Partial<AttendanceEntry> = { date: "", dayOfWeek: "", eventTheme: "", headcount: 0, coverRevenue: "", notes: "" };
@@ -22,9 +23,10 @@ export default function AttendancePage() {
   const [form, setForm] = useState<Partial<AttendanceEntry>>(empty);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const venue = useVenue();
 
-  const load = () => fetch("/api/attendance").then((r) => r.json()).then(setEntries).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = () => fetch(`/api/attendance?venue=${venue}`).then((r) => r.json()).then(setEntries).catch(() => {});
+  useEffect(() => { load(); }, [venue]);
 
   const save = async () => {
     setLoading(true);
@@ -32,7 +34,7 @@ export default function AttendancePage() {
       const dayOfWeek = getDayOfWeek(form.date ?? "");
       await fetch("/api/attendance", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...form, dayOfWeek }),
+        body: JSON.stringify({ ...form, dayOfWeek, venue: form.venue ?? venue }),
       });
       setForm(empty); setShowForm(false); await load();
     } finally { setLoading(false); }

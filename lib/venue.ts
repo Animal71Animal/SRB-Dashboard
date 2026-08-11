@@ -47,8 +47,11 @@ export function filterByVenue<T extends { venue?: string }>(
   });
 }
 
-/** Inject venue on creation when caller didn't supply one. Falls back to localStorage default of "torch1". */
-export function withDefaultVenue<T extends { venue?: string }>(item: T): T & { venue: string } {
-  if (item.venue) return item as T & { venue: string };
+/**
+ * Ensure `item` carries a `venue` string. Preserves specific type information.
+ */
+export function withDefaultVenue<T>(item: T): T & { venue: string } {
+  const v = (item as { venue?: string | null }).venue;
+  if (v === "torch1" || v === "torch2" || v === "both") return item as T & { venue: string };
   return { ...item, venue: "torch1" };
 }

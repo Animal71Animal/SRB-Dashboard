@@ -1,12 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const TYPE_ICONS: Record<string, string> = { Flyer: "🖼️", Logo: "✏️", Video: "🎥", Photo: "📸" };
 
 interface ContentAsset {
-  id: string; name: string; type: string; dateCreated: string; description: string; link: string;
+  id: string; name: string; type: string; dateCreated: string; description: string; link: string; venue?: string;
 }
 
 const empty: Partial<ContentAsset> = { name: "", type: "Flyer", dateCreated: "", description: "", link: "" };
@@ -16,15 +17,16 @@ export default function ContentAssetsPage() {
   const [form, setForm] = useState<Partial<ContentAsset>>(empty);
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(false);
+  const venue = useVenue();
 
-  const load = () => fetch("/api/content-assets").then((r) => r.json()).then(setAssets).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = () => fetch(`/api/content-assets?venue=${venue}`).then((r) => r.json()).then(setAssets).catch(() => {});
+  useEffect(() => { load(); }, [venue]);
 
   const save = async () => {
     if (!form.name) { alert("Asset name required"); return; }
     setLoading(true);
     try {
-      await fetch("/api/content-assets", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+      await fetch("/api/content-assets", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, venue: form.venue ?? venue }) });
       setForm(empty); setShowForm(false); await load();
     } finally { setLoading(false); }
   };

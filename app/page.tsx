@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useVenue } from "@/components/VenueSwitcher";
 import { modules } from "./data/modules";
 
 const CARD = {
@@ -55,13 +56,16 @@ export default function OverviewPage() {
   const [period1Hours, setPeriod1Hours] = useState(0);
   const [period2Hours, setPeriod2Hours] = useState(0);
   const [loading, setLoading] = useState(true);
+  const venue = useVenue();
 
   useEffect(() => {
+    const v = `?venue=${venue}`;
     Promise.all([
-      fetch("/api/events").then((r) => r.json()).catch(() => ({})),
-      fetch("/api/campaigns").then((r) => r.json()).catch(() => []),
-      fetch("/api/influencers").then((r) => r.json()).catch(() => []),
-      fetch("/api/social-calendar").then((r) => r.json()).catch(() => []),
+      fetch(`/api/events${v}`).then((r) => r.json()).catch(() => ({})),
+      fetch(`/api/campaigns${v}`).then((r) => r.json()).catch(() => []),
+      fetch(`/api/influencers${v}`).then((r) => r.json()).catch(() => []),
+      fetch(`/api/social-calendar${v}`).then((r) => r.json()).catch(() => []),
+      // Logged hours are personal — never filtered by venue.
       fetch("/api/hours").then((r) => r.json()).catch(() => []),
     ]).then(([eventsData, campaignsData, influencersData, socialData, hoursData]) => {
       // Flatten events
@@ -98,7 +102,7 @@ export default function OverviewPage() {
       setPeriod2Hours(p2);
       setLoading(false);
     });
-  }, []);
+  }, [venue]);
 
   const today = new Date().toISOString().split("T")[0];
   const nextWeek = new Date(Date.now() + 7 * 86400000).toISOString().split("T")[0];

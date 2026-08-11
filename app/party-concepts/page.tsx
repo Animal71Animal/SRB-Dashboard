@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const SECTION_LABEL: Record<string, string> = {
@@ -264,12 +265,13 @@ export default function PartyConceptsPage() {
   const [newDate, setNewDate] = useState("");
   const [genEndDate, setGenEndDate] = useState("2026-12-31");
   const [previewDates, setPreviewDates] = useState<string[] | null>(null);
+  const venue = useVenue();
 
-  const reload = () => fetch("/api/party-concepts").then(r => r.json()).then(d => setData(d ?? EMPTY)).catch(() => {});
+  const reload = () => fetch(`/api/party-concepts?venue=${venue}`).then(r => r.json()).then(d => setData(d ?? EMPTY)).catch(() => {});
 
   useEffect(() => {
     reload().finally(() => setLoading(false));
-  }, []);
+  }, [venue]);
 
   const openEdit = (c: PartyConcept) => {
     setEditConcept(c);
@@ -283,8 +285,10 @@ export default function PartyConceptsPage() {
     if (!editConcept) return;
     setSaving(true);
     try {
-      const payload = { ...editForm };
+      const payload: any = { ...editForm };
       if (previewDates !== null) payload.dates = previewDates;
+      // Keep current venue selection if user didn't pick one.
+      if (!payload.venue) payload.venue = venue;
       await fetch("/api/party-concepts", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

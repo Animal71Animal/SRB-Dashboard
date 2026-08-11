@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 
@@ -10,7 +11,7 @@ const STATUS_COLORS: Record<string, string> = {
 
 interface Campaign {
   id: string; name: string; channel: string; budget: string;
-  startDate: string; endDate: string; status: string; notes: string;
+  startDate: string; endDate: string; status: string; notes: string; venue?: string;
 }
 
 const empty: Partial<Campaign> = { name: "", channel: "Instagram", budget: "", startDate: "", endDate: "", status: "Planned", notes: "" };
@@ -21,17 +22,19 @@ export default function PromoCampaignsPage() {
   const [showForm, setShowForm] = useState(false);
   const [editing, setEditing] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const venue = useVenue();
 
-  const load = () => fetch("/api/campaigns").then((r) => r.json()).then(setItems).catch(() => {});
-  useEffect(() => { load(); }, []);
+  const load = () => fetch(`/api/campaigns?venue=${venue}`).then((r) => r.json()).then(setItems).catch(() => {});
+  useEffect(() => { load(); }, [venue]);
 
   const save = async () => {
     setLoading(true);
     try {
+      const payload = { ...form, venue: form.venue ?? venue };
       if (editing) {
-        await fetch("/api/campaigns", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, ...form }) });
+        await fetch("/api/campaigns", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, ...payload }) });
       } else {
-        await fetch("/api/campaigns", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+        await fetch("/api/campaigns", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
       }
       setForm(empty); setEditing(null); setShowForm(false); await load();
     } finally { setLoading(false); }
