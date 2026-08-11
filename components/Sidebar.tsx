@@ -64,7 +64,7 @@ export default function Sidebar() {
           width: "220px", minHeight: "100vh", background: "var(--card)",
           borderRight: "1px solid var(--border)", padding: "24px 0",
           display: "flex", flexDirection: "column", flexShrink: 0,
-          position: "fixed", left: 0, top: 0, zIndex: 50,
+          position: "fixed", left: 0, top: 40, zIndex: 50,
           transition: "transform 0.3s ease",
         }}>
 
