@@ -1,5 +1,14 @@
 [
   {
+    "id": "hrs-1786406755811",
+    "date": "2026-08-07",
+    "clockIn": "2026-08-07T20:00:00.000Z",
+    "clockOut": "2026-08-08T02:15:00.000Z",
+    "hours": 6.25,
+    "note": "AI Creation of Backend Systems",
+    "mode": "manual"
+  },
+  {
     "id": "hrs-1786406585061",
     "date": "2026-08-05",
     "clockIn": "2026-08-05T22:30:00.000Z",
