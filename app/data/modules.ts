@@ -24,6 +24,7 @@ export const modules: Module[] = [
   { href: "/analytics", icon: "📊", title: "Campaign Analytics", desc: "Performance summaries.", group: "analytics" },
   // Operations
   { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
+  { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio admin center.", group: "operations" },
   { href: "/staff-notes", icon: "📝", title: "Staff Notes", desc: "Internal notes and memos.", group: "operations" },
   { href: "/logged-hours", icon: "⏱️", title: "Logged Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
 ];
