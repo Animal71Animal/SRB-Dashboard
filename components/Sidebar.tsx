@@ -150,14 +150,23 @@ export default function Sidebar() {
                         </Link>
                       )}
 
-                      {/* Admin Console Sub-tab (only when TorchTV is active) */}
-                      {item.href === "/torchtv" && isTorchTVActive && (
+                      {/* Admin Console Sub-tab (always visible under Broadcast) */}
+                      {item.href === "/torchtv" && (
                         <a href="https://12b0afb612.abacusai.cloud/admin" target="_blank" rel="noopener noreferrer"
                           style={{
-                            display: "flex", alignItems: "center", gap: 10,
-                            padding: "6px 20px 6px 45px", fontSize: "0.75rem",
-                            color: "var(--muted)", textDecoration: "none", transition: "all 0.15s",
-                          }}>
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 10,
+                            padding: "6px 20px 6px 45px",
+                            fontSize: "0.75rem",
+                            color: "var(--muted)",
+                            textDecoration: "none",
+                            transition: "all 0.15s",
+                            opacity: 0.8,
+                          }}
+                          onMouseOver={(e) => (e.currentTarget.style.color = "var(--text)")}
+                          onMouseOut={(e) => (e.currentTarget.style.color = "var(--muted)")}
+                        >
                           <span style={{ fontSize: "0.8rem" }}>⚙️</span>
                           Admin Console ↗
                         </a>
