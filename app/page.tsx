@@ -117,7 +117,7 @@ export default function OverviewPage() {
         <img src="/images/torch-logo.png" alt="The Torch" style={{ width: 56, height: 56, objectFit: "contain" }} />
         <div>
           <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--accent)", margin: 0 }}>
-            The Torch Marketing Hub
+            The Torch Operations Center
           </h1>
           <div style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>{dateStr}</div>
         </div>

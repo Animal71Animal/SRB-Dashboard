@@ -72,7 +72,7 @@ export default function Sidebar() {
         <div style={{ padding: "0 20px 24px", borderBottom: "1px solid var(--border)" }}>
           <img src="/images/torch-logo.png" alt="The Torch" style={{ width: 40, height: 40, marginBottom: 8, objectFit: "contain" }} />
           <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--accent)", letterSpacing: "-0.02em" }}>
-            The Torch Marketing Hub
+            The Torch Operations Center
           </div>
           <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: 4 }}>
             The Torch Boise

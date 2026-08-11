@@ -4,8 +4,8 @@ import RootLayoutWrapper from "@/components/RootLayoutWrapper";
 import AnimatedBackground from "@/components/AnimatedBackground";
 
 export const metadata: Metadata = {
-  title: "The Torch Marketing Hub",
-  description: "The Torch Boise — Promotions & Marketing Dashboard",
+  title: "The Torch Operations Center",
+  description: "The Torch Boise — Promotions, Marketing & Operations",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
