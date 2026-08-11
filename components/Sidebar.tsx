@@ -141,8 +141,11 @@ export default function Sidebar() {
 
         {/* CloudTV Studio Sidebar Integration */}
         <div style={{ marginTop: "auto", padding: "16px 20px", borderTop: "1px solid var(--border)" }}>
-          <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 12 }}>
-            CloudTV Studio — Live
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+            <img src="/images/torchtv-logo.png" alt="TorchTV" style={{ width: 24, height: 24, objectFit: "contain" }} />
+            <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              TorchTV — LIVE
+            </div>
           </div>
           <div style={{ borderRadius: 8, overflow: "hidden", border: "1px solid var(--border)", background: "#000", aspectRatio: "16/9", position: "relative" }}>
             <iframe
