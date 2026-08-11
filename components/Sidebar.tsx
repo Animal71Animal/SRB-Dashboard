@@ -45,7 +45,11 @@ export default function Sidebar() {
 
   const isOverviewActive = pathname === "/";
 
+  // Check if we should render the Admin Console sub-tab
+  const isTorchTVActive = pathname === "/torchtv";
+
   return (
+
     <>
       {/* Mobile Menu Button */}
       <button onClick={() => setMobileOpen(!mobileOpen)} className="mobile-menu-btn"
@@ -120,18 +124,44 @@ export default function Sidebar() {
                 {groupedModules[group].map((item) => {
                   const active = pathname === item.href;
                   return (
-                    <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
-                      style={{
-                        display: "flex", alignItems: "center", gap: 10,
-                        padding: "9px 20px", fontSize: "0.875rem",
-                        color: active ? "var(--accent2)" : "var(--text)",
-                        background: active ? "rgba(201,0,43,0.1)" : "transparent",
-                        borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                        textDecoration: "none", transition: "all 0.15s",
-                      }}>
-                      <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                      {item.title}
-                    </Link>
+                      {item.href.startsWith("http") ? (
+                        <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer"
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            padding: "9px 20px", fontSize: "0.875rem",
+                            color: "var(--text)", textDecoration: "none", transition: "all 0.15s",
+                            borderLeft: "2px solid transparent",
+                          }}>
+                          <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                          {item.title}
+                        </a>
+                      ) : (
+                        <Link key={item.href} href={item.href} onClick={() => setMobileOpen(false)}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            padding: "9px 20px", fontSize: "0.875rem",
+                            color: active ? "var(--accent2)" : "var(--text)",
+                            background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                            borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                            textDecoration: "none", transition: "all 0.15s",
+                          }}>
+                          <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                          {item.title}
+                        </Link>
+                      )}
+
+                      {/* Admin Console Sub-tab (only when TorchTV is active) */}
+                      {item.href === "/torchtv" && isTorchTVActive && (
+                        <a href="https://12b0afb612.abacusai.cloud/admin" target="_blank" rel="noopener noreferrer"
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                            color: "var(--muted)", textDecoration: "none", transition: "all 0.15s",
+                          }}>
+                          <span style={{ fontSize: "0.8rem" }}>⚙️</span>
+                          Admin Console ↗
+                        </a>
+                      )}
                   );
                 })}
               </div>

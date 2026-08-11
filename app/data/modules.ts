@@ -25,7 +25,6 @@ export const modules: Module[] = [
   // Operations
   { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
   { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
-  { href: "https://12b0afb612.abacusai.cloud/admin", icon: "⚙️", title: "Admin Console", desc: "Manage playlists and uploads.", group: "operations" },
   { href: "/staff-notes", icon: "📝", title: "Staff Notes", desc: "Internal notes and memos.", group: "operations" },
   { href: "/logged-hours", icon: "⏱️", title: "Logged Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
 ];
