@@ -139,19 +139,6 @@ export default function Sidebar() {
           ))}
         </nav>
 
-        {/* CloudTV Studio Sidebar Integration - Icon Link Only */}
-        <div style={{ marginTop: "auto", padding: "16px 20px", borderTop: "1px solid var(--border)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-            <img src="/images/torchtv-logo.png" alt="TorchTV" style={{ width: 24, height: 24, objectFit: "contain" }} />
-            <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-              TorchTV — LIVE
-            </div>
-          </div>
-          <a href="https://12b0afb612.abacusai.cloud/watch" target="_blank" rel="noopener noreferrer"
-            style={{ display: "block", fontSize: "0.65rem", color: "var(--accent2)", textDecoration: "none", fontWeight: 600 }}>
-            Master Broadcast Hub →
-          </a>
-        </div>
 
         {/* Footer */}
         <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)" }}>
