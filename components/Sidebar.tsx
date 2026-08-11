@@ -70,7 +70,10 @@ export default function Sidebar() {
 
         {/* Logo */}
         <div style={{ padding: "0 20px 24px", borderBottom: "1px solid var(--border)" }}>
-          <img src="/images/torch-logo.png" alt="The Torch" style={{ width: 40, height: 40, marginBottom: 8, objectFit: "contain" }} />
+          <div style={{ display: "flex", gap: 8, marginBottom: 8 }}>
+            <img src="/images/torch-logo.png" alt="Torch 1" style={{ width: 30, height: 30, objectFit: "contain", borderRadius: 4 }} />
+            <img src="/images/torch2-logo.png" alt="Torch 2" style={{ width: 30, height: 30, objectFit: "contain", borderRadius: 4 }} />
+          </div>
           <div style={{ fontSize: "1rem", fontWeight: 700, color: "var(--accent)", letterSpacing: "-0.02em" }}>
             The Torch Operations Center
           </div>
