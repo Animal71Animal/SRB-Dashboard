@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-content-assets.json";
 
@@ -10,11 +11,12 @@ export interface ContentAsset {
   dateCreated: string;
   description: string;
   link: string;
+  venue?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { data } = await safeRead<ContentAsset[]>(FILE, []);
-  return NextResponse.json(data);
+  return NextResponse.json(filterByVenue(data, getVenueParam(req)));
 }
 
 export async function POST(req: NextRequest) {
@@ -28,6 +30,7 @@ export async function POST(req: NextRequest) {
       dateCreated: body.dateCreated ?? new Date().toISOString().split("T")[0],
       description: body.description ?? "",
       link: body.link ?? "",
+      ...withDefaultVenue({ venue: body.venue }),
     };
     await safeWrite(FILE, [item, ...data], sha, `feat: add asset "${item.name}"`);
     return NextResponse.json({ ok: true, item });

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite, readLocal, writeLocal } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-events.json";
 const LOCAL = "srb-events.json";
@@ -12,6 +13,7 @@ export interface OneOffEvent {
   name: string;
   theme: string;
   status: SRBStatus;
+  venue?: string;
 }
 
 export interface EventSeries {
@@ -20,6 +22,7 @@ export interface EventSeries {
   theme: string;
   status: SRBStatus;
   dates: string[];
+  venue?: string;
 }
 
 export interface EventsFile {
@@ -33,12 +36,18 @@ function newId(prefix: string) {
   return `${prefix}-${Date.now()}`;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const { data } = await safeRead<EventsFile>(FILE, EMPTY);
-    return NextResponse.json(data);
+    const venue = getVenueParam(req);
+    const filtered: EventsFile = {
+      oneOffs: filterByVenue(data.oneOffs ?? [], venue),
+      series: filterByVenue(data.series ?? [], venue),
+    };
+    return NextResponse.json(filtered);
   } catch {
-    return NextResponse.json(readLocal<EventsFile>(LOCAL) ?? EMPTY);
+    const local = readLocal<EventsFile>(LOCAL) ?? EMPTY;
+    return NextResponse.json(local);
   }
 }
 
@@ -49,25 +58,25 @@ export async function POST(req: NextRequest) {
     const { oneOffs = [], series = [] } = data;
 
     if (body.kind === "series") {
-      const item: EventSeries = {
+      const item: EventSeries = withDefaultVenue({
         id: newId("ser"),
         name: body.name ?? "",
         theme: body.theme ?? "",
         status: body.status ?? "Planned",
         dates: Array.isArray(body.dates) ? body.dates : [],
-      };
+      });
       await safeWrite(FILE, { oneOffs, series: [item, ...series] }, sha, `feat: add event series "${item.name}"`);
       return NextResponse.json({ ok: true, item });
     }
 
     // default: one-off event
-    const item: OneOffEvent = {
+    const item: OneOffEvent = withDefaultVenue({
       id: newId("evt"),
       date: body.date ?? "",
       name: body.name ?? "",
       theme: body.theme ?? "",
       status: body.status ?? "Planned",
-    };
+    });
     await safeWrite(FILE, { oneOffs: [item, ...oneOffs], series }, sha, `feat: add event "${item.name}"`);
     return NextResponse.json({ ok: true, item });
   } catch (err) {

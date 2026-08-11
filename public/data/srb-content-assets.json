@@ -5,7 +5,8 @@
     "type": "Flyer",
     "dateCreated": "2026-07-31",
     "description": "",
-    "link": "https://drive.google.com/file/d/1n2NqUTB31SvBWu5jqUW6Oz4A07zU6GFG/view?usp=drive_link"
+    "link": "https://drive.google.com/file/d/1n2NqUTB31SvBWu5jqUW6Oz4A07zU6GFG/view?usp=drive_link",
+    "venue": "torch1"
   },
   {
     "id": "asset-1786409362089",
@@ -13,7 +14,8 @@
     "type": "Flyer",
     "dateCreated": "2026-07-31",
     "description": "",
-    "link": "https://drive.google.com/file/d/1S0DOwkuOvw3nP-mex8Vvihgs3cgvAEUo/view?usp=drive_link"
+    "link": "https://drive.google.com/file/d/1S0DOwkuOvw3nP-mex8Vvihgs3cgvAEUo/view?usp=drive_link",
+    "venue": "torch1"
   },
   {
     "id": "asset-1786409279319",
@@ -21,7 +23,8 @@
     "type": "Flyer",
     "dateCreated": "2026-07-31",
     "description": "",
-    "link": "https://drive.google.com/file/d/1nFjp3GBVcq88bu9Yw_A6QLyPFMI57uta/view?usp=drive_link"
+    "link": "https://drive.google.com/file/d/1nFjp3GBVcq88bu9Yw_A6QLyPFMI57uta/view?usp=drive_link",
+    "venue": "torch1"
   },
   {
     "id": "asset-1786409139201",
@@ -29,6 +32,7 @@
     "type": "Flyer",
     "dateCreated": "2026-07-31",
     "description": "",
-    "link": "https://drive.google.com/file/d/14NAj0lXcWxlc0PxT4E_N8DU3SaI3ffo-/view?usp=sharing"
+    "link": "https://drive.google.com/file/d/14NAj0lXcWxlc0PxT4E_N8DU3SaI3ffo-/view?usp=sharing",
+    "venue": "torch1"
   }
 ]

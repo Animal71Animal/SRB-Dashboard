@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-comp-codes.json";
 
@@ -11,11 +12,12 @@ export interface CompCode {
   expiryDate: string;
   used: boolean;
   notes: string;
+  venue?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { data } = await safeRead<CompCode[]>(FILE, []);
-  return NextResponse.json(data);
+  return NextResponse.json(filterByVenue(data, getVenueParam(req)));
 }
 
 export async function POST(req: NextRequest) {
@@ -30,6 +32,7 @@ export async function POST(req: NextRequest) {
       expiryDate: body.expiryDate ?? "",
       used: body.used ?? false,
       notes: body.notes ?? "",
+      ...withDefaultVenue({ venue: body.venue }),
     };
     const updated = [item, ...data];
     await safeWrite(FILE, updated, sha, `feat: add comp code "${item.code}" for ${item.recipientName}`);

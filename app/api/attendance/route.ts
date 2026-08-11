@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-attendance.json";
 
@@ -11,18 +12,19 @@ export interface AttendanceEntry {
   headcount: number;
   coverRevenue: string;
   notes: string;
+  venue?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { data } = await safeRead<AttendanceEntry[]>(FILE, []);
-  return NextResponse.json(data);
+  return NextResponse.json(filterByVenue(data, getVenueParam(req)));
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { data, sha } = await safeRead<AttendanceEntry[]>(FILE, []);
-    const item: AttendanceEntry = { id: `att-${Date.now()}`, ...body };
+    const item: AttendanceEntry = { id: `att-${Date.now()}`, ...withDefaultVenue(body) };
     const updated = [item, ...data].sort((a, b) => b.date.localeCompare(a.date));
     await safeWrite(FILE, updated, sha, `feat: add attendance ${item.date}`);
     return NextResponse.json({ ok: true, item });

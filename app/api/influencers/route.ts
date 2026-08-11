@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-influencers.json";
 
@@ -18,18 +19,19 @@ export interface Influencer {
   facebook?: SocialProfile;
   status: "active" | "contacted" | "pending" | "passed";
   notes: string;
+  venue?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { data } = await safeRead<Influencer[]>(FILE, []);
-  return NextResponse.json(data);
+  return NextResponse.json(filterByVenue(data, getVenueParam(req)));
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { data, sha } = await safeRead<Influencer[]>(FILE, []);
-    const item: Influencer = { id: `inf-${Date.now()}`, ...body };
+    const item: Influencer = { id: `inf-${Date.now()}`, ...withDefaultVenue(body) };
     await safeWrite(FILE, [item, ...data], sha, `feat: add influencer "${item.name}"`);
     return NextResponse.json({ ok: true, item });
   } catch (err) {

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-staff-notes.json";
 
@@ -8,9 +9,11 @@ export interface StaffNote {
   date: string;
   title: string;
   content: string;
+  venue?: string;
 }
 
 export async function GET() {
+  // Staff notes are internal/global — NOT filtered by venue on display.
   const { data } = await safeRead<StaffNote[]>(FILE, []);
   return NextResponse.json(data);
 }
@@ -24,6 +27,7 @@ export async function POST(req: NextRequest) {
       date: body.date ?? new Date().toISOString().split("T")[0],
       title: body.title ?? "Untitled",
       content: body.content ?? "",
+      ...withDefaultVenue({ venue: body.venue }),
     };
     const updated = [item, ...data];
     await safeWrite(FILE, updated, sha, `feat: add staff note "${item.title}"`);

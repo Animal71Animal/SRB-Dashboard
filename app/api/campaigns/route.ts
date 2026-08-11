@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-campaigns.json";
 
@@ -12,12 +13,13 @@ export interface Campaign {
   endDate: string;
   status: "Active" | "Completed" | "Paused" | "Planned";
   notes: string;
+  venue?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
     const { data } = await safeRead<Campaign[]>(FILE, []);
-    return NextResponse.json(data);
+    return NextResponse.json(filterByVenue(data, getVenueParam(req)));
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
   }
@@ -27,7 +29,7 @@ export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { data, sha } = await safeRead<Campaign[]>(FILE, []);
-    const item: Campaign = { id: `camp-${Date.now()}`, ...body };
+    const item: Campaign = { id: `camp-${Date.now()}`, ...withDefaultVenue(body) };
     const updated = [item, ...data];
     await safeWrite(FILE, updated, sha, `feat: add campaign "${item.name}"`);
     return NextResponse.json({ ok: true, item });

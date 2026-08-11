@@ -53,7 +53,8 @@
           "showName": "The Amityville Horrors",
           "time": "2:00 AM"
         }
-      ]
+      ],
+      "venue": "torch1"
     },
     {
       "id": "evt-tailgate-touchdown",
@@ -67,7 +68,8 @@
       "drinks": "NEED IDEAS",
       "games": "Cornhole, beer pong, giant Jenga, fantasy football draft board, jersey raffle",
       "costuming": "Jerseys, team gear encouraged — entertainers in team colors or cheerleader-style outfits",
-      "day": "Saturday"
+      "day": "Saturday",
+      "venue": "torch1"
     },
     {
       "id": "evt-new-years-eve",
@@ -81,7 +83,8 @@
       "drinks": "Champagne packages, Midnight Kiss (champagne + strawberry), Resolution cocktails",
       "games": "Countdown celebration, midnight kiss contest, resolution wall, photo booth",
       "costuming": "Formal/cocktail attire encouraged. Black tie optional VIP section.",
-      "day": "Thursday"
+      "day": "Thursday",
+      "venue": "torch1"
     },
     {
       "id": "evt-valentines-special",
@@ -95,7 +98,8 @@
       "drinks": "Love Potion (pink cocktail), Broken Heart (whiskey + bitters), Cupid's Arrow (champagne + raspberry)",
       "games": "Singles mingle speed dating, couples dance contest, love song request hour",
       "costuming": "Red, pink, or black attire. Romantic or anti-romantic theme encouraged.",
-      "day": "Sunday"
+      "day": "Sunday",
+      "venue": "torch1"
     },
     {
       "id": "evt-st-patricks-day",
@@ -109,7 +113,8 @@
       "drinks": "Green Beer, Irish Car Bombs, Jameson specials, Shamrock Shots",
       "games": "Best green outfit contest, Irish trivia, pot of gold raffle",
       "costuming": "Green mandatory. Leprechaun hats, shamrock accessories encouraged.",
-      "day": "Wednesday"
+      "day": "Wednesday",
+      "venue": "torch1"
     },
     {
       "id": "evt-blacklight-party",
@@ -122,7 +127,8 @@
       "format": "Full club UV/blacklight transformation. Neon body paint station, glow sticks, white clothing encouraged. DJ plays high-energy EDM and hip-hop.",
       "drinks": "Glow-in-the-dark cocktails (tonic water base), Neon Margaritas, Blacklight Beer specials",
       "games": "Best glow outfit contest, neon body paint competition, glow stick dance-off",
-      "costuming": "White or neon clothing required for full effect. Body paint available at entry."
+      "costuming": "White or neon clothing required for full effect. Body paint available at entry.",
+      "venue": "torch1"
     },
     {
       "id": "evt-pole-competition",
@@ -135,7 +141,8 @@
       "format": "Multi-round pole dancing competition with judges panel. Amateur and pro divisions. Audience voting + professional scoring.",
       "drinks": "Champagne specials, VIP bottle service for judges/sponsors, themed cocktails per round",
       "games": "Competition rounds (technical, artistic, freestyle), audience vote, judges' choice awards",
-      "costuming": "Competition-appropriate athletic wear. Judges in formal attire."
+      "costuming": "Competition-appropriate athletic wear. Judges in formal attire.",
+      "venue": "torch1"
     }
   ],
   "series": [
@@ -153,7 +160,8 @@
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/clocked-out-sundays.jpg",
       "dates": [],
-      "startDate": ""
+      "startDate": "",
+      "venue": "torch1"
     },
     {
       "id": "ser-005",
@@ -169,7 +177,8 @@
       "costuming": "Entertainers in teddys, lingerie, and bedroom wear",
       "flyerImage": "/images/party-flyers/lingerie-lounge.jpg",
       "dates": [],
-      "startDate": ""
+      "startDate": "",
+      "venue": "torch1"
     },
     {
       "id": "ser-001",
@@ -185,7 +194,8 @@
       "costuming": "Cosplay or not....",
       "flyerImage": "/images/party-flyers/level-up.jpg",
       "dates": [],
-      "startDate": ""
+      "startDate": "",
+      "venue": "torch1"
     },
     {
       "id": "ser-002",
@@ -201,7 +211,8 @@
       "costuming": "Entertainers wear dope sneakers with coordinating outfits. Fresh kicks front and center with fits that match the energy.",
       "flyerImage": "/images/party-flyers/chicks-n-kicks.jpg",
       "dates": [],
-      "startDate": ""
+      "startDate": "",
+      "venue": "torch1"
     },
     {
       "id": "ser-003",
@@ -217,7 +228,8 @@
       "costuming": "Gowns, Dresses, Sexy Evening Wear",
       "flyerImage": "/images/party-flyers/femme-fatale-fridays.jpg",
       "dates": [],
-      "startDate": ""
+      "startDate": "",
+      "venue": "torch1"
     },
     {
       "id": "ser-004",
@@ -233,7 +245,8 @@
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/after-dark.jpg",
       "dates": [],
-      "startDate": "2026-09-05"
+      "startDate": "2026-09-05",
+      "venue": "torch1"
     },
     {
       "id": "ser-featured-entertainer",
@@ -251,7 +264,8 @@
       "flyerImage": "",
       "dates": [],
       "startDate": "",
-      "_format_featured_entertainer": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience"
+      "_format_featured_entertainer": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience",
+      "venue": "torch1"
     },
     {
       "id": "ser-featured-entertainer-showcase",
@@ -317,7 +331,8 @@
           "entertainer": "Indie",
           "showName": "Indie Xmas Show"
         }
-      ]
+      ],
+      "venue": "torch1"
     }
   ]
 }

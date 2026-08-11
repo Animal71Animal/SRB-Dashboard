@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
+import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-social-calendar.json";
 
@@ -11,18 +12,19 @@ export interface SocialPost {
   scheduledDate: string;
   scheduledTime: string;
   status: "Draft" | "Scheduled" | "Posted";
+  venue?: string;
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   const { data } = await safeRead<SocialPost[]>(FILE, []);
-  return NextResponse.json(data);
+  return NextResponse.json(filterByVenue(data, getVenueParam(req)));
 }
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { data, sha } = await safeRead<SocialPost[]>(FILE, []);
-    const item: SocialPost = { id: `sc-${Date.now()}`, ...body };
+    const item: SocialPost = { id: `sc-${Date.now()}`, ...withDefaultVenue(body) };
     await safeWrite(FILE, [item, ...data], sha, `feat: add social post ${item.id}`);
     return NextResponse.json({ ok: true, item });
   } catch (err) {
