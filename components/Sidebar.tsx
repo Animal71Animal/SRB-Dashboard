@@ -147,7 +147,7 @@ export default function Sidebar() {
               TorchTV — LIVE
             </div>
           </div>
-          <a href="/torchtv"
+          <a href="https://12b0afb612.abacusai.cloud/watch" target="_blank" rel="noopener noreferrer"
             style={{ display: "block", fontSize: "0.65rem", color: "var(--accent2)", textDecoration: "none", fontWeight: 600 }}>
             Master Broadcast Hub →
           </a>
