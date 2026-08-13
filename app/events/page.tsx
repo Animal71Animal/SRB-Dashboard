@@ -30,6 +30,8 @@ interface EventSeries {
   shows?: ShowEntry[]; venue?: string;
 }
 
+type NewEventForm = Partial<OneOffEvent> & Partial<EventSeries> & { id: string };
+
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
@@ -78,7 +80,8 @@ export default function EventsPage() {
   const [data, setData] = useState<EventsFile>({ oneOffs: [], series: [] });
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
-  const [form, setForm] = useState<Partial<OneOffEvent>>(emptyOneOff);
+  const [formType, setFormType] = useState<'oneOff' | 'series'>('oneOff');
+  const [form, setForm] = useState<NewEventForm>(emptyOneOff as NewEventForm);
   
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 7, 1));
   const [selectedEventIds, setSelectedEventIds] = useState<{ type: 'oneOff' | 'series', id: string }[]>([]);
@@ -141,12 +144,15 @@ export default function EventsPage() {
       // Determine kind: explicit > payload.day heuristic > look up in data
       let kind = explicitKind;
       if (!kind) kind = payload.day ? 'series' : 'oneOff';
-      
+
       // Verify by checking if id exists in series list
       const existsInSeries = (data.series || []).some(s => s.id === payload.id);
       const existsInOneOffs = (data.oneOffs || []).some(e => e.id === payload.id);
       if (existsInSeries && !existsInOneOffs) kind = 'series';
       if (existsInOneOffs && !existsInSeries) kind = 'oneOff';
+
+      // If no existing id, this is a CREATE not an update
+      const isCreate = !payload.id;
 
       if (kind === 'series' && payload.day && payload.startDate) {
         const canonicalDay = normalizeRecurrenceCode(payload.day);
@@ -156,14 +162,16 @@ export default function EventsPage() {
         }
       }
 
-      await fetch("/api/events", { 
-        method: "PATCH", 
-        headers: { "Content-Type": "application/json" }, 
-        body: JSON.stringify({ id: payload.id, kind, ...payload }) 
+      await fetch("/api/events", {
+        method: isCreate ? "POST" : "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(isCreate ? { kind, ...payload } : { id: payload.id, kind, ...payload }),
       });
-      
+
       setEditingId(null);
       setEditBuffer(null);
+      setShowForm(false);
+      setForm({ ...emptyOneOff, id: "", venue: "torch1" });
       await load();
     } finally { setLoading(false); }
   };
@@ -327,7 +335,7 @@ export default function EventsPage() {
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Confirmed Events Layout</p>
         </div>
-        <button onClick={() => { setForm(emptyOneOff); setShowForm(true); }} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontWeight: 600, cursor: "pointer" }}>+ Add Event</button>
+        <button onClick={() => { setForm({ ...emptyOneOff, id: "", venue: "torch1" }); setFormType('oneOff'); setShowForm(true); }} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontWeight: 600, cursor: "pointer" }}>+ Add Event</button>
       </div>
 
       <div style={{ ...CARD, marginBottom: 32 }}>
@@ -397,27 +405,66 @@ export default function EventsPage() {
 
       {showForm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 520, maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Add One-Off Event</h3>
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <h3 style={{ margin: 0, fontWeight: 700 }}>Add {formType === 'series' ? 'Weekly Series' : 'One-Off Event'}</h3>
+              <button onClick={() => setShowForm(false)} style={{ background: "none", border: "none", color: "var(--muted)", fontSize: "1.2rem", cursor: "pointer" }}>✕</button>
+            </div>
+
+            {/* Type toggle */}
+            <div style={{ display: "flex", gap: 6, marginBottom: 18, padding: 4, background: "var(--bg)", borderRadius: 8, border: "1px solid var(--border)" }}>
+              <button onClick={() => setFormType('oneOff')} style={{ flex: 1, padding: "8px", borderRadius: 6, border: "none", background: formType === 'oneOff' ? "var(--accent2)" : "transparent", color: formType === 'oneOff' ? "#fff" : "var(--text)", fontWeight: 600, cursor: "pointer", fontSize: "0.85rem" }}>📅 One-Off Event</button>
+              <button onClick={() => setFormType('series')} style={{ flex: 1, padding: "8px", borderRadius: 6, border: "none", background: formType === 'series' ? "var(--accent2)" : "transparent", color: formType === 'series' ? "#fff" : "var(--text)", fontWeight: 600, cursor: "pointer", fontSize: "0.85rem" }}>📁 Weekly Series</button>
+            </div>
+
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                <div><label style={LABEL_STYLE}>Icon</label><input value={form.icon ?? ""} onChange={(e) => setForm(f => ({ ...f, icon: e.target.value }))} style={INPUT_STYLE} placeholder="e.g. 🎉" /></div>
-                <div><label style={LABEL_STYLE}>Date</label><input type="date" value={form.date ?? ""} onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))} style={INPUT_STYLE} /></div>
+                <div><label style={LABEL_STYLE}>Icon</label><input value={form.icon ?? ""} onChange={(e) => setForm(f => ({ ...f, icon: e.target.value }))} style={INPUT_STYLE} placeholder={formType === 'series' ? "e.g. 📁" : "e.g. 🎉"} /></div>
+                {formType === 'oneOff' ? (
+                  <div><label style={LABEL_STYLE}>Date *</label><input type="date" value={form.date ?? ""} onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))} style={INPUT_STYLE} /></div>
+                ) : (
+                  <div><label style={LABEL_STYLE}>Start Date *</label><input type="date" value={form.startDate ?? ""} onChange={(e) => setForm(f => ({ ...f, startDate: e.target.value }))} style={INPUT_STYLE} /></div>
+                )}
               </div>
-              <div><label style={LABEL_STYLE}>Event Name</label><input value={form.name ?? ""} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} style={INPUT_STYLE} /></div>
-              <div><label style={LABEL_STYLE}>Theme</label><input value={form.theme ?? ""} onChange={(e) => setForm(f => ({ ...f, theme: e.target.value }))} style={INPUT_STYLE} /></div>
+              <div><label style={LABEL_STYLE}>Event Name *</label><input value={form.name ?? ""} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} style={INPUT_STYLE} placeholder="e.g. Industry Night" /></div>
+              <div><label style={LABEL_STYLE}>Theme</label><input value={form.theme ?? ""} onChange={(e) => setForm(f => ({ ...f, theme: e.target.value }))} style={INPUT_STYLE} placeholder="Optional" /></div>
+
+              {formType === 'series' && (
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                  <div>
+                    <label style={LABEL_STYLE}>Recurring Day *</label>
+                    <select value={form.day ?? ""} onChange={(e) => setForm(f => ({ ...f, day: e.target.value }))} style={INPUT_STYLE}>
+                      <option value="">Select…</option>
+                      {RECURRENCE_RULES.map((r) => <option key={r.code} value={r.code}>{r.label}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label style={LABEL_STYLE}>Status</label>
+                    <select value={form.status ?? "Planned"} onChange={(e) => setForm(f => ({ ...f, status: e.target.value as SRBStatus }))} style={INPUT_STYLE}>
+                      <option>Planned</option><option>Confirmed</option><option>Cancelled</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
               <div>
                 <label style={LABEL_STYLE}>Venue Selection</label>
-                <select value={form.venue || ""} onChange={(e) => setForm(f => ({ ...f, venue: e.target.value }))} style={INPUT_STYLE}>
-                    <option value="">Select Venue</option>
+                <select value={form.venue || "torch1"} onChange={(e) => setForm(f => ({ ...f, venue: e.target.value }))} style={INPUT_STYLE}>
                     <option value="torch1">Torch 1</option>
                     <option value="torch2">Torch 2</option>
                     <option value="both">Both</option>
                 </select>
               </div>
-              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
-                <button onClick={() => save(form)} style={{ flex: 1, background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer" }}>Add Event</button>
-                <button onClick={() => setShowForm(false)} style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "10px", cursor: "pointer" }}>Cancel</button>
+
+              <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
+                <button
+                  onClick={() => save(form, formType)}
+                  disabled={!form.name || (formType === 'oneOff' ? !form.date : (!form.startDate || !form.day))}
+                  style={{ flex: 1, background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer", opacity: (!form.name || (formType === 'oneOff' ? !form.date : (!form.startDate || !form.day))) ? 0.5 : 1 }}
+                >
+                  Add {formType === 'series' ? 'Series' : 'Event'}
+                </button>
+                <button onClick={() => { setShowForm(false); setForm({ ...emptyOneOff, id: "", venue: "torch1" }); }} style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "10px", cursor: "pointer" }}>Cancel</button>
               </div>
             </div>
           </div>
