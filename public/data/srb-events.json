@@ -76,7 +76,7 @@
       "date": "2026-12-31",
       "name": "New Year's Eve Gala",
       "theme": "",
-      "status": "Planned",
+      "status": "Confirmed",
       "icon": "🎆",
       "who": "Couples, groups, anyone looking for a premium NYE experience",
       "format": "Premium open bar packages, champagne toast at midnight, countdown celebration, special NYE menu. Higher cover, VIP tables available.",
@@ -84,7 +84,7 @@
       "games": "Countdown celebration, midnight kiss contest, resolution wall, photo booth",
       "costuming": "Formal/cocktail attire encouraged. Black tie optional VIP section.",
       "day": "Thursday",
-      "venue": "torch1"
+      "venue": "both"
     },
     {
       "id": "evt-valentines-special",
