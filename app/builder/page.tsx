@@ -42,8 +42,8 @@ export default function BuilderPage() {
 
   return (
     <div style={{ padding: "40px 20px", maxWidth: 800, margin: "0 auto" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 8, letterSpacing: "-0.02em" }}>Access Control Builder</h1>
-      <p style={{ color: "var(--muted)", marginBottom: 32 }}>Manage user roles and dashboard permissions.</p>
+      <h1 style={{ fontSize: "2rem", fontWeight: 800, marginBottom: 8, letterSpacing: "-0.02em" }}>Permissions Dashboard</h1>
+      <p style={{ color: "var(--muted)", marginBottom: 32 }}>Manage user roles and dashboard access levels.</p>
 
       <div style={{ ...CARD, marginBottom: 32 }}>
         <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Add / Update User</h3>
@@ -55,6 +55,7 @@ export default function BuilderPage() {
           <div>
             <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Assigned Role</label>
             <select value={role} onChange={e => setRole(e.target.value as Role)} style={INPUT}>
+              <option>SuperSuperAdmin</option>
               <option>SuperAdmin</option>
               <option>Manager</option>
               <option>DJ</option>
@@ -81,8 +82,9 @@ export default function BuilderPage() {
               <span>
                 <span style={{
                   padding: "2px 8px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 700,
-                  background: u.role === "SuperAdmin" ? "#dc2626" : u.role === "Manager" ? "#fb923c" : u.role === "DJ" ? "#facc15" : "var(--border)",
-                  color: u.role === "DJ" ? "#000" : "#fff"
+                  background: u.role === "SuperSuperAdmin" ? "#000" : (u.role === "SuperAdmin" ? "#dc2626" : u.role === "Manager" ? "#fb923c" : u.role === "DJ" ? "#facc15" : "var(--border)"),
+                  color: (u.role === "DJ" || u.role === "SuperSuperAdmin") ? "inherit" : "#fff",
+                  boxShadow: u.role === "SuperSuperAdmin" ? "0 0 0 1px #fff" : "none"
                 }}>
                   {u.role}
                 </span>

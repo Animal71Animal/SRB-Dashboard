@@ -1,4 +1,4 @@
-export type Role = "SuperAdmin" | "Manager" | "DJ" | "Employee";
+export type Role = "SuperSuperAdmin" | "SuperAdmin" | "Manager" | "DJ" | "Employee";
 
 export interface Permissions {
   view: string[];      // Module hrefs allowed to view
@@ -7,6 +7,11 @@ export interface Permissions {
 }
 
 export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
+  SuperSuperAdmin: {
+    view: ["*"],
+    edit: ["*"],
+    special: ["admin-console", "builder"]
+  },
   SuperAdmin: {
     view: ["*"],
     edit: ["*"],

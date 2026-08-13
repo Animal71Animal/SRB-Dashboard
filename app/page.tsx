@@ -158,8 +158,8 @@ export default function OverviewPage() {
         Quick Access
       </h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
-        {role === "SuperAdmin" && (
-          <ModuleCard href="/builder" icon="🛡️" title="Access Builder" desc="Manage staff emails and role-based permissions." />
+        {hasPermission(role, "special", "builder") && (
+          <ModuleCard href="/builder" icon="🛡️" title="Permissions" desc="Manage staff emails and role-based permissions." />
         )}
         {modules.filter(m => hasPermission(role, "view", m.href)).map((m) => (
           <ModuleCard key={m.href} href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
