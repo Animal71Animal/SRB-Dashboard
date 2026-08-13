@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { useVenue } from "@/components/VenueSwitcher";
+import { RECURRENCE_RULES, computeSeriesDates, normalizeRecurrenceCode, recurrenceLabel, CALENDAR_FROM, CALENDAR_TO } from "@/lib/recurrence";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const BADGE: Record<string, string> = {
@@ -33,8 +34,6 @@ interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
 
-const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
 function formatVenueLabel(v?: string) {
   if (v === "torch1") return "Torch 1";
   if (v === "torch2") return "Torch 2";
@@ -51,43 +50,6 @@ function normalizeVenueCode(v?: string): "torch1" | "torch2" | "both" | undefine
   if (lc === "both") return "both";
   return undefined;
 }
-
-/**
- * Generate every YYYY-MM-DD date in [from, to] that matches the given weekday
- * AND is on or after the series' startDate. Returns a sorted, deduplicated array.
- */
-function generateRecurringDates(
-  startDate: string | undefined,
-  day: string | undefined,
-  fromISO: string,
-  toISO: string,
-): string[] {
-  if (!startDate || !day) return [];
-  // Canonicalize the weekday input
-  const target = WEEKDAYS.find((w) => w.toLowerCase() === String(day).toLowerCase().trim());
-  if (!target) return [];
-  const targetIdx = WEEKDAYS.indexOf(target); // 0=Sun..6=Sat
-  const out: string[] = [];
-  const start = new Date(startDate + "T12:00:00");
-  const from = new Date(fromISO + "T12:00:00");
-  const to = new Date(toISO + "T12:00:00");
-  if (Number.isNaN(start.getTime()) || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return [];
-  // Walk forward one day at a time from whichever is later (startDate, from)
-  const cursor = new Date(Math.max(start.getTime(), from.getTime()));
-  // Snap back to the most recent target weekday
-  while (cursor.getDay() !== targetIdx) cursor.setDate(cursor.getDate() - 1);
-  while (cursor.getTime() <= to.getTime()) {
-    const y = cursor.getFullYear();
-    const m = String(cursor.getMonth() + 1).padStart(2, "0");
-    const d = String(cursor.getDate()).padStart(2, "0");
-    out.push(`${y}-${m}-${d}`);
-    cursor.setDate(cursor.getDate() + 7);
-  }
-  return out;
-}
-
-const CALENDAR_FROM = "2026-08-01";
-const CALENDAR_TO = "2027-12-31";
 
 function StatusPill({ status }: { status: SRBStatus }) {
   return (
@@ -186,9 +148,12 @@ export default function EventsPage() {
       if (existsInSeries && !existsInOneOffs) kind = 'series';
       if (existsInOneOffs && !existsInSeries) kind = 'oneOff';
 
-      if (kind === 'series' && payload.startDate && payload.day) {
-        // Regenerate the full dates array based on day + startDate for the calendar range
-        payload.dates = generateRecurringDates(payload.startDate, payload.day, CALENDAR_FROM, CALENDAR_TO);
+      if (kind === 'series' && payload.day && payload.startDate) {
+        const canonicalDay = normalizeRecurrenceCode(payload.day);
+        if (canonicalDay) {
+          payload.day = canonicalDay;
+          payload.dates = computeSeriesDates(canonicalDay, payload.startDate, CALENDAR_FROM, CALENDAR_TO);
+        }
       }
 
       await fetch("/api/events", { 
@@ -239,7 +204,7 @@ export default function EventsPage() {
                 )}
                 {isCollapsed && (
                   <p style={{ margin: "2px 0 0", fontSize: "0.75rem", color: "var(--muted)" }}>
-                    {refType === 'oneOff' ? fmtDate(e.date) : `Every ${e.day || "—"}`} · {e.status}
+                    {refType === 'oneOff' ? fmtDate(e.date) : (e.day ? recurrenceLabel(e.day) : "—")} · {e.status}
                   </p>
                 )}
               </div>
@@ -298,7 +263,7 @@ export default function EventsPage() {
                         style={INPUT_STYLE}
                       >
                         <option value="">Select Recurring Day</option>
-                        {WEEKDAYS.map((w) => <option key={w} value={w}>{w}</option>)}
+                        {RECURRENCE_RULES.map((r) => <option key={r.code} value={r.code}>{r.label}</option>)}
                       </select>
                     ) : (
                       <input
@@ -307,7 +272,7 @@ export default function EventsPage() {
                         style={INPUT_STYLE}
                       />
                     )
-                  ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'series' ? (e.day || "—") : (e.who || "—")}</p>}
+                  ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'series' ? (recurrenceLabel(e.day) || "—") : (e.who || "—")}</p>}
                 </div>
 
                 <div style={{ gridColumn: "span 2" }}>

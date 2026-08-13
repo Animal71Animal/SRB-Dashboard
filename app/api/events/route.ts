@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite, readLocal, writeLocal } from "@/lib/github";
 import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
+import { computeSeriesDates, normalizeRecurrenceCode, CALENDAR_FROM, CALENDAR_TO } from "@/lib/recurrence";
 
 const FILE = "public/data/srb-events.json";
 const LOCAL = "srb-events.json";
@@ -85,39 +86,6 @@ function migrateVenueCode(v?: string): "torch1" | "torch2" | "both" | undefined 
   return undefined;
 }
 
-const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
-/** Generate every YYYY-MM-DD date in [from, to] that matches the given weekday AND is on or after startDate. */
-function generateRecurringDates(
-  startDate: string | undefined,
-  day: string | undefined,
-  fromISO: string,
-  toISO: string,
-): string[] {
-  if (!startDate || !day) return [];
-  const target = WEEKDAYS.find((w) => w.toLowerCase() === String(day).toLowerCase().trim());
-  if (!target) return [];
-  const targetIdx = WEEKDAYS.indexOf(target);
-  const out: string[] = [];
-  const start = new Date(startDate + "T12:00:00");
-  const from = new Date(fromISO + "T12:00:00");
-  const to = new Date(toISO + "T12:00:00");
-  if (Number.isNaN(start.getTime()) || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return [];
-  const cursor = new Date(Math.max(start.getTime(), from.getTime()));
-  while (cursor.getDay() !== targetIdx) cursor.setDate(cursor.getDate() - 1);
-  while (cursor.getTime() <= to.getTime()) {
-    const y = cursor.getFullYear();
-    const m = String(cursor.getMonth() + 1).padStart(2, "0");
-    const d = String(cursor.getDate()).padStart(2, "0");
-    out.push(`${y}-${m}-${d}`);
-    cursor.setDate(cursor.getDate() + 7);
-  }
-  return out;
-}
-
-const CALENDAR_FROM = "2026-08-01";
-const CALENDAR_TO = "2027-12-31";
-
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -181,22 +149,23 @@ export async function PATCH(req: NextRequest) {
     if (kind === "series") {
       const idx = series.findIndex((s) => s.id === id);
       if (idx === -1) return NextResponse.json({ ok: false, error: "Series not found" }, { status: 404 });
-      
+
       // Build updated series with all editable fields preserved
       series[idx] = {
         ...series[idx],
         ...changes,
       };
-      
-      // Server-side: regenerate the full dates[] array based on canonical day + startDate
-      // This is the source of truth for calendar placement
+
+      // Server-side: normalize recurrence code and regenerate dates[] using the shared rule registry
       if (series[idx].day) {
-        const canonicalDay = WEEKDAYS.find((w) => w.toLowerCase() === String(series[idx].day).toLowerCase().trim());
-        if (canonicalDay) series[idx].day = canonicalDay; // normalize to canonical form
+        const canonicalDay = normalizeRecurrenceCode(series[idx].day);
+        if (canonicalDay) series[idx].day = canonicalDay;
         const sd = series[idx].startDate || changes.startDate;
-        if (sd) series[idx].dates = generateRecurringDates(sd, series[idx].day, CALENDAR_FROM, CALENDAR_TO);
+        if (canonicalDay && sd) {
+          series[idx].dates = computeSeriesDates(canonicalDay, sd, CALENDAR_FROM, CALENDAR_TO);
+        }
       }
-      
+
       await safeWrite(FILE, { oneOffs, series }, sha, `fix: update event series ${id}`);
       return NextResponse.json({ ok: true, item: series[idx] });
     }
