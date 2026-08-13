@@ -90,25 +90,7 @@ export default function BuilderPage() {
           {users.map((u, i) => (
             <div key={u.email} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 100px", padding: "16px 12px", borderTop: "1px solid var(--border)", alignItems: "center", fontSize: "0.9rem" }}>
               <span style={{ fontWeight: 600 }}>{u.email}</span>
-              <span>
-                <input 
-                  defaultValue={u.name || ""} 
-                  onBlur={async (e) => {
-                    const newName = e.target.value.trim();
-                    if (newName === (u.name || "")) return;
-                    setLoading(true);
-                    await fetch("/api/users", {
-                      method: "POST",
-                      headers: { "Content-Type": "application/json" },
-                      body: JSON.stringify({ email: u.email, role: u.role, name: newName }),
-                    });
-                    await load();
-                    setLoading(false);
-                  }}
-                  placeholder="Set name..."
-                  style={{ ...INPUT, padding: "4px 8px", fontSize: "0.8rem", width: "90%" }}
-                />
-              </span>
+              <span style={{ color: "var(--accent)" }}>{u.name || "—"}</span>
               <span>
                 <span style={{
                   padding: "2px 8px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 700,
