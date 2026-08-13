@@ -109,11 +109,12 @@ export default function EventsPage() {
     setLoading(true);
     try {
       const finalPayload = { ...payload, venue: payload.venue ?? venue };
-      if (id || editingId) {
+      const targetId = id || editingId;
+      if (targetId) {
         await fetch("/api/events", { 
           method: "PATCH", 
           headers: { "Content-Type": "application/json" }, 
-          body: JSON.stringify({ id: id || editingId, kind: payload.day ? 'series' : 'oneOff', ...finalPayload }) 
+          body: JSON.stringify({ id: targetId, kind: payload.day ? 'series' : 'oneOff', ...finalPayload }) 
         });
       } else {
         await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(finalPayload) });
@@ -145,11 +146,117 @@ export default function EventsPage() {
     setEditBuffer({ ...e });
   };
 
-  const del = async (id: string) => {
-    if (!confirm("Delete this event?")) return;
-    await fetch(`/api/events?id=${id}`, { method: "DELETE" });
+  const del = async (id: string, kind: 'oneOff' | 'series' = 'oneOff') => {
+    if (!confirm(`Delete this ${kind === 'series' ? 'recurring series' : 'event'}?`)) return;
+    const url = kind === 'series' ? `/api/events?id=${id}&kind=series` : `/api/events?id=${id}`;
+    await fetch(url, { method: "DELETE" });
+    setSelectedEventIds(prev => prev.filter(ref => ref.id !== id));
     await load();
   };
+
+  const renderEventEditForm = (isEditing: boolean, e: any, refType: 'oneOff' | 'series') => (
+    <div style={CARD}>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+        <span style={{ fontSize: "2rem" }}>
+          {isEditing ? (
+            <input value={editBuffer.icon} onChange={b => setEditBuffer({ ...editBuffer, icon: b.target.value })} style={{ ...INPUT_STYLE, width: 48, textAlign: "center" }} />
+          ) : (
+            e.icon || (refType === 'oneOff' ? "📅" : "📁")
+          )}
+        </span>
+        <div style={{ flex: 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: isEditing ? 12 : 0 }}>
+            {isEditing ? (
+              <input value={editBuffer.name} onChange={b => setEditBuffer({ ...editBuffer, name: b.target.value })} style={{ ...INPUT_STYLE, fontSize: "1.3rem", fontWeight: 700 }} />
+            ) : (
+              <h3 style={{ margin: 0, fontSize: "1.3rem" }}>{e.name}</h3>
+            )}
+            <div style={{ display: "flex", gap: 8 }}>
+              {isEditing ? (
+                <>
+                  <button onClick={() => save(editBuffer)} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Save</button>
+                  <button onClick={() => setEditingId(null)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Cancel</button>
+                </>
+              ) : (
+                <>
+                  <button onClick={() => startInlineEdit(e)} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Edit</button>
+                  <button onClick={() => del(e.id, refType)} style={{ background: "none", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Delete</button>
+                  <StatusPill status={e.status} />
+                </>
+              )}
+            </div>
+          </div>
+
+          <div style={{ margin: "8px 0", display: "flex", gap: 12, alignItems: "center" }}>
+            {isEditing ? (
+              <>
+                <select value={editBuffer.status} onChange={b => setEditBuffer({ ...editBuffer, status: b.target.value })} style={{ ...INPUT_STYLE, width: "auto" }}>
+                  <option>Planned</option><option>Confirmed</option><option>Cancelled</option>
+                </select>
+                {refType === 'series' && (
+                   <input value={editBuffer.day} onChange={b => setEditBuffer({ ...editBuffer, day: b.target.value })} style={{ ...INPUT_STYLE, width: "auto" }} placeholder="Day (e.g. Sunday)" />
+                )}
+              </>
+            ) : null}
+            <p style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "var(--muted)" }}>
+              {refType === 'oneOff' ? fmtDate((e as OneOffEvent).date) : `Recurring Series (${(e as EventSeries).day})`}
+            </p>
+          </div>
+
+          <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div>
+              <label style={LABEL_STYLE}>Audience</label>
+              {isEditing ? (
+                <input value={editBuffer.who} onChange={b => setEditBuffer({ ...editBuffer, who: b.target.value })} style={INPUT_STYLE} />
+              ) : (
+                <p style={{ margin: 0 }}>{e.who || "—"}</p>
+              )}
+            </div>
+            <div>
+              <label style={LABEL_STYLE}>Theme</label>
+              {isEditing ? (
+                <input value={editBuffer.theme} onChange={b => setEditBuffer({ ...editBuffer, theme: b.target.value })} style={INPUT_STYLE} />
+              ) : (
+                <p style={{ margin: 0 }}>{e.theme || "—"}</p>
+              )}
+            </div>
+            <div style={{ gridColumn: "span 2" }}>
+              <label style={LABEL_STYLE}>Format</label>
+              {isEditing ? (
+                <textarea value={editBuffer.format} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 60 }} />
+              ) : (
+                <p style={{ margin: 0 }}>{e.format || "—"}</p>
+              )}
+            </div>
+            <div>
+              <label style={LABEL_STYLE}>Drinks</label>
+              {isEditing ? (
+                <input value={editBuffer.drinks} onChange={b => setEditBuffer({ ...editBuffer, drinks: b.target.value })} style={INPUT_STYLE} />
+              ) : (
+                <p style={{ margin: 0 }}>{e.drinks || "—"}</p>
+              )}
+            </div>
+            <div>
+              <label style={LABEL_STYLE}>Games</label>
+              {isEditing ? (
+                <input value={editBuffer.games} onChange={b => setEditBuffer({ ...editBuffer, games: b.target.value })} style={INPUT_STYLE} />
+              ) : (
+                <p style={{ margin: 0 }}>{e.games || "—"}</p>
+              )}
+            </div>
+            <div>
+              <label style={LABEL_STYLE}>Costuming</label>
+              {isEditing ? (
+                <input value={editBuffer.costuming} onChange={b => setEditBuffer({ ...editBuffer, costuming: b.target.value })} style={INPUT_STYLE} />
+              ) : (
+                <p style={{ margin: 0 }}>{e.costuming || "—"}</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div>
@@ -215,151 +322,33 @@ export default function EventsPage() {
       {selectedEventIds.length > 0 && (
         <div style={{ marginBottom: 40 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--accent)" }}>Event Details</h2>
+             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--accent)" }}>Selected Day Events</h2>
              <button onClick={() => { setSelectedEventIds([]); setEditingId(null); }} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {selectedEventIds.map(ref => {
               const e = ref.type === 'oneOff' ? data.oneOffs.find(x => x.id === ref.id) : data.series.find(x => x.id === ref.id);
               if (!e) return null;
-              const isEditing = editingId === e.id;
-
-              return (
-                <div key={ref.id} style={CARD}>
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                    <span style={{ fontSize: "2rem" }}>
-                      {isEditing ? (
-                        <input value={editBuffer.icon} onChange={b => setEditBuffer({ ...editBuffer, icon: b.target.value })} style={{ ...INPUT_STYLE, width: 48, textAlign: "center" }} />
-                      ) : (
-                        e.icon || (ref.type === 'oneOff' ? "📅" : "📁")
-                      )}
-                    </span>
-                    <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: isEditing ? 12 : 0 }}>
-                        {isEditing ? (
-                          <input value={editBuffer.name} onChange={b => setEditBuffer({ ...editBuffer, name: b.target.value })} style={{ ...INPUT_STYLE, fontSize: "1.3rem", fontWeight: 700 }} />
-                        ) : (
-                          <h3 style={{ margin: 0, fontSize: "1.3rem" }}>{e.name}</h3>
-                        )}
-                        <div style={{ display: "flex", gap: 8 }}>
-                          {isEditing ? (
-                            <>
-                              <button onClick={() => save(editBuffer)} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Save</button>
-                              <button onClick={() => setEditingId(null)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Cancel</button>
-                            </>
-                          ) : (
-                            <>
-                              <button onClick={() => startInlineEdit(e)} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Edit</button>
-                              <StatusPill status={e.status} />
-                            </>
-                          )}
-                        </div>
-                      </div>
-
-                      <div style={{ margin: "8px 0", display: "flex", gap: 12, alignItems: "center" }}>
-                        {isEditing ? (
-                          <select value={editBuffer.status} onChange={b => setEditBuffer({ ...editBuffer, status: b.target.value })} style={{ ...INPUT_STYLE, width: "auto" }}>
-                            <option>Planned</option><option>Confirmed</option><option>Cancelled</option>
-                          </select>
-                        ) : null}
-                        <p style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "var(--muted)" }}>
-                          {ref.type === 'oneOff' ? fmtDate((e as OneOffEvent).date) : `Recurring Series (${(e as EventSeries).day})`}
-                        </p>
-                      </div>
-
-                      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                        <div>
-                          <label style={LABEL_STYLE}>Audience</label>
-                          {isEditing ? (
-                            <input value={editBuffer.who} onChange={b => setEditBuffer({ ...editBuffer, who: b.target.value })} style={INPUT_STYLE} />
-                          ) : (
-                            <p style={{ margin: 0 }}>{e.who || "—"}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label style={LABEL_STYLE}>Theme</label>
-                          {isEditing ? (
-                            <input value={editBuffer.theme} onChange={b => setEditBuffer({ ...editBuffer, theme: b.target.value })} style={INPUT_STYLE} />
-                          ) : (
-                            <p style={{ margin: 0 }}>{e.theme || "—"}</p>
-                          )}
-                        </div>
-                        <div style={{ gridColumn: "span 2" }}>
-                          <label style={LABEL_STYLE}>Format</label>
-                          {isEditing ? (
-                            <textarea value={editBuffer.format} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 60 }} />
-                          ) : (
-                            <p style={{ margin: 0 }}>{e.format || "—"}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label style={LABEL_STYLE}>Drinks</label>
-                          {isEditing ? (
-                            <input value={editBuffer.drinks} onChange={b => setEditBuffer({ ...editBuffer, drinks: b.target.value })} style={INPUT_STYLE} />
-                          ) : (
-                            <p style={{ margin: 0 }}>{e.drinks || "—"}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label style={LABEL_STYLE}>Games</label>
-                          {isEditing ? (
-                            <input value={editBuffer.games} onChange={b => setEditBuffer({ ...editBuffer, games: b.target.value })} style={INPUT_STYLE} />
-                          ) : (
-                            <p style={{ margin: 0 }}>{e.games || "—"}</p>
-                          )}
-                        </div>
-                        <div>
-                          <label style={LABEL_STYLE}>Costuming</label>
-                          {isEditing ? (
-                            <input value={editBuffer.costuming} onChange={b => setEditBuffer({ ...editBuffer, costuming: b.target.value })} style={INPUT_STYLE} />
-                          ) : (
-                            <p style={{ margin: 0 }}>{e.costuming || "—"}</p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
+              return renderEventEditForm(editingId === e.id, e, ref.type);
             })}
           </div>
         </div>
       )}
 
       {/* ── All Events List ── */}
+      <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)", marginBottom: 24, borderBottom: "1px solid var(--border)", paddingBottom: 8 }}>Registry Management</h2>
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
         <section>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>Weekly Series</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {(data.series || []).map(s => (
-              <div key={s.id} style={{ ...CARD, padding: "16px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span>{s.icon || "📁"}</span>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: 0, fontWeight: 700 }}>{s.name}</p>
-                    <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--muted)" }}>Every {s.day}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
+            {(data.series || []).map(s => renderEventEditForm(editingId === s.id, s, 'series'))}
           </div>
         </section>
 
         <section>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>One-Off Events</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {(data.oneOffs || []).sort((a,b) => a.date.localeCompare(b.date)).map(e => (
-              <div key={e.id} style={{ ...CARD, padding: "16px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                  <span>{e.icon || "📅"}</span>
-                  <div style={{ flex: 1 }}>
-                    <p style={{ margin: 0, fontWeight: 700 }}>{e.name}</p>
-                    <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--muted)" }}>{e.date ? fmtDate(e.date) : "TBD"}</p>
-                  </div>
-                  <button onClick={() => del(e.id)} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Delete</button>
-                </div>
-              </div>
-            ))}
+            {(data.oneOffs || []).sort((a,b) => a.date.localeCompare(b.date)).map(e => renderEventEditForm(editingId === e.id, e, 'oneOff'))}
           </div>
         </section>
       </div>
