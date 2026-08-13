@@ -19,11 +19,11 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
   },
   Manager: {
     view: ["*"],
-    edit: ["/events"],
+    edit: ["/events", "/torchtv"],
     special: ["admin-console"]
   },
   DJ: {
-    view: ["/events", "/torchtv"],
+    view: ["/events", "/torchtv", "/torch-radio"],
     edit: ["/torchtv"],
     special: ["admin-console"]
   },
