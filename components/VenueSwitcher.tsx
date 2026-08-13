@@ -13,12 +13,12 @@ const venues: { key: Venue; label: string; short: string }[] = [
 ];
 
 export function getActiveVenue(): Venue {
-  if (typeof window === "undefined") return "torch1";
-  return (localStorage.getItem(VENUE_STORAGE_KEY) as Venue) || "torch1";
+  if (typeof window === "undefined") return "combined";
+  return (localStorage.getItem(VENUE_STORAGE_KEY) as Venue) || "combined";
 }
 
 export function useVenue(): Venue {
-  const [venue, setVenue] = useState<Venue>("torch1");
+  const [venue, setVenue] = useState<Venue>("combined");
   useEffect(() => {
     setVenue(getActiveVenue());
     const handler = () => setVenue(getActiveVenue());
@@ -29,7 +29,7 @@ export function useVenue(): Venue {
 }
 
 export default function VenueSwitcher() {
-  const [active, setActive] = useState<Venue>("torch1");
+  const [active, setActive] = useState<Venue>("combined");
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
