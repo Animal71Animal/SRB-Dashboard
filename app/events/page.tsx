@@ -121,10 +121,19 @@ export default function EventsPage() {
     setSelectedEventIds(combined);
   };
 
-  const save = async (payload: any) => {
+  const save = async (payload: any, explicitKind?: 'oneOff' | 'series') => {
     setLoading(true);
     try {
-      const kind = payload.day ? 'series' : 'oneOff';
+      // Determine kind: explicit > payload.day heuristic > look up in data
+      let kind = explicitKind;
+      if (!kind) kind = payload.day ? 'series' : 'oneOff';
+      
+      // Verify by checking if id exists in series list
+      const existsInSeries = (data.series || []).some(s => s.id === payload.id);
+      const existsInOneOffs = (data.oneOffs || []).some(e => e.id === payload.id);
+      if (existsInSeries && !existsInOneOffs) kind = 'series';
+      if (existsInOneOffs && !existsInSeries) kind = 'oneOff';
+
       if (kind === 'series' && payload.startDate) {
         if (!payload.dates) payload.dates = [];
         if (!payload.dates.includes(payload.startDate)) {
@@ -188,7 +197,7 @@ export default function EventsPage() {
               <div style={{ display: "flex", gap: 8, marginLeft: 12 }}>
                 {isEditing ? (
                   <>
-                    <button onClick={() => save(editBuffer)} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Save</button>
+                    <button onClick={() => save(editBuffer, refType)} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Save</button>
                     <button onClick={() => setEditingId(null)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Cancel</button>
                   </>
                 ) : (

@@ -7,6 +7,13 @@ const LOCAL = "srb-events.json";
 
 export type SRBStatus = "Confirmed" | "Planned" | "Cancelled";
 
+export interface ShowEntry {
+  dates: string[];
+  entertainer: string;
+  showName: string;
+  time?: string;
+}
+
 export interface OneOffEvent {
   id: string;
   date: string;
@@ -14,6 +21,13 @@ export interface OneOffEvent {
   theme: string;
   status: SRBStatus;
   venue?: string;
+  icon?: string;
+  who?: string;
+  format?: string;
+  drinks?: string;
+  games?: string;
+  costuming?: string;
+  shows?: ShowEntry[];
 }
 
 export interface EventSeries {
@@ -23,6 +37,16 @@ export interface EventSeries {
   status: SRBStatus;
   dates: string[];
   venue?: string;
+  icon?: string;
+  day?: string;
+  startDate?: string;
+  who?: string;
+  format?: string;
+  drinks?: string;
+  games?: string;
+  costuming?: string;
+  flyerImage?: string;
+  shows?: ShowEntry[];
 }
 
 export interface EventsFile {
@@ -64,18 +88,31 @@ export async function POST(req: NextRequest) {
         theme: body.theme ?? "",
         status: body.status ?? "Planned",
         dates: Array.isArray(body.dates) ? body.dates : [],
+        icon: body.icon ?? "",
+        day: body.day ?? "",
+        startDate: body.startDate ?? "",
+        who: body.who ?? "",
+        format: body.format ?? "",
+        drinks: body.drinks ?? "",
+        games: body.games ?? "",
+        costuming: body.costuming ?? "",
       });
       await safeWrite(FILE, { oneOffs, series: [item, ...series] }, sha, `feat: add event series "${item.name}"`);
       return NextResponse.json({ ok: true, item });
     }
 
-    // default: one-off event
     const item: OneOffEvent = withDefaultVenue({
       id: newId("evt"),
       date: body.date ?? "",
       name: body.name ?? "",
       theme: body.theme ?? "",
       status: body.status ?? "Planned",
+      icon: body.icon ?? "",
+      who: body.who ?? "",
+      format: body.format ?? "",
+      drinks: body.drinks ?? "",
+      games: body.games ?? "",
+      costuming: body.costuming ?? "",
     });
     await safeWrite(FILE, { oneOffs: [item, ...oneOffs], series }, sha, `feat: add event "${item.name}"`);
     return NextResponse.json({ ok: true, item });
@@ -93,14 +130,33 @@ export async function PATCH(req: NextRequest) {
     if (kind === "series") {
       const idx = series.findIndex((s) => s.id === id);
       if (idx === -1) return NextResponse.json({ ok: false, error: "Series not found" }, { status: 404 });
-      series[idx] = { ...series[idx], ...changes };
+      
+      // Build updated series with all editable fields preserved
+      series[idx] = {
+        ...series[idx],
+        ...changes,
+      };
+      
+      // Ensure startDate lands in the dates array for calendar display
+      if (changes.startDate) {
+        if (!series[idx].dates) series[idx].dates = [];
+        if (!series[idx].dates.includes(changes.startDate)) {
+          series[idx].dates.push(changes.startDate);
+        }
+      }
+      
       await safeWrite(FILE, { oneOffs, series }, sha, `fix: update event series ${id}`);
       return NextResponse.json({ ok: true, item: series[idx] });
     }
 
     const idx = oneOffs.findIndex((e) => e.id === id);
     if (idx === -1) return NextResponse.json({ ok: false, error: "Event not found" }, { status: 404 });
-    oneOffs[idx] = { ...oneOffs[idx], ...changes };
+    
+    oneOffs[idx] = {
+      ...oneOffs[idx],
+      ...changes,
+    };
+    
     await safeWrite(FILE, { oneOffs, series }, sha, `fix: update event ${id}`);
     return NextResponse.json({ ok: true, item: oneOffs[idx] });
   } catch (err) {
