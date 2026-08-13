@@ -9,12 +9,31 @@ function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === "1234") {
-      onLogin(email.toLowerCase().trim());
-    } else {
+    if (password !== "1234") {
       setError("Invalid password.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/users");
+      if (!res.ok) {
+        setError("System error. Try again later.");
+        return;
+      }
+      const data = await res.json();
+      const users = data.users || [];
+      const normalizedEmail = email.toLowerCase().trim();
+      const matched = users.find((u: any) => u.email.toLowerCase() === normalizedEmail);
+      
+      if (matched) {
+        onLogin(normalizedEmail);
+      } else {
+        setError("Access denied. Email not recognized.");
+      }
+    } catch {
+      setError("Connection error.");
     }
   };
 
