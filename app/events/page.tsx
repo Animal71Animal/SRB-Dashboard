@@ -26,7 +26,7 @@ interface OneOffEvent {
 interface EventSeries {
   id: string; name: string; theme: string; status: SRBStatus; dates: string[];
   icon?: string; day?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string; flyerImage?: string; startDate?: string;
-  shows?: ShowEntry[];
+  shows?: ShowEntry[]; venue?: string;
 }
 
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
@@ -96,15 +96,14 @@ export default function EventsPage() {
   const monthYearLabel = currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
   const getEventsForDate = (date: string) => {
-    const matchedOneOffs = (data.oneOffs || []).filter(e => e.date === date);
+    // Only show "Confirmed" events on the calendar
+    const matchedOneOffs = (data.oneOffs || []).filter(e => e.date === date && e.status === "Confirmed");
     
-    // Logic: Series appears on calendar if:
-    // 1. Explicitly in the 'dates' array (assigned via Main Event Date), OR
-    // 2. The date's day matches the 'day' property (e.g. "Sunday")
     const dt = new Date(date + "T12:00:00");
     const dayName = dt.toLocaleDateString("en-US", { weekday: "long" });
     
     const matchedSeries = (data.series || []).filter(s => {
+      if (s.status !== "Confirmed") return false;
       const isCalculatedDate = s.day?.toLowerCase() === dayName.toLowerCase();
       const isManualDate = (s.dates || []).includes(date);
       return isCalculatedDate || isManualDate;
@@ -126,8 +125,6 @@ export default function EventsPage() {
     setLoading(true);
     try {
       const kind = payload.day ? 'series' : 'oneOff';
-      
-      // Auto-assign dates logic for Series if Main Event Date (startDate) is provided
       if (kind === 'series' && payload.startDate) {
         if (!payload.dates) payload.dates = [];
         if (!payload.dates.includes(payload.startDate)) {
@@ -135,17 +132,15 @@ export default function EventsPage() {
         }
       }
 
-      const res = await fetch("/api/events", { 
+      await fetch("/api/events", { 
         method: "PATCH", 
         headers: { "Content-Type": "application/json" }, 
         body: JSON.stringify({ id: payload.id, kind, ...payload }) 
       });
       
-      if (res.ok) {
-        setEditingId(null);
-        setEditBuffer(null);
-        await load();
-      }
+      setEditingId(null);
+      setEditBuffer(null);
+      await load();
     } finally { setLoading(false); }
   };
 
@@ -155,7 +150,7 @@ export default function EventsPage() {
     const target = isEditing ? editBuffer : e;
 
     return (
-      <div key={e.id} style={{ ...CARD, padding: isCollapsed ? "12px 20px" : "24px", transition: "all 0.2s" }}>
+      <div key={e.id} style={{ ...CARD, padding: isCollapsed ? "12px 20px" : "24px" }}>
         <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
           <span style={{ fontSize: isCollapsed ? "1.2rem" : "2rem", minWidth: isCollapsed ? 24 : 44, textAlign: "center" }}>
             {isEditing ? (
@@ -246,22 +241,24 @@ export default function EventsPage() {
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'series' ? (e.day || "—") : (e.who || "—")}</p>}
                 </div>
 
-                {/* Common fields for both */}
-                <div style={refType === 'series' ? { gridColumn: "span 2" } : {}}>
+                <div>
+                  <label style={LABEL_STYLE}>Venue Selection</label>
+                  {isEditing ? (
+                    <select value={target.venue || ""} onChange={b => setEditBuffer({ ...editBuffer, venue: b.target.value })} style={INPUT_STYLE}>
+                      <option value="">Select Venue</option>
+                      <option value="Torch 1">Torch 1</option>
+                      <option value="Torch 2">Torch 2</option>
+                      <option value="Both">Both</option>
+                    </select>
+                  ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.venue || "—"}</p>}
+                </div>
+
+                <div>
                   <label style={LABEL_STYLE}>Format</label>
                   {isEditing ? (
-                    <textarea value={target.format || ""} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 60 }} />
+                    <textarea value={target.format || ""} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 40 }} />
                   ) : <p style={{ margin: 0, fontSize: "0.9rem", lineHeight: 1.4 }}>{e.format || "—"}</p>}
                 </div>
-                
-                {refType === 'oneOff' && (
-                  <div>
-                    <label style={LABEL_STYLE}>Venue</label>
-                    {isEditing ? (
-                      <input value={target.venue || ""} onChange={b => setEditBuffer({ ...editBuffer, venue: b.target.value })} style={INPUT_STYLE} />
-                    ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.venue || "—"}</p>}
-                  </div>
-                )}
 
                 <div>
                   <label style={LABEL_STYLE}>Drinks</label>
@@ -292,7 +289,10 @@ export default function EventsPage() {
   return (
     <div>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
+        <div>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
+          <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Confirmed Events Layout</p>
+        </div>
         <button onClick={() => { setForm(emptyOneOff); setShowForm(true); }} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontWeight: 600, cursor: "pointer" }}>+ Add Event</button>
       </div>
 
@@ -325,7 +325,10 @@ export default function EventsPage() {
 
       {selectedEventIds.length > 0 && (
         <div style={{ marginBottom: 40 }}>
-           <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", marginBottom: 16 }}>Selected Day Events</h2>
+           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", margin: 0 }}>Selected Day Events</h2>
+             <button onClick={() => setSelectedEventIds([])} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
+           </div>
            <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
              {selectedEventIds.map(ref => {
                const e = ref.type === 'oneOff' ? data.oneOffs.find(x => x.id === ref.id) : data.series.find(x => x.id === ref.id);
@@ -339,7 +342,7 @@ export default function EventsPage() {
         <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", margin: 0 }}>Registry Management</h2>
         <div style={{ display: "flex", gap: 12 }}>
           <button onClick={() => setOpenRegistryIds(new Set())} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Collapse All</button>
-          <button onClick={() => setOpenRegistryIds(new Set([...data.series.map(s => s.id), ...data.oneOffs.map(e => e.id)]))} style={{ background: "none", border: "none", color: "var(--accent2)", cursor: "pointer", fontSize: "0.8rem" }}>Expand All</button>
+          <button onClick={() => setOpenRegistryIds(new Set([...(data.series || []).map(s => s.id), ...(data.oneOffs || []).map(e => e.id)]))} style={{ background: "none", border: "none", color: "var(--accent2)", cursor: "pointer", fontSize: "0.8rem" }}>Expand All</button>
         </div>
       </div>
 
@@ -347,13 +350,13 @@ export default function EventsPage() {
         <section>
           <h3 style={LABEL_STYLE}>Weekly Series</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {data.series.map(s => renderEventForm(s, 'series'))}
+            {(data.series || []).map(s => renderEventForm(s, 'series'))}
           </div>
         </section>
         <section>
           <h3 style={LABEL_STYLE}>One-Off Events</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {data.oneOffs.sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(e, 'oneOff'))}
+            {(data.oneOffs || []).sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(e, 'oneOff'))}
           </div>
         </section>
       </div>
@@ -369,6 +372,15 @@ export default function EventsPage() {
               </div>
               <div><label style={LABEL_STYLE}>Event Name</label><input value={form.name ?? ""} onChange={(e) => setForm(f => ({ ...f, name: e.target.value }))} style={INPUT_STYLE} /></div>
               <div><label style={LABEL_STYLE}>Theme</label><input value={form.theme ?? ""} onChange={(e) => setForm(f => ({ ...f, theme: e.target.value }))} style={INPUT_STYLE} /></div>
+              <div>
+                <label style={LABEL_STYLE}>Venue Selection</label>
+                <select value={form.venue || ""} onChange={(e) => setForm(f => ({ ...f, venue: e.target.value }))} style={INPUT_STYLE}>
+                    <option value="">Select Venue</option>
+                    <option value="Torch 1">Torch 1</option>
+                    <option value="Torch 2">Torch 2</option>
+                    <option value="Both">Both</option>
+                </select>
+              </div>
               <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
                 <button onClick={() => save(form)} style={{ flex: 1, background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer" }}>Add Event</button>
                 <button onClick={() => setShowForm(false)} style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "10px", cursor: "pointer" }}>Cancel</button>
