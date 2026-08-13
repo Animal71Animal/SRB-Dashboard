@@ -28,28 +28,7 @@ export default function Sidebar() {
     promotions: true, social: true, analytics: true, operations: true,
   });
 
-  // Confirmed-event indicator state (for Event Calendar tab)
-  const [hasConfirmedEvent, setHasConfirmedEvent] = useState(false);
-
-  useEffect(() => {
-    // Fetch event data and check whether any Confirmed event exists (regardless of date)
-    const checkConfirmed = async () => {
-      try {
-        const res = await fetch("/api/events?venue=combined", { cache: "no-store" });
-        if (!res.ok) return;
-        const data = await res.json();
-        const oneOffs: any[] = data.oneOffs || [];
-        const series: any[] = data.series || [];
-        const hasOneOff = oneOffs.some(e => e.status === "Confirmed");
-        const hasSeries = series.some(s => s.status === "Confirmed");
-        setHasConfirmedEvent(hasOneOff || hasSeries);
-      } catch {}
-    };
-    checkConfirmed();
-    // Re-check every 5 minutes
-    const t = setInterval(checkConfirmed, 5 * 60 * 1000);
-    return () => clearInterval(t);
-  }, []);
+  // (Sidebar confirmed-event indicator removed by user request)
 
   useEffect(() => {
     const saved = localStorage.getItem("torch-sidebar-groups");
@@ -131,12 +110,7 @@ export default function Sidebar() {
                   textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)",
                   background: "transparent", border: "none", cursor: "pointer", textAlign: "left",
                 }}>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  {groupLabels[group]}
-                  {group === "promotions" && !expandedGroups[group] && hasConfirmedEvent && (
-                    <span title="Confirmed event scheduled" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 18, height: 18, borderRadius: "50%", background: "#00a86b", color: "#fff", fontSize: "0.75rem", fontWeight: 800, lineHeight: 1 }}>✓</span>
-                  )}
-                </span>
+                <span>{groupLabels[group]}</span>
                 <ChevronIcon expanded={expandedGroups[group]} />
               </button>
 
@@ -160,9 +134,6 @@ export default function Sidebar() {
                         }}>
                         <span style={{ fontSize: "1rem" }}>{item.icon}</span>
                         {item.title}
-                        {item.href === "/events" && hasConfirmedEvent && (
-                          <span title="Confirmed event scheduled" style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 22, height: 22, borderRadius: "50%", background: "#00a86b", color: "#fff", fontSize: "0.85rem", fontWeight: 800, lineHeight: 1, padding: "0 6px" }}>✓</span>
-                        )}
                       </Link>
 
                       {/* Admin Console Sub-tab (always visible under Broadcast) */}
