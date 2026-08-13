@@ -7,8 +7,9 @@ const CARD = { background: "var(--card)", border: "1px solid var(--border)", bor
 const INPUT = { background: "var(--bg)", border: "1px solid var(--border)", color: "var(--text)", padding: "10px", borderRadius: 8, width: "100%", fontSize: "0.9rem" };
 
 export default function BuilderPage() {
-  const [users, setUsers] = useState<{ email: string; role: Role }[]>([]);
+  const [users, setUsers] = useState<{ email: string; role: Role; name?: string }[]>([]);
   const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
   const [role, setRole] = useState<Role>("Employee");
   const [loading, setLoading] = useState(false);
 
@@ -26,9 +27,14 @@ export default function BuilderPage() {
     await fetch("/api/users", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email.toLowerCase().trim(), role }),
+      body: JSON.stringify({ 
+        email: email.toLowerCase().trim(), 
+        role, 
+        name: name.trim() || undefined 
+      }),
     });
     setEmail("");
+    setName("");
     setRole("Employee");
     await load();
     setLoading(false);
@@ -47,10 +53,14 @@ export default function BuilderPage() {
 
       <div style={{ ...CARD, marginBottom: 32 }}>
         <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Add / Update User</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr auto", gap: 12, alignItems: "end" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 12, alignItems: "end" }}>
           <div>
             <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Email Address</label>
             <input value={email} onChange={e => setEmail(e.target.value)} style={INPUT} placeholder="user@example.com" />
+          </div>
+          <div>
+            <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Display Name</label>
+            <input value={name} onChange={e => setName(e.target.value)} style={INPUT} placeholder="e.g. DJ Khaleed" />
           </div>
           <div>
             <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Assigned Role</label>
@@ -71,14 +81,16 @@ export default function BuilderPage() {
       <div style={CARD}>
         <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Active Registry</h3>
         <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", padding: "12px", background: "var(--bg)", borderRadius: "8px 8px 0 0", fontSize: "0.75rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 100px", padding: "12px", background: "var(--bg)", borderRadius: "8px 8px 0 0", fontSize: "0.75rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>
             <span>Email</span>
+            <span>Name</span>
             <span>Role</span>
             <span>Action</span>
           </div>
           {users.map((u, i) => (
-            <div key={u.email} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 100px", padding: "16px 12px", borderTop: "1px solid var(--border)", alignItems: "center", fontSize: "0.9rem" }}>
+            <div key={u.email} style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 100px", padding: "16px 12px", borderTop: "1px solid var(--border)", alignItems: "center", fontSize: "0.9rem" }}>
               <span style={{ fontWeight: 600 }}>{u.email}</span>
+              <span style={{ color: "var(--accent)" }}>{u.name || "—"}</span>
               <span>
                 <span style={{
                   padding: "2px 8px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 700,

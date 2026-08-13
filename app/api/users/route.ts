@@ -10,18 +10,19 @@ export async function GET() {
 
 export async function POST(req: NextRequest) {
   const { data, sha } = await safeRead(FILE);
-  const body = await req.json(); // { email, role }
+  const body = await req.json(); // { email, role, name }
   
   const users = data.users || [];
   const idx = users.findIndex((u: any) => u.email === body.email);
   
   if (idx > -1) {
     users[idx].role = body.role;
+    if (body.name) users[idx].name = body.name;
   } else {
     users.push(body);
   }
   
-  await safeWrite(FILE, { users }, sha, `feat: update user ${body.email} to ${body.role}`);
+  await safeWrite(FILE, { users }, sha, `feat: update user ${body.email}`);
   return NextResponse.json({ ok: true });
 }
 
