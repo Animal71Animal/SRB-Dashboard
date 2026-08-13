@@ -63,8 +63,9 @@ export default function VenueSwitcher() {
           color: "var(--text)", cursor: "pointer",
         }}>
         <span style={{
-          width: 8, height: 8, borderRadius: "50%",
-          background: active === "torch1" ? "#ff3366" : active === "torch2" ? "#3366ff" : "linear-gradient(135deg, #ff3366, #3366ff)",
+          width: 10, height: 10, borderRadius: "50%",
+          background: active === "torch1" ? "#fb923c" : active === "torch2" ? "#facc15" : "#dc2626",
+          border: active === "torch2" ? "1px solid rgba(0,0,0,0.2)" : "none",
           display: "inline-block",
         }} />
         {activeVenue.short}
@@ -94,8 +95,9 @@ export default function VenueSwitcher() {
                   display: "flex", alignItems: "center", gap: 8,
                 }}>
                 <span style={{
-                  width: 8, height: 8, borderRadius: "50%",
-                  background: v.key === "torch1" ? "#ff3366" : v.key === "torch2" ? "#3366ff" : "linear-gradient(135deg, #ff3366, #3366ff)",
+                  width: 10, height: 10, borderRadius: "50%",
+                  background: v.key === "torch1" ? "#fb923c" : v.key === "torch2" ? "#facc15" : "#dc2626",
+                  border: v.key === "torch2" ? "1px solid rgba(0,0,0,0.2)" : "none",
                   display: "inline-block", flexShrink: 0,
                 }} />
                 {v.label}

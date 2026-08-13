@@ -220,7 +220,7 @@ export default function EventsPage() {
                         borderRadius: 4,
                         fontSize: "0.65rem",
                         fontWeight: 700,
-                        background: e.venue === "torch1" ? "#dc2626" : e.venue === "torch2" ? "#facc15" : "#fb923c",
+                        background: e.venue === "torch1" ? "#fb923c" : e.venue === "torch2" ? "#facc15" : "#dc2626",
                         color: e.venue === "torch2" ? "#1a1a1a" : "#fff",
                       }}>
                         {formatVenueLabel(e.venue)}
@@ -361,7 +361,7 @@ export default function EventsPage() {
         {/* Venue legend */}
         <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, fontSize: "0.75rem", color: "var(--muted)", flexWrap: "wrap" }}>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#dc2626" }}></span>
+            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#fb923c" }}></span>
             Torch 1
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
@@ -369,7 +369,7 @@ export default function EventsPage() {
             Torch 2
           </span>
           <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#fb923c" }}></span>
+            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#dc2626" }}></span>
             Both Venues
           </span>
         </div>
@@ -386,12 +386,12 @@ export default function EventsPage() {
                 <span style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
                 <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
                   {events.series.map(s => {
-                    const bg = s.venue === "torch1" ? "#dc2626" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#fb923c" : "var(--border)";
+                    const bg = s.venue === "torch1" ? "#fb923c" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#dc2626" : "var(--border)";
                     const fg = s.venue === "torch2" ? "#1a1a1a" : "#fff";
                     return <div key={s.id} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{s.icon || "📁"} {s.name}</div>;
                   })}
                   {events.oneOffs.map(e => {
-                    const bg = e.venue === "torch1" ? "#dc2626" : e.venue === "torch2" ? "#facc15" : e.venue === "both" ? "#fb923c" : "var(--accent2)";
+                    const bg = e.venue === "torch1" ? "#fb923c" : e.venue === "torch2" ? "#facc15" : e.venue === "both" ? "#dc2626" : "var(--accent2)";
                     const fg = e.venue === "torch2" ? "#1a1a1a" : "#fff";
                     return <div key={e.id} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{e.icon || "📅"} {e.name}</div>;
                   })}
