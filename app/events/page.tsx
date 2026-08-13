@@ -208,9 +208,6 @@ export default function EventsPage() {
                   <h3 style={{ margin: 0, fontSize: isCollapsed ? "1rem" : "1.3rem", fontWeight: 700, display: "flex", alignItems: "center", gap: 8 }}>
                     {!isCalendarDetail && <span style={{ fontSize: "0.7rem", verticalAlign: "middle", opacity: 0.5 }}>{isCollapsed ? "▶" : "▼"}</span>}
                     <span>{e.name}</span>
-                    {e.status === "Confirmed" && (
-                      <span title="Confirmed" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 22, height: 22, borderRadius: "50%", background: "#00a86b", color: "#fff", fontSize: "0.85rem", fontWeight: 800, lineHeight: 1, flexShrink: 0 }}>✓</span>
-                    )}
                   </h3>
                 )}
                 {isCollapsed && (
@@ -241,6 +238,9 @@ export default function EventsPage() {
                   </>
                 ) : (
                   <>
+                    {e.status === "Confirmed" && (
+                      <span title="Confirmed" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: "50%", background: "#00a86b", color: "#fff", fontSize: "0.9rem", fontWeight: 800, lineHeight: 1, flexShrink: 0 }}>✓</span>
+                    )}
                     {!isCollapsed && <button onClick={() => { setEditingId(e.id); setEditBuffer({ ...e }); }} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Edit</button>}
                     {!isCollapsed && <StatusPill status={e.status} />}
                   </>
