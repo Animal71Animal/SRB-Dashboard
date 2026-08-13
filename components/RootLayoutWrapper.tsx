@@ -91,11 +91,13 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
   const handleLogin = (email: string) => {
     sessionStorage.setItem("srb-session-email", email);
     setSession({ email });
+    window.location.href = "/"; // Force full reload to Overview to reset all state
   };
 
   const handleLogout = () => {
     sessionStorage.removeItem("srb-session-email");
     setSession(null);
+    window.location.href = "/"; // Send to home and allow LoginPage to take over
   };
 
   if (!ready) return null;
