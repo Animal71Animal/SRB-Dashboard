@@ -146,15 +146,21 @@ export default function OverviewPage() {
       </div>
 
       {/* KPI Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
-        <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
-        <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
-        <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
-        <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
-        <KpiCard label="Logged Hours (1st–15th)" value={loading ? "…" : `${period1Hours.toFixed(1)}h`} icon="📅" />
-        <KpiCard label="Logged Hours (16th–EOM)" value={loading ? "…" : `${period2Hours.toFixed(1)}h`} icon="📅" />
-        <KpiCard label="Logged Hours (All Time)" value={loading ? "…" : `${allHours.toFixed(1)}h`} icon="📊" />
-      </div>
+      {(role === "SuperSuperAdmin" || role === "SuperAdmin" || role === "Manager") && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+          <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
+          <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
+          <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
+          <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
+          {(role === "SuperSuperAdmin" || role === "SuperAdmin") && (
+            <>
+              <KpiCard label="Logged Hours (1st–15th)" value={loading ? "…" : `${period1Hours.toFixed(1)}h`} icon="📅" />
+              <KpiCard label="Logged Hours (16th–EOM)" value={loading ? "…" : `${period2Hours.toFixed(1)}h`} icon="📅" />
+              <KpiCard label="Logged Hours (All Time)" value={loading ? "…" : `${allHours.toFixed(1)}h`} icon="📊" />
+            </>
+          )}
+        </div>
+      )}
 
       {/* Module Grid */}
       <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
