@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
@@ -10,47 +10,32 @@ const BADGE: Record<string, string> = {
 
 type SRBStatus = "Confirmed" | "Planned" | "Cancelled";
 
-interface OneOffEvent {
-  id: string; date: string; name: string; theme: string; status: SRBStatus;
-  icon?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string;
-  shows?: ShowEntry[]; venue?: string;
-}
 interface ShowEntry {
   dates: string[];
   entertainer: string;
   showName: string;
   time?: string;
 }
+
+interface OneOffEvent {
+  id: string; date: string; name: string; theme: string; status: SRBStatus;
+  icon?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string;
+  shows?: ShowEntry[]; venue?: string;
+}
+
 interface EventSeries {
   id: string; name: string; theme: string; status: SRBStatus; dates: string[];
   icon?: string; day?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string; flyerImage?: string; startDate?: string;
   shows?: ShowEntry[];
 }
+
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
-const emptySeriesForm = (): Partial<EventSeries> => ({
-  name: "", theme: "", status: "Planned", icon: "", day: "", who: "", format: "", drinks: "", games: "", costuming: "", startDate: "",
-});
 
 const DAY_MAP: Record<string, number> = {
   sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6,
 };
-
-function generateWeeklyDates(startDate: string, dayName: string, endDate: string): string[] {
-  const targetDay = DAY_MAP[(dayName || "").toLowerCase().trim()];
-  if (targetDay === undefined || !startDate) return [];
-  const end = new Date(endDate + "T12:00:00");
-  const cur = new Date(startDate + "T12:00:00");
-  // Advance to first matching weekday on or after startDate
-  while (cur.getDay() !== targetDay) cur.setDate(cur.getDate() + 1);
-  const dates: string[] = [];
-  while (cur <= end) {
-    dates.push(cur.toISOString().split("T")[0]);
-    cur.setDate(cur.getDate() + 7);
-  }
-  return dates;
-}
 
 function StatusPill({ status }: { status: SRBStatus }) {
   return (
@@ -61,7 +46,7 @@ function StatusPill({ status }: { status: SRBStatus }) {
 }
 
 function fmtDate(d: string) {
-  const dt = new Date(d + "T00:00:00");
+  const dt = new Date(d + "T12:00:00");
   return dt.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
 }
 
@@ -76,23 +61,14 @@ const LABEL_STYLE: React.CSSProperties = {
 
 export default function EventsPage() {
   const [data, setData] = useState<EventsFile>({ oneOffs: [], series: [] });
-  const [form, setForm] = useState<Partial<OneOffEvent>>(emptyOneOff);
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
+  const [form, setForm] = useState<Partial<OneOffEvent>>(emptyOneOff);
   const [editing, setEditing] = useState<string | null>(null);
-
-  // Series edit state
-  const [editingSeries, setEditingSeries] = useState<EventSeries | null>(null);
-  const [seriesForm, setSeriesForm] = useState<Partial<EventSeries>>(emptySeriesForm());
-  const [seriesSaving, setSeriesSaving] = useState(false);
-  const [genEndDate, setGenEndDate] = useState("2026-08-31");
-  const [previewDates, setPreviewDates] = useState<string[] | null>(null);
-
-  // Section / per-card collapse state
-  const [seriesSectionOpen, setSeriesSectionOpen] = useState(false);
-  const [oneOffSectionOpen, setOneOffSectionOpen] = useState(false);
-  const [openSeriesId, setOpenSeriesId] = useState<string | null>(null);
-  const [openOneOffId, setOpenOneOffId] = useState<string | null>(null);
+  
+  // Calendar State
+  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 7, 1)); // Aug 2026
+  const [selectedEventIds, setSelectedEventIds] = useState<{ type: 'oneOff' | 'series', id: string }[]>([]);
 
   const venue = useVenue();
   const load = () => {
@@ -100,10 +76,40 @@ export default function EventsPage() {
   };
   useEffect(() => { load(); }, [venue]);
 
+  // Calendar Logic
+  const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+
+  const calendarDays = useMemo(() => {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    const days = [];
+    const totalDays = daysInMonth(year, month);
+    const startDay = firstDayOfMonth(year, month);
+
+    // Padding for start
+    for (let i = 0; i < startDay; i++) days.push(null);
+    for (let i = 1; i <= totalDays; i++) {
+      const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+      days.push({ day: i, date: dateStr });
+    }
+    return days;
+  }, [currentMonth]);
+
+  const monthYearLabel = currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
+
+  const changeMonth = (delta: number) => {
+    const newMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() + delta, 1);
+    const minMonth = new Date(2026, 7, 1);
+    const maxMonth = new Date(2027, 11, 1);
+    if (newMonth >= minMonth && newMonth <= maxMonth) {
+      setCurrentMonth(newMonth);
+    }
+  };
+
   const save = async () => {
     setLoading(true);
     try {
-      // Auto-tag new items with the active venue if user didn't pick one.
       const payload = { ...form, venue: form.venue ?? venue };
       if (editing) {
         await fetch("/api/events", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, ...payload }) });
@@ -114,66 +120,26 @@ export default function EventsPage() {
     } finally { setLoading(false); }
   };
 
+  const getEventsForDate = (date: string) => {
+    const matchedOneOffs = data.oneOffs.filter(e => e.date === date);
+    const matchedSeries = data.series.filter(s => (s.dates || []).includes(date));
+    return { oneOffs: matchedOneOffs, series: matchedSeries };
+  };
+
+  const handleDayClick = (date: string) => {
+    const events = getEventsForDate(date);
+    const combined = [
+      ...events.oneOffs.map(e => ({ type: 'oneOff' as const, id: e.id })),
+      ...events.series.map(s => ({ type: 'series' as const, id: s.id }))
+    ];
+    setSelectedEventIds(combined);
+  };
+
   const del = async (id: string) => {
     if (!confirm("Delete this event?")) return;
     await fetch(`/api/events?id=${id}`, { method: "DELETE" });
     await load();
   };
-
-  const delSeries = async (id: string, name: string) => {
-    if (!confirm(`Delete the entire "${name}" series and all its dates?`)) return;
-    await fetch(`/api/events?id=${id}&kind=series`, { method: "DELETE" });
-    await load();
-  };
-
-  const openEditSeries = (s: EventSeries) => {
-    setEditingSeries(s);
-    setSeriesForm({
-      name: s.name, theme: s.theme, status: s.status,
-      icon: s.icon ?? "", day: s.day ?? "", who: s.who ?? "",
-      format: s.format ?? "", drinks: s.drinks ?? "",
-      games: s.games ?? "", costuming: s.costuming ?? "",
-      startDate: s.startDate ?? "",
-      dates: s.dates ?? [],
-    });
-    setPreviewDates(null);
-    setGenEndDate("2026-08-31");
-  };
-
-  const saveSeries = async () => {
-    if (!editingSeries) return;
-    setSeriesSaving(true);
-    try {
-      const payload: any = { ...seriesForm };
-      if (previewDates !== null) payload.dates = previewDates;
-      // Persist current venue selection unless the editor already set one.
-      if (!payload.venue) payload.venue = venue;
-      await fetch("/api/events", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ id: editingSeries.id, kind: "series", ...payload }),
-      });
-      setEditingSeries(null);
-      setSeriesForm(emptySeriesForm());
-      setPreviewDates(null);
-      await load();
-    } finally { setSeriesSaving(false); }
-  };
-
-  const editOneOff = (e: OneOffEvent) => { setForm(e); setEditing(e.id); setShowForm(true); };
-
-  const { oneOffs = [], series = [] } = data;
-  const sortedOneOffs = [...oneOffs].sort((a, b) => {
-    if (!a.date && !b.date) return 0;
-    if (!a.date) return 1;
-    if (!b.date) return -1;
-    return a.date.localeCompare(b.date);
-  });
-  const sortedSeries = [...series].sort((a, b) => {
-    const aDate = a.startDate || "9999";
-    const bDate = b.startDate || "9999";
-    return aDate.localeCompare(bDate);
-  });
 
   return (
     <div>
@@ -181,233 +147,139 @@ export default function EventsPage() {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <div>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
-          <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>The Torch Boise weekly themes, monthly events, and yearly specials</p>
+          <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>August 2026 – December 2027 Operation Center</p>
         </div>
+        <button
+          onClick={() => { setForm(emptyOneOff); setEditing(null); setShowForm(true); }}
+          style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: "0.9rem", fontWeight: 600, cursor: "pointer" }}>
+          + Add Event
+        </button>
       </div>
 
-      {/* ── Recurring Series ── */}
-      {sortedSeries.length > 0 && (
-        <section style={{ marginBottom: 32 }}>
-          <button
-            onClick={() => setSeriesSectionOpen(o => !o)}
-            style={{
-              display: "flex", alignItems: "center", gap: 8, width: "100%",
-              background: "none", border: "none", padding: 0, margin: "0 0 12px",
-              cursor: "pointer", color: "var(--muted)", textAlign: "left",
-            }}
-            aria-expanded={seriesSectionOpen}
-          >
-            <span style={{
-              display: "inline-block", transform: seriesSectionOpen ? "rotate(90deg)" : "rotate(0deg)",
-              transition: "transform 0.2s", fontSize: "0.8rem", color: "var(--muted)",
-            }}>▶</span>
-            <h2 style={{
-              fontSize: "1rem", fontWeight: 600, color: "var(--muted)",
-              textTransform: "uppercase", letterSpacing: "0.05em", margin: 0,
-            }}>
-              Recurring Series
-              <span style={{ marginLeft: 8, fontSize: "0.85rem", fontWeight: 500, opacity: 0.7 }}>
-                ({sortedSeries.length})
-              </span>
-            </h2>
-          </button>
-          {seriesSectionOpen && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {sortedSeries.map((s) => {
-              const sortedDates = [...(s.dates || [])].sort();
-              const next = sortedDates.length > 0 ? sortedDates.find((d) => d >= new Date().toISOString().split("T")[0]) ?? sortedDates[0] : null;
-              const hasInfo = s.who || s.format || s.drinks || s.games || s.costuming;
-              const isOpen = openSeriesId === s.id;
-              return (
-                <div key={s.id} style={CARD}>
-                  <div
-                    onClick={() => setOpenSeriesId(isOpen ? null : s.id)}
-                    style={{ display: "flex", alignItems: "center", gap: 12, padding: 4, cursor: "pointer" }}
-                  >
-                    <span style={{
-                      display: "inline-block", transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                      transition: "transform 0.2s", color: "var(--muted)", fontSize: "0.8rem",
-                    }}>▶</span>
-                    <span style={{ fontSize: "1.1rem" }}>{s.icon || "📁"}</span>
-                    <div style={{ flex: 1 }}>
-                      <span style={{ fontSize: "1.05rem", fontWeight: 600 }}>{s.name}</span>
-                      {s.startDate && (
-                        <div style={{ fontSize: "1.5rem", fontWeight: 800, color: "var(--text)", marginTop: 4, lineHeight: 1.2 }}>
-                          {fmtDate(s.startDate)}
-                        </div>
-                      )}
-                      {sortedDates.length > 0 && <div style={{ color: "var(--muted)", fontSize: "0.85rem", marginTop: 2 }}>{sortedDates.length} dates{next ? ` · next: ${fmtDate(next)}` : ""}</div>}
-                    </div>
-                    <span style={{ marginLeft: "auto" }}><StatusPill status={s.status} /></span>
-                    <button
-                      onClick={(e) => { e.stopPropagation(); openEditSeries(s); }}
-                      style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 10px", fontSize: "0.8rem", cursor: "pointer" }}>
-                      Edit
-                    </button>
-                    <button onClick={(e) => { e.stopPropagation(); delSeries(s.id, s.name); }}
-                      style={{ background: "none", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 6, padding: "4px 10px", fontSize: "0.8rem", cursor: "pointer" }}>
-                      Del
-                    </button>
-                  </div>
-                  {isOpen && (
-                  <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-                    {hasInfo && (
-                      <div style={{ marginBottom: 16 }}>
-                        {s.who && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Target Audience:</strong> {s.who}</p>}
-                        {s.format && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.5 }}><strong>Format:</strong> {s.format}</p>}
-                        {s.drinks && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Signature Drinks:</strong> {s.drinks}</p>}
-                        {s.games && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Games & Activities:</strong> {s.games}</p>}
-                        {s.costuming && <p style={{ margin: "0", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Costuming:</strong> {s.costuming}</p>}
-                      </div>
-                    )}
-                    {s.shows && s.shows.length > 0 && (
-                      <div style={{ marginTop: 12 }}>
-                        <p style={{ margin: "0 0 8px", fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>Lineup</p>
-                        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                          {s.shows.map((sh, i) => (
-                            <div key={i} style={{ display: "grid", gridTemplateColumns: sh.time ? "80px 1fr 1fr 1fr" : "160px 1fr 1fr", gap: 12, background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontSize: "0.85rem", alignItems: "center" }}>
-                              {sh.time && <span style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.9rem" }}>{sh.time}</span>}
-                              <span style={{ color: "var(--muted)", fontWeight: 500 }}>{sh.dates.map(fmtDate).join(" & ")}</span>
-                              <span style={{ fontWeight: 600, color: "var(--text)" }}>{sh.entertainer}</span>
-                              <span style={{ color: "var(--accent2)", fontStyle: "italic" }}>{sh.showName}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {(!s.shows || s.shows.length === 0) && sortedDates.length > 0 && (
-                      <div>
-                        <p style={{ margin: "8px 0", fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>Scheduled Dates</p>
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))", gap: 8 }}>
-                          {sortedDates.map((d) => (
-                            <div key={d} style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8, padding: "8px 12px", fontSize: "0.85rem", textAlign: "center" }}>
-                              {fmtDate(d)}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                    {sortedDates.length === 0 && (
-                      <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--muted)", fontStyle: "italic" }}>Dates to be filled in...</p>
-                    )}
-                  </div>
-                )}
-                </div>
-              );
-            })}
-          </div>
-          )}
-        </section>
-      )}
-
-      {/* ── One-Off Events ── */}
-      <section style={{ marginBottom: 32 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-          <button
-            onClick={() => setOneOffSectionOpen(o => !o)}
-            style={{
-              display: "flex", alignItems: "center", gap: 8,
-              background: "none", border: "none", padding: 0, margin: 0,
-              cursor: "pointer", color: "var(--muted)", textAlign: "left",
-            }}
-            aria-expanded={oneOffSectionOpen}
-          >
-            <span style={{
-              display: "inline-block", transform: oneOffSectionOpen ? "rotate(90deg)" : "rotate(0deg)",
-              transition: "transform 0.2s", fontSize: "0.8rem", color: "var(--muted)",
-            }}>▶</span>
-            <h2 style={{
-              fontSize: "1rem", fontWeight: 600, color: "var(--muted)",
-              textTransform: "uppercase", letterSpacing: "0.05em", margin: 0,
-            }}>
-              One-Off Events
-              <span style={{ marginLeft: 8, fontSize: "0.85rem", fontWeight: 500, opacity: 0.7 }}>
-                ({sortedOneOffs.length})
-              </span>
-            </h2>
-          </button>
-          <button
-            onClick={() => { setForm(emptyOneOff); setEditing(null); setShowForm(true); }}
-            style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "7px 16px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer" }}>
-            + Add Event
-          </button>
+      {/* ── Calendar UI ── */}
+      <div style={{ ...CARD, marginBottom: 32 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
+          <button onClick={() => changeMonth(-1)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}>←</button>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 700, margin: 0 }}>{monthYearLabel}</h2>
+          <button onClick={() => changeMonth(1)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "6px 12px", cursor: "pointer" }}>→</button>
         </div>
 
-        {sortedOneOffs.length === 0 && oneOffSectionOpen && (
-          <p style={{ color: "var(--muted)", fontSize: "0.9rem", fontStyle: "italic" }}>No events scheduled yet.</p>
-        )}
-
-        {oneOffSectionOpen && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {sortedOneOffs.map((e) => {
-            const hasInfo = e.who || e.format || e.drinks || e.games || e.costuming || (e.shows && e.shows.length > 0);
-            const isOpen = openOneOffId === e.id;
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
+            <div key={d} style={{ background: "var(--bg)", padding: 12, textAlign: "center", fontSize: "0.8rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase" }}>{d}</div>
+          ))}
+          {calendarDays.map((d, i) => {
+            if (!d) return <div key={i} style={{ background: "var(--card)", minHeight: 100 }} />;
+            const events = getEventsForDate(d.date);
+            const hasEvents = events.oneOffs.length > 0 || events.series.length > 0;
             return (
-              <div key={e.id} style={CARD}>
-                <div
-                  onClick={() => setOpenOneOffId(isOpen ? null : e.id)}
-                  style={{ display: "flex", alignItems: "center", gap: 12, padding: 4, cursor: "pointer" }}
-                >
-                  <span style={{
-                    display: "inline-block", transform: isOpen ? "rotate(90deg)" : "rotate(0deg)",
-                    transition: "transform 0.2s", color: "var(--muted)", fontSize: "0.8rem",
-                  }}>▶</span>
-                  <span style={{ fontSize: "1.1rem" }}>{e.icon || "📅"}</span>
-                  <div style={{ flex: 1 }}>
-                    <span style={{ fontSize: "1.05rem", fontWeight: 600 }}>{e.name}</span>
-                    <div style={{ fontSize: "1.5rem", fontWeight: 800, marginTop: 4, lineHeight: 1.2, color: e.date ? "var(--text)" : "var(--muted)" }}>
-                      {e.date ? fmtDate(e.date) : "No date set"}
+              <div
+                key={i}
+                onClick={() => handleDayClick(d.date)}
+                style={{
+                  background: "var(--card)", padding: 8, minHeight: 110, position: "relative", cursor: "pointer",
+                  transition: "background 0.2s", border: "0.5px solid var(--border)"
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = "var(--bg)")}
+                onMouseLeave={(e) => (e.currentTarget.style.background = "var(--card)")}
+              >
+                <span style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
+                <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
+                  {events.series.map(s => (
+                    <div key={s.id} style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {s.icon || "📁"} {s.name}
                     </div>
-                  </div>
-                  <span style={{ marginLeft: "auto" }}><StatusPill status={e.status} /></span>
-                  <button onClick={(ev) => { ev.stopPropagation(); editOneOff(e); }}
-                    style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 10px", fontSize: "0.8rem", cursor: "pointer" }}>
-                    Edit
-                  </button>
-                  <button onClick={(ev) => { ev.stopPropagation(); del(e.id); }}
-                    style={{ background: "none", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 6, padding: "4px 10px", fontSize: "0.8rem", cursor: "pointer" }}>
-                    Del
-                  </button>
-                </div>
-                {isOpen && (
-                <div style={{ marginTop: 16, paddingTop: 16, borderTop: "1px solid var(--border)" }}>
-                  {hasInfo ? (
-                    <div>
-                      {e.who && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Target Audience:</strong> {e.who}</p>}
-                      {e.theme && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Theme:</strong> {e.theme}</p>}
-                      {e.format && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.5 }}><strong>Format:</strong> {e.format}</p>}
-                      {e.drinks && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Signature Drinks:</strong> {e.drinks}</p>}
-                      {e.games && <p style={{ margin: "0 0 8px", fontSize: "0.85rem", color: "var(--muted)" }}><strong>Games & Activities:</strong> {e.games}</p>}
-                      {e.costuming && <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--muted)" }}><strong>Costuming:</strong> {e.costuming}</p>}
-                      {e.shows && e.shows.length > 0 && (
-                        <div style={{ marginTop: 12 }}>
-                          <p style={{ margin: "0 0 8px", fontSize: "0.75rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 500 }}>🎭 Featured Entertainment</p>
-                          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                            {e.shows.map((sh, i) => (
-                              <div key={i} style={{ display: "grid", gridTemplateColumns: sh.time ? "80px 1fr 1fr 1fr" : "160px 1fr 1fr", gap: 12, background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8, padding: "10px 14px", fontSize: "0.85rem", alignItems: "center" }}>
-                                {sh.time && <span style={{ color: "var(--accent)", fontWeight: 700, fontSize: "0.9rem" }}>{sh.time}</span>}
-                                <span style={{ color: "var(--muted)", fontWeight: 500 }}>{sh.dates.map(fmtDate).join(" & ")}</span>
-                                <span style={{ fontWeight: 600, color: "var(--text)" }}>{sh.entertainer}</span>
-                                <span style={{ color: "var(--accent2)", fontStyle: "italic" }}>{sh.showName}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
+                  ))}
+                  {events.oneOffs.map(e => (
+                    <div key={e.id} style={{ background: "var(--accent2)", padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                      {e.icon || "📅"} {e.name}
                     </div>
-                  ) : (
-                    <p style={{ margin: 0, fontSize: "0.85rem", color: "var(--muted)", fontStyle: "italic" }}>No details set.</p>
-                  )}
+                  ))}
                 </div>
-                )}
               </div>
             );
           })}
         </div>
-        )}
-      </section>
+      </div>
 
-      {/* ── One-Off Event Form Modal ── */}
+      {/* ── Event Detail View (Selected from Calendar) ── */}
+      {selectedEventIds.length > 0 && (
+        <div style={{ marginBottom: 40 }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--accent)" }}>Event Details</h2>
+             <button onClick={() => setSelectedEventIds([])} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            {selectedEventIds.map(ref => {
+              const e = ref.type === 'oneOff' ? data.oneOffs.find(x => x.id === ref.id) : data.series.find(x => x.id === ref.id);
+              if (!e) return null;
+              return (
+                <div key={ref.id} style={CARD}>
+                  <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
+                    <span style={{ fontSize: "2rem" }}>{e.icon || (ref.type === 'oneOff' ? "📅" : "📁")}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        <h3 style={{ margin: 0, fontSize: "1.3rem" }}>{e.name}</h3>
+                        <StatusPill status={e.status} />
+                      </div>
+                      <p style={{ margin: "4px 0", fontSize: "1rem", fontWeight: 600, color: "var(--muted)" }}>
+                        {ref.type === 'oneOff' ? fmtDate((e as OneOffEvent).date) : `Recurring Series (${(e as EventSeries).day})`}
+                      </p>
+                      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+                        {e.who && <div><label style={LABEL_STYLE}>Audience</label><p style={{ margin: 0 }}>{e.who}</p></div>}
+                        {e.theme && <div><label style={LABEL_STYLE}>Theme</label><p style={{ margin: 0 }}>{e.theme}</p></div>}
+                        {e.format && <div style={{ gridColumn: "span 2" }}><label style={LABEL_STYLE}>Format</label><p style={{ margin: 0 }}>{e.format}</p></div>}
+                        {e.drinks && <div><label style={LABEL_STYLE}>Drinks</label><p style={{ margin: 0 }}>{e.drinks}</p></div>}
+                        {e.games && <div><label style={LABEL_STYLE}>Games</label><p style={{ margin: 0 }}>{e.games}</p></div>}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* ── All Events List ── */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+        <section>
+          <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>Weekly Series</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {data.series.map(s => (
+              <div key={s.id} style={{ ...CARD, padding: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span>{s.icon || "📁"}</span>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0, fontWeight: 700 }}>{s.name}</p>
+                    <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--muted)" }}>Every {s.day}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>One-Off Events</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {data.oneOffs.sort((a,b) => a.date.localeCompare(b.date)).map(e => (
+              <div key={e.id} style={{ ...CARD, padding: "16px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span>{e.icon || "📅"}</span>
+                  <div style={{ flex: 1 }}>
+                    <p style={{ margin: 0, fontWeight: 700 }}>{e.name}</p>
+                    <p style={{ margin: 0, fontSize: "0.8rem", color: "var(--muted)" }}>{e.date ? fmtDate(e.date) : "TBD"}</p>
+                  </div>
+                  <button onClick={() => del(e.id)} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Delete</button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* ── Add Form Modal ── */}
       {showForm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 520, maxHeight: "90vh", overflowY: "auto" }}>
@@ -436,91 +308,6 @@ export default function EventsPage() {
                 {loading ? "Saving…" : editing ? "Save Changes" : "Add Event"}
               </button>
               <button onClick={() => { setShowForm(false); setEditing(null); setForm(emptyOneOff); }}
-                style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "10px", cursor: "pointer" }}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── Series Edit Modal ── */}
-      {editingSeries && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 520, maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Edit Series: {editingSeries.name}</h3>
-            <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
-                <div><label style={LABEL_STYLE}>Icon</label><input value={seriesForm.icon ?? ""} onChange={(e) => { setSeriesForm(f => ({ ...f, icon: e.target.value })); setPreviewDates(null); }} style={INPUT_STYLE} placeholder="e.g. 🎉" /></div>
-                <div><label style={LABEL_STYLE}>Day</label><input value={seriesForm.day ?? ""} onChange={(e) => { setSeriesForm(f => ({ ...f, day: e.target.value })); setPreviewDates(null); }} style={INPUT_STYLE} placeholder="e.g. Thursday" /></div>
-              </div>
-              <div><label style={LABEL_STYLE}>Series Name</label><input value={seriesForm.name ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, name: e.target.value }))} style={INPUT_STYLE} /></div>
-              <div><label style={LABEL_STYLE}>Theme</label><input value={seriesForm.theme ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, theme: e.target.value }))} style={INPUT_STYLE} /></div>
-              <div>
-                <label style={LABEL_STYLE}>Status</label>
-                <select value={seriesForm.status ?? "Planned"} onChange={(e) => setSeriesForm(f => ({ ...f, status: e.target.value as SRBStatus }))} style={INPUT_STYLE}>
-                  <option>Planned</option><option>Confirmed</option><option>Cancelled</option>
-                </select>
-              </div>
-              <div><label style={LABEL_STYLE}>Target Audience</label><input value={seriesForm.who ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, who: e.target.value }))} style={INPUT_STYLE} /></div>
-              <div><label style={LABEL_STYLE}>Format</label><textarea value={seriesForm.format ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, format: e.target.value }))} style={{ ...INPUT_STYLE, minHeight: 72, resize: "vertical" }} /></div>
-              <div><label style={LABEL_STYLE}>Signature Drinks</label><input value={seriesForm.drinks ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, drinks: e.target.value }))} style={INPUT_STYLE} /></div>
-              <div><label style={LABEL_STYLE}>Games & Activities</label><input value={seriesForm.games ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, games: e.target.value }))} style={INPUT_STYLE} /></div>
-              <div><label style={LABEL_STYLE}>Costuming</label><input value={seriesForm.costuming ?? ""} onChange={(e) => setSeriesForm(f => ({ ...f, costuming: e.target.value }))} style={INPUT_STYLE} /></div>
-
-              {/* ── Weekly Date Generator ── */}
-              <div style={{ borderTop: "1px solid var(--border)", paddingTop: 16, marginTop: 4 }}>
-                <p style={{ margin: "0 0 12px", fontSize: "0.8rem", fontWeight: 700, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.05em" }}>📅 Weekly Date Generator</p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
-                  <div>
-                    <label style={LABEL_STYLE}>Start Date</label>
-                    <input type="date" value={seriesForm.startDate ?? ""}
-                      onChange={(e) => { setSeriesForm(f => ({ ...f, startDate: e.target.value })); setPreviewDates(null); }}
-                      style={INPUT_STYLE} />
-                  </div>
-                  <div>
-                    <label style={LABEL_STYLE}>Generate Through</label>
-                    <input type="date" value={genEndDate}
-                      onChange={(e) => { setGenEndDate(e.target.value); setPreviewDates(null); }}
-                      style={INPUT_STYLE} />
-                  </div>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    const dates = generateWeeklyDates(seriesForm.startDate ?? "", seriesForm.day ?? "", genEndDate);
-                    setPreviewDates(dates);
-                  }}
-                  style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "8px 16px", fontSize: "0.85rem", fontWeight: 600, cursor: "pointer", marginBottom: 12 }}>
-                  Generate Weekly Dates
-                </button>
-                {previewDates !== null && (
-                  <div>
-                    <p style={{ margin: "0 0 8px", fontSize: "0.78rem", color: "var(--muted)" }}>
-                      {previewDates.length > 0 ? `${previewDates.length} dates generated — will replace existing dates on save:` : "⚠️ No dates generated — check Start Date and Day fields."}
-                    </p>
-                    {previewDates.length > 0 && (
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                        {previewDates.map(d => (
-                          <span key={d} style={{ background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, padding: "4px 10px", fontSize: "0.78rem" }}>{fmtDate(d)}</span>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-                {previewDates === null && (seriesForm.dates?.length ?? 0) > 0 && (
-                  <p style={{ margin: 0, fontSize: "0.78rem", color: "var(--muted)" }}>
-                    Currently has {seriesForm.dates?.length} date(s). Generate new dates to replace them.
-                  </p>
-                )}
-              </div>
-            </div>
-            <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
-              <button onClick={saveSeries} disabled={seriesSaving}
-                style={{ flex: 1, background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer" }}>
-                {seriesSaving ? "Saving…" : "Save Changes"}
-              </button>
-              <button onClick={() => { setEditingSeries(null); setSeriesForm(emptySeriesForm()); }}
                 style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "10px", cursor: "pointer" }}>
                 Cancel
               </button>
