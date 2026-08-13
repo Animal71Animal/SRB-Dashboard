@@ -233,7 +233,7 @@
     },
     {
       "id": "ser-004",
-      "name": "AFTER DARK by Torch Radio",
+      "name": "AFTER DARK w/ANIMAL by Torch Radio",
       "theme": "AFTER DARK presented by Torch Radio",
       "status": "Planned",
       "icon": "🌙",
@@ -244,7 +244,9 @@
       "games": "Showtime Showcase at midnight. Featured Entertainer performs a carefully curated, high-production set. After 2am — Late Night kicks in: guest DJs, full kitchen with Breakfast Specials.",
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/after-dark.jpg",
-      "dates": [],
+      "dates": [
+        "2026-09-05"
+      ],
       "startDate": "2026-09-05",
       "venue": "torch1"
     },
