@@ -246,9 +246,10 @@
       "flyerImage": "/images/party-flyers/after-dark.jpg",
       "dates": [
         "2026-09-05",
-        "2026-10-31"
+        "2026-10-31",
+        "2026-11-07"
       ],
-      "startDate": "2026-10-31",
+      "startDate": "2026-11-07",
       "venue": "torch2"
     },
     {
