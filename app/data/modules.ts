@@ -26,7 +26,6 @@ export const modules: Module[] = [
   { href: "/staff-notes", icon: "📝", title: "Staff Notes", desc: "Internal notes and memos.", group: "operations" },
   { href: "/logged-hours", icon: "⏱️", title: "Logged Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
   { href: "/dj-mc-communications", icon: "💬", title: "DJ/MC Communications", desc: "Internal messaging for DJs and MCs.", group: "operations" },
-  { href: "/dj-mc-communications/scheduling", icon: "📅", title: "Scheduling", desc: "Time off requests and staff schedule.", group: "operations" },
 ];
 
 export const groupLabels: Record<ModuleGroup, string> = {

@@ -178,6 +178,21 @@ export default function Sidebar() {
                           Admin Console ↗
                         </a>
                       )}
+
+                      {/* Scheduling Sub-tab */}
+                      {item.href === "/dj-mc-communications" && (
+                        <Link href="/dj-mc-communications/scheduling" onClick={() => setMobileOpen(false)}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                            color: pathname === "/dj-mc-communications/scheduling" ? "var(--accent2)" : "var(--muted)",
+                            background: pathname === "/dj-mc-communications/scheduling" ? "rgba(201,0,43,0.1)" : "transparent",
+                            textDecoration: "none", transition: "all 0.15s",
+                          }}>
+                          <span style={{ fontSize: "0.8rem" }}>📅</span>
+                          Scheduling
+                        </Link>
+                      )}
                     </div>
                   );
                 })}
