@@ -16,7 +16,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
   SuperSuperAdmin: {
     view: ["*"],
     edit: ["*"],
-    special: ["admin-console", "builder"]
+    special: ["admin-console", "builder", "role-preview"]
   },
   SuperAdmin: {
     view: ["*"],

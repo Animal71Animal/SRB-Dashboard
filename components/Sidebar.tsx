@@ -34,6 +34,12 @@ export default function Sidebar() {
     // Check role by matching current email
     const checkRole = async () => {
       try {
+        const preview = sessionStorage.getItem("srb-role-preview");
+        if (preview) {
+          setRole(preview as Role);
+          return;
+        }
+
         const currentEmail = sessionStorage.getItem("srb-session-email");
         if (!currentEmail) { setRole("Employee"); return; }
         
@@ -76,6 +82,19 @@ export default function Sidebar() {
   };
 
   const isOverviewActive = pathname === "/";
+
+  // Role Preview logic
+  const handleRolePreview = (pRole: Role) => {
+    sessionStorage.setItem("srb-role-preview", pRole);
+    window.dispatchEvent(new Event("venue-changed")); // trigger context refresh
+  };
+
+  const clearRolePreview = () => {
+    sessionStorage.removeItem("srb-role-preview");
+    window.dispatchEvent(new Event("venue-changed"));
+  };
+
+  const activeRole = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
 
   return (
     <>
@@ -200,6 +219,41 @@ export default function Sidebar() {
             </div>
           ))}
         </nav>
+
+        {/* Role Preview - Admin Only Tool */}
+        {hasPermission(activeRole as Role || role, "special", "role-preview") && (
+          <div style={{ padding: "8px 20px", borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
+            <div style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
+              Role Preview {activeRole ? `(${activeRole})` : ""}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
+              {(["SuperSuperAdmin", "SuperAdmin", "Manager", "DJ", "Employee"] as Role[]).map(r => (
+                <button 
+                  key={r}
+                  onClick={() => handleRolePreview(r)}
+                  style={{
+                    fontSize: "0.6rem", padding: "4px", borderRadius: 4, border: "1px solid var(--border)",
+                    background: activeRole === r ? "var(--accent2)" : "var(--bg)",
+                    color: activeRole === r ? "#fff" : "var(--text)", cursor: "pointer"
+                  }}
+                >
+                  {r}
+                </button>
+              ))}
+              {activeRole && (
+                <button 
+                  onClick={clearRolePreview}
+                  style={{
+                    gridColumn: "span 2", fontSize: "0.6rem", padding: "4px", borderRadius: 4,
+                    background: "var(--accent)", color: "#fff", border: "none", cursor: "pointer", marginTop: 4
+                  }}
+                >
+                  Reset to Actual
+                </button>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* Footer */}
         <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)" }}>
