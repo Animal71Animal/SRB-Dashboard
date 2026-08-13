@@ -245,10 +245,11 @@
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/after-dark.jpg",
       "dates": [
-        "2026-09-05"
+        "2026-09-05",
+        "2026-10-31"
       ],
-      "startDate": "2026-09-05",
-      "venue": "Torch 1"
+      "startDate": "2026-10-31",
+      "venue": "torch2"
     },
     {
       "id": "ser-featured-entertainer",
