@@ -17,7 +17,8 @@
     },
     {
       "email": "robertmares17@gmail.com",
-      "role": "Manager"
+      "role": "Manager",
+      "name": "Bob"
     }
   ]
 }
