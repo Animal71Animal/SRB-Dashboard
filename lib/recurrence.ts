@@ -52,7 +52,8 @@ function generateWeeklyWeekday(targetIdx: number, startDate: string | undefined,
   const to = toDate(toISO);
   if (Number.isNaN(start.getTime()) || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return out;
   const cursor = new Date(Math.max(start.getTime(), from.getTime()));
-  while (cursor.getDay() !== targetIdx) cursor.setDate(cursor.getDate() - 1);
+  // Walk FORWARD (not back) to the next occurrence — prevents emitting dates before startDate
+  while (cursor.getDay() !== targetIdx) cursor.setDate(cursor.getDate() + 1);
   while (cursor.getTime() <= to.getTime()) {
     out.push(fromDate(cursor));
     cursor.setDate(cursor.getDate() + 7);
