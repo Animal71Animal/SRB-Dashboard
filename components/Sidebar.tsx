@@ -25,15 +25,29 @@ const groupedModules = groupOrder.reduce((acc, group) => {
 export default function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [role, setRole] = useState<Role>("SuperAdmin");
+  const [role, setRole] = useState<Role>("Employee");
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
     promotions: true, social: true, analytics: true, operations: true,
   });
 
   useEffect(() => {
-    const savedRole = localStorage.getItem("srb-user-role") as Role;
-    if (savedRole) setRole(savedRole);
-  }, []);
+    // Check role by matching current email
+    const checkRole = async () => {
+      try {
+        const res = await fetch("/api/users");
+        if (!res.ok) { setRole("Employee"); return; }
+        const data = await res.json();
+        const users = data.users || [];
+        const currentEmail = "ericmills71@gmail.com"; 
+        const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
+        if (matched) setRole(matched.role);
+        else setRole("Employee");
+      } catch {
+        setRole("Employee");
+      }
+    };
+    checkRole();
+  }, [pathname]);
 
   // Filter modules based on viewing permissions
   const allowedGroupedModules = groupOrder.reduce((acc, group) => {
@@ -150,8 +164,8 @@ export default function Sidebar() {
                         {item.title}
                       </Link>
 
-                      {/* Admin Console Sub-tab (always visible under Broadcast) */}
-                      {item.href === "/torchtv" && (
+                      {/* Admin Console Sub-tab */}
+                      {item.href === "/torchtv" && hasPermission(role, "special", "admin-console") && (
                         <a href="https://12b0afb612.abacusai.cloud/admin" target="_blank" rel="noopener noreferrer"
                           style={{
                             display: "flex", alignItems: "center", gap: 10,
