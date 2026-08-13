@@ -220,11 +220,11 @@ export default function EventsPage() {
                 <div>
                   <label style={LABEL_STYLE}>Main Event Date</label>
                   {isEditing ? (
-                    <input 
-                      type="date" 
-                      value={refType === 'oneOff' ? (target.date || "") : (target.startDate || "")} 
-                      onChange={b => setEditBuffer({ ...editBuffer, [refType === 'oneOff' ? 'date' : 'startDate']: b.target.value })} 
-                      style={INPUT_STYLE} 
+                    <input
+                      type="date"
+                      value={refType === 'oneOff' ? (target.date || "") : (target.startDate || "")}
+                      onChange={b => setEditBuffer({ ...editBuffer, [refType === 'oneOff' ? 'date' : 'startDate']: b.target.value })}
+                      style={INPUT_STYLE}
                     />
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'oneOff' ? fmtDate(e.date) : fmtDate(e.startDate)}</p>}
                 </div>
@@ -232,16 +232,16 @@ export default function EventsPage() {
                 <div>
                   <label style={LABEL_STYLE}>{refType === 'series' ? "Recurring Day" : "Target Audience"}</label>
                   {isEditing ? (
-                    <input 
-                      value={refType === 'series' ? (target.day || "") : (target.who || "")} 
-                      onChange={b => setEditBuffer({ ...editBuffer, [refType === 'series' ? 'day' : 'who']: b.target.value })} 
-                      style={INPUT_STYLE} 
+                    <input
+                      value={refType === 'series' ? (target.day || "") : (target.who || "")}
+                      onChange={b => setEditBuffer({ ...editBuffer, [refType === 'series' ? 'day' : 'who']: b.target.value })}
+                      style={INPUT_STYLE}
                       placeholder={refType === 'series' ? "e.g. Sunday" : ""}
                     />
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'series' ? (e.day || "—") : (e.who || "—")}</p>}
                 </div>
 
-                <div>
+                <div style={{ gridColumn: "span 2" }}>
                   <label style={LABEL_STYLE}>Venue Selection</label>
                   {isEditing ? (
                     <select value={target.venue || ""} onChange={b => setEditBuffer({ ...editBuffer, venue: b.target.value })} style={INPUT_STYLE}>
@@ -253,7 +253,7 @@ export default function EventsPage() {
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.venue || "—"}</p>}
                 </div>
 
-                <div>
+                <div style={{ gridColumn: "span 2" }}>
                   <label style={LABEL_STYLE}>Format</label>
                   {isEditing ? (
                     <textarea value={target.format || ""} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 40 }} />
