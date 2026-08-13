@@ -33,10 +33,6 @@ interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
 
-const DAY_MAP: Record<string, number> = {
-  sunday: 0, monday: 1, tuesday: 2, wednesday: 3, thursday: 4, friday: 5, saturday: 6,
-};
-
 function StatusPill({ status }: { status: SRBStatus }) {
   return (
     <span style={{ background: BADGE[status] + "22", color: BADGE[status], padding: "3px 10px", borderRadius: 12, fontSize: "0.75rem", fontWeight: 600 }}>
@@ -64,11 +60,14 @@ export default function EventsPage() {
   const [loading, setLoading] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState<Partial<OneOffEvent>>(emptyOneOff);
-  const [editing, setEditing] = useState<string | null>(null);
   
   // Calendar State
   const [currentMonth, setCurrentMonth] = useState(new Date(2026, 7, 1)); // Aug 2026
   const [selectedEventIds, setSelectedEventIds] = useState<{ type: 'oneOff' | 'series', id: string }[]>([]);
+  
+  // Inline Editing State
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editBuffer, setEditBuffer] = useState<any>(null);
 
   const venue = useVenue();
   const load = () => {
@@ -87,7 +86,6 @@ export default function EventsPage() {
     const totalDays = daysInMonth(year, month);
     const startDay = firstDayOfMonth(year, month);
 
-    // Padding for start
     for (let i = 0; i < startDay; i++) days.push(null);
     for (let i = 1; i <= totalDays; i++) {
       const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
@@ -107,22 +105,29 @@ export default function EventsPage() {
     }
   };
 
-  const save = async () => {
+  const save = async (payload: any, id?: string) => {
     setLoading(true);
     try {
-      const payload = { ...form, venue: form.venue ?? venue };
-      if (editing) {
-        await fetch("/api/events", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id: editing, ...payload }) });
+      const finalPayload = { ...payload, venue: payload.venue ?? venue };
+      if (id || editingId) {
+        await fetch("/api/events", { 
+          method: "PATCH", 
+          headers: { "Content-Type": "application/json" }, 
+          body: JSON.stringify({ id: id || editingId, kind: payload.day ? 'series' : 'oneOff', ...finalPayload }) 
+        });
       } else {
-        await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) });
+        await fetch("/api/events", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(finalPayload) });
       }
-      setForm(emptyOneOff); setEditing(null); setShowForm(false); await load();
+      setEditingId(null);
+      setEditBuffer(null);
+      setShowForm(false);
+      await load();
     } finally { setLoading(false); }
   };
 
   const getEventsForDate = (date: string) => {
-    const matchedOneOffs = data.oneOffs.filter(e => e.date === date);
-    const matchedSeries = data.series.filter(s => (s.dates || []).includes(date));
+    const matchedOneOffs = (data.oneOffs || []).filter(e => e.date === date);
+    const matchedSeries = (data.series || []).filter(s => (s.dates || []).includes(date));
     return { oneOffs: matchedOneOffs, series: matchedSeries };
   };
 
@@ -133,6 +138,11 @@ export default function EventsPage() {
       ...events.series.map(s => ({ type: 'series' as const, id: s.id }))
     ];
     setSelectedEventIds(combined);
+  };
+
+  const startInlineEdit = (e: any) => {
+    setEditingId(e.id);
+    setEditBuffer({ ...e });
   };
 
   const del = async (id: string) => {
@@ -150,7 +160,7 @@ export default function EventsPage() {
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>August 2026 – December 2027 Operation Center</p>
         </div>
         <button
-          onClick={() => { setForm(emptyOneOff); setEditing(null); setShowForm(true); }}
+          onClick={() => { setForm(emptyOneOff); setShowForm(true); }}
           style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontSize: "0.9rem", fontWeight: 600, cursor: "pointer" }}>
           + Add Event
         </button>
@@ -171,7 +181,6 @@ export default function EventsPage() {
           {calendarDays.map((d, i) => {
             if (!d) return <div key={i} style={{ background: "var(--card)", minHeight: 100 }} />;
             const events = getEventsForDate(d.date);
-            const hasEvents = events.oneOffs.length > 0 || events.series.length > 0;
             return (
               <div
                 key={i}
@@ -207,30 +216,106 @@ export default function EventsPage() {
         <div style={{ marginBottom: 40 }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
              <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--accent)" }}>Event Details</h2>
-             <button onClick={() => setSelectedEventIds([])} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
+             <button onClick={() => { setSelectedEventIds([]); setEditingId(null); }} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
           </div>
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {selectedEventIds.map(ref => {
               const e = ref.type === 'oneOff' ? data.oneOffs.find(x => x.id === ref.id) : data.series.find(x => x.id === ref.id);
               if (!e) return null;
+              const isEditing = editingId === e.id;
+
               return (
                 <div key={ref.id} style={CARD}>
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
-                    <span style={{ fontSize: "2rem" }}>{e.icon || (ref.type === 'oneOff' ? "📅" : "📁")}</span>
+                    <span style={{ fontSize: "2rem" }}>
+                      {isEditing ? (
+                        <input value={editBuffer.icon} onChange={b => setEditBuffer({ ...editBuffer, icon: b.target.value })} style={{ ...INPUT_STYLE, width: 48, textAlign: "center" }} />
+                      ) : (
+                        e.icon || (ref.type === 'oneOff' ? "📅" : "📁")
+                      )}
+                    </span>
                     <div style={{ flex: 1 }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <h3 style={{ margin: 0, fontSize: "1.3rem" }}>{e.name}</h3>
-                        <StatusPill status={e.status} />
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: isEditing ? 12 : 0 }}>
+                        {isEditing ? (
+                          <input value={editBuffer.name} onChange={b => setEditBuffer({ ...editBuffer, name: b.target.value })} style={{ ...INPUT_STYLE, fontSize: "1.3rem", fontWeight: 700 }} />
+                        ) : (
+                          <h3 style={{ margin: 0, fontSize: "1.3rem" }}>{e.name}</h3>
+                        )}
+                        <div style={{ display: "flex", gap: 8 }}>
+                          {isEditing ? (
+                            <>
+                              <button onClick={() => save(editBuffer)} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Save</button>
+                              <button onClick={() => setEditingId(null)} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Cancel</button>
+                            </>
+                          ) : (
+                            <>
+                              <button onClick={() => startInlineEdit(e)} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.8rem", cursor: "pointer" }}>Edit</button>
+                              <StatusPill status={e.status} />
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <p style={{ margin: "4px 0", fontSize: "1rem", fontWeight: 600, color: "var(--muted)" }}>
-                        {ref.type === 'oneOff' ? fmtDate((e as OneOffEvent).date) : `Recurring Series (${(e as EventSeries).day})`}
-                      </p>
+
+                      <div style={{ margin: "8px 0", display: "flex", gap: 12, alignItems: "center" }}>
+                        {isEditing ? (
+                          <select value={editBuffer.status} onChange={b => setEditBuffer({ ...editBuffer, status: b.target.value })} style={{ ...INPUT_STYLE, width: "auto" }}>
+                            <option>Planned</option><option>Confirmed</option><option>Cancelled</option>
+                          </select>
+                        ) : null}
+                        <p style={{ margin: 0, fontSize: "1rem", fontWeight: 600, color: "var(--muted)" }}>
+                          {ref.type === 'oneOff' ? fmtDate((e as OneOffEvent).date) : `Recurring Series (${(e as EventSeries).day})`}
+                        </p>
+                      </div>
+
                       <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
-                        {e.who && <div><label style={LABEL_STYLE}>Audience</label><p style={{ margin: 0 }}>{e.who}</p></div>}
-                        {e.theme && <div><label style={LABEL_STYLE}>Theme</label><p style={{ margin: 0 }}>{e.theme}</p></div>}
-                        {e.format && <div style={{ gridColumn: "span 2" }}><label style={LABEL_STYLE}>Format</label><p style={{ margin: 0 }}>{e.format}</p></div>}
-                        {e.drinks && <div><label style={LABEL_STYLE}>Drinks</label><p style={{ margin: 0 }}>{e.drinks}</p></div>}
-                        {e.games && <div><label style={LABEL_STYLE}>Games</label><p style={{ margin: 0 }}>{e.games}</p></div>}
+                        <div>
+                          <label style={LABEL_STYLE}>Audience</label>
+                          {isEditing ? (
+                            <input value={editBuffer.who} onChange={b => setEditBuffer({ ...editBuffer, who: b.target.value })} style={INPUT_STYLE} />
+                          ) : (
+                            <p style={{ margin: 0 }}>{e.who || "—"}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label style={LABEL_STYLE}>Theme</label>
+                          {isEditing ? (
+                            <input value={editBuffer.theme} onChange={b => setEditBuffer({ ...editBuffer, theme: b.target.value })} style={INPUT_STYLE} />
+                          ) : (
+                            <p style={{ margin: 0 }}>{e.theme || "—"}</p>
+                          )}
+                        </div>
+                        <div style={{ gridColumn: "span 2" }}>
+                          <label style={LABEL_STYLE}>Format</label>
+                          {isEditing ? (
+                            <textarea value={editBuffer.format} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 60 }} />
+                          ) : (
+                            <p style={{ margin: 0 }}>{e.format || "—"}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label style={LABEL_STYLE}>Drinks</label>
+                          {isEditing ? (
+                            <input value={editBuffer.drinks} onChange={b => setEditBuffer({ ...editBuffer, drinks: b.target.value })} style={INPUT_STYLE} />
+                          ) : (
+                            <p style={{ margin: 0 }}>{e.drinks || "—"}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label style={LABEL_STYLE}>Games</label>
+                          {isEditing ? (
+                            <input value={editBuffer.games} onChange={b => setEditBuffer({ ...editBuffer, games: b.target.value })} style={INPUT_STYLE} />
+                          ) : (
+                            <p style={{ margin: 0 }}>{e.games || "—"}</p>
+                          )}
+                        </div>
+                        <div>
+                          <label style={LABEL_STYLE}>Costuming</label>
+                          {isEditing ? (
+                            <input value={editBuffer.costuming} onChange={b => setEditBuffer({ ...editBuffer, costuming: b.target.value })} style={INPUT_STYLE} />
+                          ) : (
+                            <p style={{ margin: 0 }}>{e.costuming || "—"}</p>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -246,7 +331,7 @@ export default function EventsPage() {
         <section>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>Weekly Series</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {data.series.map(s => (
+            {(data.series || []).map(s => (
               <div key={s.id} style={{ ...CARD, padding: "16px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <span>{s.icon || "📁"}</span>
@@ -263,7 +348,7 @@ export default function EventsPage() {
         <section>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>One-Off Events</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {data.oneOffs.sort((a,b) => a.date.localeCompare(b.date)).map(e => (
+            {(data.oneOffs || []).sort((a,b) => a.date.localeCompare(b.date)).map(e => (
               <div key={e.id} style={{ ...CARD, padding: "16px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
                   <span>{e.icon || "📅"}</span>
@@ -283,7 +368,7 @@ export default function EventsPage() {
       {showForm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
           <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 520, maxHeight: "90vh", overflowY: "auto" }}>
-            <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>{editing ? "Edit Event" : "Add One-Off Event"}</h3>
+            <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Add One-Off Event</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div><label style={LABEL_STYLE}>Icon</label><input value={form.icon ?? ""} onChange={(e) => setForm(f => ({ ...f, icon: e.target.value }))} style={INPUT_STYLE} placeholder="e.g. 🎉" /></div>
@@ -304,10 +389,10 @@ export default function EventsPage() {
               <div><label style={LABEL_STYLE}>Costuming</label><input value={form.costuming ?? ""} onChange={(e) => setForm(f => ({ ...f, costuming: e.target.value }))} style={INPUT_STYLE} /></div>
             </div>
             <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
-              <button onClick={save} disabled={loading} style={{ flex: 1, background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer" }}>
-                {loading ? "Saving…" : editing ? "Save Changes" : "Add Event"}
+              <button onClick={() => save(form)} disabled={loading} style={{ flex: 1, background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px", fontWeight: 700, cursor: "pointer" }}>
+                {loading ? "Saving…" : "Add Event"}
               </button>
-              <button onClick={() => { setShowForm(false); setEditing(null); setForm(emptyOneOff); }}
+              <button onClick={() => { setShowForm(false); setForm(emptyOneOff); }}
                 style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 8, padding: "10px", cursor: "pointer" }}>
                 Cancel
               </button>
