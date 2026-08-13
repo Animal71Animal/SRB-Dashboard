@@ -32,21 +32,16 @@ export default function Sidebar() {
   const [hasConfirmedEvent, setHasConfirmedEvent] = useState(false);
 
   useEffect(() => {
-    // Fetch event data and check whether any Confirmed event exists (today or future)
+    // Fetch event data and check whether any Confirmed event exists (regardless of date)
     const checkConfirmed = async () => {
       try {
         const res = await fetch("/api/events?venue=combined", { cache: "no-store" });
         if (!res.ok) return;
         const data = await res.json();
-        const today = new Date().toISOString().slice(0, 10);
         const oneOffs: any[] = data.oneOffs || [];
         const series: any[] = data.series || [];
-        const hasOneOff = oneOffs.some(e => e.status === "Confirmed" && (e.date || "") >= today);
-        const hasSeries = series.some(s => {
-          if (s.status !== "Confirmed") return false;
-          const dates: string[] = s.dates || [];
-          return dates.some(d => d >= today);
-        });
+        const hasOneOff = oneOffs.some(e => e.status === "Confirmed");
+        const hasSeries = series.some(s => s.status === "Confirmed");
         setHasConfirmedEvent(hasOneOff || hasSeries);
       } catch {}
     };

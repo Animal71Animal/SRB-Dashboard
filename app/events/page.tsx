@@ -345,6 +345,22 @@ export default function EventsPage() {
           <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer" }}>→</button>
         </div>
 
+        {/* Venue legend */}
+        <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 16, fontSize: "0.75rem", color: "var(--muted)", flexWrap: "wrap" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#dc2626" }}></span>
+            Torch 1
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#facc15" }}></span>
+            Torch 2
+          </span>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+            <span style={{ display: "inline-block", width: 14, height: 14, borderRadius: 3, background: "#fb923c" }}></span>
+            Both Venues
+          </span>
+        </div>
+
         <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
             <div key={d} style={{ background: "var(--bg)", padding: 12, textAlign: "center", fontSize: "0.8rem", fontWeight: 700, color: "var(--muted)" }}>{d}</div>
@@ -356,8 +372,16 @@ export default function EventsPage() {
               <div key={i} onClick={() => handleDayClick(d.date)} style={{ background: "var(--card)", padding: 8, minHeight: 110, border: "0.5px solid var(--border)", cursor: "pointer" }}>
                 <span style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
                 <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
-                  {events.series.map(s => <div key={s.id} style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden" }}>{s.icon || "📁"} {s.name}</div>)}
-                  {events.oneOffs.map(e => <div key={e.id} style={{ background: "var(--accent2)", padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", color: "#fff", whiteSpace: "nowrap", overflow: "hidden" }}>{e.icon || "📅"} {e.name}</div>)}
+                  {events.series.map(s => {
+                    const bg = s.venue === "torch1" ? "#dc2626" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#fb923c" : "var(--border)";
+                    const fg = s.venue === "torch2" ? "#1a1a1a" : "#fff";
+                    return <div key={s.id} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{s.icon || "📁"} {s.name}</div>;
+                  })}
+                  {events.oneOffs.map(e => {
+                    const bg = e.venue === "torch1" ? "#dc2626" : e.venue === "torch2" ? "#facc15" : e.venue === "both" ? "#fb923c" : "var(--accent2)";
+                    const fg = e.venue === "torch2" ? "#1a1a1a" : "#fff";
+                    return <div key={e.id} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{e.icon || "📅"} {e.name}</div>;
+                  })}
                 </div>
               </div>
             );
