@@ -285,9 +285,10 @@
       "costuming": "",
       "flyerImage": "",
       "dates": [
-        "2026-10-30"
+        "2026-10-30",
+        "2026-10-31"
       ],
-      "startDate": "2026-10-30",
+      "startDate": "2026-10-31",
       "shows": [
         {
           "dates": [
