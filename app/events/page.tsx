@@ -226,9 +226,6 @@ export default function EventsPage() {
                       <select value={editBuffer.status} onChange={b => setEditBuffer({ ...editBuffer, status: b.target.value })} style={{ ...INPUT_STYLE, width: "auto" }}>
                         <option>Planned</option><option>Confirmed</option><option>Cancelled</option>
                       </select>
-                      {refType === 'series' && (
-                         <input value={editBuffer.day} onChange={b => setEditBuffer({ ...editBuffer, day: b.target.value })} style={{ ...INPUT_STYLE, width: "auto" }} placeholder="Day" />
-                      )}
                     </>
                   ) : null}
                   <p style={{ margin: 0, fontSize: "0.95rem", fontWeight: 600, color: "var(--muted)" }}>
@@ -253,7 +250,36 @@ export default function EventsPage() {
                       <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.theme || "—"}</p>
                     )}
                   </div>
-                  <div style={{ gridColumn: refType === 'oneOff' ? "auto" : "span 2" }}>
+
+                  <div>
+                    <label style={LABEL_STYLE}>Main Event Date</label>
+                     {isEditing ? (
+                        refType === 'oneOff' ? (
+                          <input type="date" value={editBuffer.date || ""} onChange={b => setEditBuffer({ ...editBuffer, date: b.target.value })} style={INPUT_STYLE} />
+                        ) : (
+                          <input type="date" value={editBuffer.startDate || ""} onChange={b => setEditBuffer({ ...editBuffer, startDate: b.target.value })} style={INPUT_STYLE} />
+                        )
+                     ) : (
+                        <p style={{ margin: 0, fontSize: "0.9rem" }}>
+                          {refType === 'oneOff' ? (e.date ? fmtDate(e.date) : "—") : (e.startDate ? fmtDate(e.startDate) : "—")}
+                        </p>
+                     )}
+                  </div>
+
+                  <div>
+                    <label style={LABEL_STYLE}>{refType === 'oneOff' ? "Location/Venue" : "Recurring Day"}</label>
+                    {isEditing ? (
+                      refType === 'oneOff' ? (
+                        <input value={editBuffer.venue || ""} onChange={b => setEditBuffer({ ...editBuffer, venue: b.target.value })} style={INPUT_STYLE} />
+                      ) : (
+                        <input value={editBuffer.day || ""} onChange={b => setEditBuffer({ ...editBuffer, day: b.target.value })} style={INPUT_STYLE} placeholder="e.g. Sunday" />
+                      )
+                    ) : (
+                      <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'oneOff' ? (e.venue || "—") : (e.day || "—")}</p>
+                    )}
+                  </div>
+
+                  <div style={{ gridColumn: "span 2" }}>
                     <label style={LABEL_STYLE}>Format</label>
                     {isEditing ? (
                       <textarea value={editBuffer.format} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 60 }} />
@@ -261,16 +287,6 @@ export default function EventsPage() {
                       <p style={{ margin: 0, fontSize: "0.9rem", lineHeight: 1.4 }}>{e.format || "—"}</p>
                     )}
                   </div>
-                  {refType === 'oneOff' && (
-                    <div>
-                      <label style={LABEL_STYLE}>Event Date</label>
-                      {isEditing ? (
-                        <input type="date" value={editBuffer.date} onChange={b => setEditBuffer({ ...editBuffer, date: b.target.value })} style={INPUT_STYLE} />
-                      ) : (
-                        <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.date ? fmtDate(e.date) : "—"}</p>
-                      )}
-                    </div>
-                  )}
                   <div>
                     <label style={LABEL_STYLE}>Drinks</label>
                     {isEditing ? (
@@ -287,7 +303,7 @@ export default function EventsPage() {
                       <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.games || "—"}</p>
                     )}
                   </div>
-                  <div>
+                  <div style={{ gridColumn: "span 2" }}>
                     <label style={LABEL_STYLE}>Costuming</label>
                     {isEditing ? (
                       <input value={editBuffer.costuming} onChange={b => setEditBuffer({ ...editBuffer, costuming: b.target.value })} style={INPUT_STYLE} />
