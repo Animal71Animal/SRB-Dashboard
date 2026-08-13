@@ -29,6 +29,11 @@
       "email": "christopherdouthit23@gmail.com",
       "role": "DJ",
       "name": "Stylez"
+    },
+    {
+      "email": "meganpilote@gmail.com",
+      "role": "SuperAdmin",
+      "name": "Megan"
     }
   ]
 }
