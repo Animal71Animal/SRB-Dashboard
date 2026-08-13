@@ -264,10 +264,12 @@
       "games": "",
       "costuming": "",
       "flyerImage": "",
-      "dates": [],
+      "dates": [
+        "2026-09-04"
+      ],
       "startDate": "2026-09-04",
       "_format_featured_entertainer": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience",
-      "venue": "torch1"
+      "venue": "Both"
     },
     {
       "id": "ser-featured-entertainer-showcase",
