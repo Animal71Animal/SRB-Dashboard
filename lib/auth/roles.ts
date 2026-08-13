@@ -18,17 +18,17 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
     special: ["admin-console"]
   },
   Manager: {
-    view: ["*"],
+    view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications"],
     edit: ["/events", "/torchtv"],
     special: ["admin-console"]
   },
   DJ: {
-    view: ["/events", "/torchtv", "/torch-radio"],
+    view: ["/events", "/torchtv", "/torch-radio", "/dj-mc-communications"],
     edit: ["/torchtv"],
     special: ["admin-console"]
   },
   Employee: {
-    view: ["/events", "/torchtv"],
+    view: ["/events", "/torchtv", "/staff-notes"],
     edit: [],
     special: []
   },
