@@ -2,7 +2,8 @@
   "users": [
     {
       "email": "ericmills71@gmail.com",
-      "role": "SuperSuperAdmin"
+      "role": "SuperSuperAdmin",
+      "name": "ANiMAL"
     },
     {
       "email": "joannatorchlounge@gmail.com",
