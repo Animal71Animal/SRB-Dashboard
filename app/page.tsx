@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useVenue } from "@/components/VenueSwitcher";
 import { modules } from "./data/modules";
+import { type Role, hasPermission } from "@/lib/auth/roles";
 
 const CARD = {
   background: "var(--card)",
@@ -48,6 +49,7 @@ function ModuleCard({ href, icon, title, desc }: { href: string; icon: string; t
 }
 
 export default function OverviewPage() {
+  const [role, setRole] = useState<Role>("Employee");
   const [events, setEvents] = useState<any[]>([]);
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [influencers, setInfluencers] = useState<any[]>([]);
@@ -57,6 +59,19 @@ export default function OverviewPage() {
   const [period2Hours, setPeriod2Hours] = useState(0);
   const [loading, setLoading] = useState(true);
   const venue = useVenue();
+
+  useEffect(() => {
+    const checkRole = async () => {
+      try {
+        const res = await fetch("/api/users");
+        if (!res.ok) return;
+        const d = await res.json();
+        const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === "ericmills71@gmail.com");
+        if (matched) setRole(matched.role);
+      } catch {}
+    };
+    checkRole();
+  }, []);
 
   useEffect(() => {
     const v = `?venue=${venue}`;
@@ -143,7 +158,10 @@ export default function OverviewPage() {
         Quick Access
       </h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
-        {modules.map((m) => (
+        {role === "SuperAdmin" && (
+          <ModuleCard href="/builder" icon="🛡️" title="Access Builder" desc="Manage staff emails and role-based permissions." />
+        )}
+        {modules.filter(m => hasPermission(role, "view", m.href)).map((m) => (
           <ModuleCard key={m.href} href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
         ))}
       </div>
