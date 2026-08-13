@@ -1,6 +1,20 @@
 {
   "oneOffs": [
     {
+      "id": "evt-1786587963277",
+      "date": "2026-10-30",
+      "name": "DJ/MC Meeting",
+      "theme": "",
+      "status": "Planned",
+      "icon": "DJ ",
+      "who": "",
+      "format": "",
+      "drinks": "",
+      "games": "",
+      "costuming": "",
+      "venue": "torch1"
+    },
+    {
       "id": "evt-animal-house",
       "date": "2026-10-31",
       "name": "Psycho Circus",
