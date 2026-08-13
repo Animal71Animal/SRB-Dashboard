@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { useVenue } from "@/components/VenueSwitcher";
 import { RECURRENCE_RULES, computeSeriesDates, normalizeRecurrenceCode, recurrenceLabel, CALENDAR_FROM, CALENDAR_TO } from "@/lib/recurrence";
+import { type Role, hasPermission } from "@/lib/auth/roles";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const BADGE: Record<string, string> = {
@@ -90,6 +91,14 @@ export default function EventsPage() {
   const [openRegistryIds, setOpenRegistryIds] = useState<Set<string>>(new Set());
 
   const venue = useVenue();
+  const [role, setRole] = useState<Role>("SuperAdmin");
+
+  useEffect(() => {
+    const saved = localStorage.getItem("srb-user-role") as Role;
+    if (saved) setRole(saved);
+  }, []);
+
+  const canEdit = hasPermission(role, "edit", "/events");
   const load = () => {
     fetch(`/api/events?venue=${venue}`).then((r) => r.json()).then((d) => setData(d ?? { oneOffs: [], series: [] })).catch(() => {});
   };
@@ -241,7 +250,7 @@ export default function EventsPage() {
                     {e.status === "Confirmed" && (
                       <span title="Confirmed" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: "50%", background: "#00a86b", color: "#fff", fontSize: "0.9rem", fontWeight: 800, lineHeight: 1, flexShrink: 0 }}>✓</span>
                     )}
-                    {!isCollapsed && <button onClick={() => { setEditingId(e.id); setEditBuffer({ ...e }); }} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Edit</button>}
+                    {canEdit && !isCollapsed && <button onClick={() => { setEditingId(e.id); setEditBuffer({ ...e }); }} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Edit</button>}
                     {!isCollapsed && <StatusPill status={e.status} />}
                   </>
                 )}
@@ -351,7 +360,9 @@ export default function EventsPage() {
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Confirmed Events Layout</p>
         </div>
-        <button onClick={() => { setForm({ ...emptyOneOff, id: "", venue: "torch1" }); setFormType('oneOff'); setShowForm(true); }} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontWeight: 600, cursor: "pointer" }}>+ Add Event</button>
+        {canEdit && (
+          <button onClick={() => { setForm({ ...emptyOneOff, id: "", venue: "torch1" }); setFormType('oneOff'); setShowForm(true); }} style={{ background: "var(--accent2)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 20px", fontWeight: 600, cursor: "pointer" }}>+ Add Event</button>
+        )}
       </div>
 
       <div style={{ ...CARD, marginBottom: 32 }}>

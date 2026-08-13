@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { modules, groupLabels, groupOrder } from "../app/data/modules";
 import type { ModuleGroup } from "../app/data/modules";
+import { type Role, hasPermission } from "@/lib/auth/roles";
 
 function ChevronIcon({ expanded }: { expanded: boolean }) {
   return (
@@ -24,11 +25,24 @@ const groupedModules = groupOrder.reduce((acc, group) => {
 export default function Sidebar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [role, setRole] = useState<Role>("SuperAdmin");
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
     promotions: true, social: true, analytics: true, operations: true,
   });
 
-  // (Sidebar confirmed-event indicator removed by user request)
+  useEffect(() => {
+    const savedRole = localStorage.getItem("srb-user-role") as Role;
+    if (savedRole) setRole(savedRole);
+  }, []);
+
+  // Filter modules based on viewing permissions
+  const allowedGroupedModules = groupOrder.reduce((acc, group) => {
+    acc[group] = modules.filter((m) => m.group === group && hasPermission(role, "view", m.href));
+    return acc;
+  }, {} as Record<ModuleGroup, typeof modules>);
+
+  // Only show groups that have at least one allowed module
+  const visibleGroups = groupOrder.filter(group => allowedGroupedModules[group].length > 0);
 
   useEffect(() => {
     const saved = localStorage.getItem("torch-sidebar-groups");
@@ -101,7 +115,7 @@ export default function Sidebar() {
           </Link>
 
           {/* Groups */}
-          {groupOrder.map((group) => (
+          {visibleGroups.map((group) => (
             <div key={group} style={{ marginTop: 16 }}>
               <button onClick={() => toggleGroup(group)}
                 style={{
@@ -119,7 +133,7 @@ export default function Sidebar() {
                 overflow: "hidden", transition: "max-height 0.25s ease, opacity 0.2s",
                 opacity: expandedGroups[group] ? 1 : 0,
               }}>
-                {groupedModules[group].map((item) => {
+                {allowedGroupedModules[group].map((item) => {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
