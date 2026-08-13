@@ -34,7 +34,7 @@ export default function Sidebar() {
     // Check role by matching current email
     const checkRole = async () => {
       try {
-        const currentEmail = localStorage.getItem("srb-session-email");
+        const currentEmail = sessionStorage.getItem("srb-session-email");
         if (!currentEmail) { setRole("Employee"); return; }
         
         const res = await fetch("/api/users");

@@ -81,18 +81,20 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem("srb-session-email");
+    // sessionStorage persists only for the tab session.
+    // When the tab is closed, the data is wiped.
+    const saved = sessionStorage.getItem("srb-session-email");
     if (saved) setSession({ email: saved });
     setReady(true);
   }, []);
 
   const handleLogin = (email: string) => {
-    localStorage.setItem("srb-session-email", email);
+    sessionStorage.setItem("srb-session-email", email);
     setSession({ email });
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("srb-session-email");
+    sessionStorage.removeItem("srb-session-email");
     setSession(null);
   };
 

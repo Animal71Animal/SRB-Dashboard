@@ -63,7 +63,7 @@ export default function OverviewPage() {
   useEffect(() => {
     const checkRole = async () => {
       try {
-        const currentEmail = localStorage.getItem("srb-session-email");
+        const currentEmail = sessionStorage.getItem("srb-session-email");
         if (!currentEmail) return;
 
         const res = await fetch("/api/users");
