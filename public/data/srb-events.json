@@ -275,17 +275,19 @@
       "id": "ser-featured-entertainer-showcase",
       "name": "Featured Entertainer",
       "theme": "Fully produced showcase",
-      "status": "Planned",
+      "status": "Confirmed",
       "icon": "🎭",
       "day": "",
       "who": "All guests",
-      "format": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience",
+      "format": "After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience",
       "drinks": "",
       "games": "",
       "costuming": "",
       "flyerImage": "",
-      "dates": [],
-      "startDate": "",
+      "dates": [
+        "2026-10-30"
+      ],
+      "startDate": "2026-10-30",
       "shows": [
         {
           "dates": [
@@ -336,7 +338,7 @@
           "showName": "Indie Xmas Show"
         }
       ],
-      "venue": "torch1"
+      "venue": "Torch 1"
     }
   ]
 }
