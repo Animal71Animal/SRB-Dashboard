@@ -253,7 +253,7 @@ export default function EventsPage() {
                       <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.theme || "—"}</p>
                     )}
                   </div>
-                  <div style={{ gridColumn: "span 2" }}>
+                  <div style={{ gridColumn: refType === 'oneOff' ? "auto" : "span 2" }}>
                     <label style={LABEL_STYLE}>Format</label>
                     {isEditing ? (
                       <textarea value={editBuffer.format} onChange={b => setEditBuffer({ ...editBuffer, format: b.target.value })} style={{ ...INPUT_STYLE, minHeight: 60 }} />
@@ -261,6 +261,16 @@ export default function EventsPage() {
                       <p style={{ margin: 0, fontSize: "0.9rem", lineHeight: 1.4 }}>{e.format || "—"}</p>
                     )}
                   </div>
+                  {refType === 'oneOff' && (
+                    <div>
+                      <label style={LABEL_STYLE}>Event Date</label>
+                      {isEditing ? (
+                        <input type="date" value={editBuffer.date} onChange={b => setEditBuffer({ ...editBuffer, date: b.target.value })} style={INPUT_STYLE} />
+                      ) : (
+                        <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.date ? fmtDate(e.date) : "—"}</p>
+                      )}
+                    </div>
+                  )}
                   <div>
                     <label style={LABEL_STYLE}>Drinks</label>
                     {isEditing ? (
@@ -337,12 +347,12 @@ export default function EventsPage() {
               >
                 <span style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
                 <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
-                  {events.series.map(s => (
+                  {(events.series || []).map(s => (
                     <div key={s.id} style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", color: "var(--text)", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {s.icon || "📁"} {s.name}
                     </div>
                   ))}
-                  {events.oneOffs.map(e => (
+                  {(events.oneOffs || []).map(e => (
                     <div key={e.id} style={{ background: "var(--accent2)", padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", color: "#fff", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                       {e.icon || "📅"} {e.name}
                     </div>
@@ -378,7 +388,7 @@ export default function EventsPage() {
           <button onClick={() => setOpenRegistryIds(new Set())} style={{ background: "none", border: "none", color: "var(--accent)", fontSize: "0.75rem", cursor: "pointer" }}>Collapse All</button>
           <button 
             onClick={() => {
-              const allIds = new Set([...data.series.map(s => s.id), ...data.oneOffs.map(e => e.id)]);
+              const allIds = new Set([...(data.series || []).map(s => s.id), ...(data.oneOffs || []).map(e => e.id)]);
               setOpenRegistryIds(allIds);
             }} 
             style={{ background: "none", border: "none", color: "var(--accent2)", fontSize: "0.75rem", cursor: "pointer" }}>Expand All</button>
@@ -396,7 +406,7 @@ export default function EventsPage() {
         <section>
           <h2 style={{ fontSize: "0.9rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", marginBottom: 16 }}>One-Off Events</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {(data.oneOffs || []).sort((a,b) => a.date.localeCompare(b.date)).map(e => renderEventForm(editingId === e.id, e, 'oneOff'))}
+            {(data.oneOffs || []).sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(editingId === e.id, e, 'oneOff'))}
           </div>
         </section>
       </div>
