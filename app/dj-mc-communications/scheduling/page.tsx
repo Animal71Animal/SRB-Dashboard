@@ -58,7 +58,7 @@ export default function SchedulingPage() {
     <div className="relative min-h-screen p-8 text-white">
       <AnimatedBackground />
       <div className="relative z-10 max-w-4xl mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Scheduling & Time Off</h1>
+        <h1 className="text-4xl font-bold mb-4">Time Off Requests</h1>
         
         {/* Request Form */}
         <div className="bg-black/60 backdrop-blur-md border border-red-900/30 rounded-xl p-6 mb-8">

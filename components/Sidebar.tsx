@@ -190,7 +190,7 @@ export default function Sidebar() {
                             textDecoration: "none", transition: "all 0.15s",
                           }}>
                           <span style={{ fontSize: "0.8rem" }}>📅</span>
-                          Scheduling
+                          Time Off Requests
                         </Link>
                       )}
                     </div>
