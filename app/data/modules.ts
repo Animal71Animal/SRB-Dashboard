@@ -15,7 +15,6 @@ export const modules: Module[] = [
   { href: "/promo-campaigns", icon: "📢", title: "Promo Campaigns", desc: "Active and past campaign tracker.", group: "promotions" },
   { href: "/feature-shows", icon: "🎭", title: "Feature Shows", desc: "Themed experiences and special-event portals for The Torch.", group: "promotions" },
   // Social & Influencers
-  { href: "/social-calendar", icon: "📱", title: "Social Calendar", desc: "Weekly social media post schedule.", group: "social" },
   { href: "/influencers", icon: "⭐", title: "Influencers", desc: "Influencer database with stats.", group: "social" },
   { href: "/content-assets", icon: "🎨", title: "Content Assets", desc: "Flyer archive and asset links.", group: "social" },
   // Analytics
