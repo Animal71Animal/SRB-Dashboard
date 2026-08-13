@@ -128,7 +128,7 @@
       "drinks": "Glow-in-the-dark cocktails (tonic water base), Neon Margaritas, Blacklight Beer specials",
       "games": "Best glow outfit contest, neon body paint competition, glow stick dance-off",
       "costuming": "White or neon clothing required for full effect. Body paint available at entry.",
-      "venue": "Torch 2"
+      "venue": "torch2"
     },
     {
       "id": "evt-pole-competition",
@@ -178,7 +178,7 @@
       "flyerImage": "/images/party-flyers/lingerie-lounge.jpg",
       "dates": [],
       "startDate": "",
-      "venue": "Both"
+      "venue": "both"
     },
     {
       "id": "ser-001",
@@ -269,7 +269,7 @@
       ],
       "startDate": "2026-09-04",
       "_format_featured_entertainer": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience",
-      "venue": "Both"
+      "venue": "both"
     },
     {
       "id": "ser-featured-entertainer-showcase",

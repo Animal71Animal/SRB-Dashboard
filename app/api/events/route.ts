@@ -75,11 +75,24 @@ export async function GET(req: NextRequest) {
   }
 }
 
+/** Normalize legacy venue strings ("Torch 1" → "torch1"). */
+function migrateVenueCode(v?: string): "torch1" | "torch2" | "both" | undefined {
+  if (!v) return undefined;
+  const lc = String(v).toLowerCase().trim();
+  if (lc === "torch 1" || lc === "torch1") return "torch1";
+  if (lc === "torch 2" || lc === "torch2") return "torch2";
+  if (lc === "both") return "both";
+  return undefined;
+}
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { data, sha } = await safeRead<EventsFile>(FILE, EMPTY);
     const { oneOffs = [], series = [] } = data;
+
+    // Normalize incoming venue value if present
+    if ("venue" in body) body.venue = migrateVenueCode(body.venue);
 
     if (body.kind === "series") {
       const item: EventSeries = withDefaultVenue({
@@ -126,6 +139,11 @@ export async function PATCH(req: NextRequest) {
     const { id, kind, ...changes } = await req.json();
     const { data, sha } = await safeRead<EventsFile>(FILE, EMPTY);
     const { oneOffs = [], series = [] } = data;
+
+    // Normalize incoming venue value if present
+    if ("venue" in changes) {
+      changes.venue = migrateVenueCode(changes.venue);
+    }
 
     if (kind === "series") {
       const idx = series.findIndex((s) => s.id === id);

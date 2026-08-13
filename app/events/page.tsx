@@ -33,6 +33,23 @@ interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
 
+function formatVenueLabel(v?: string) {
+  if (v === "torch1") return "Torch 1";
+  if (v === "torch2") return "Torch 2";
+  if (v === "both") return "Both";
+  return v || "";
+}
+
+/** Normalize any legacy venue value to the canonical code. */
+function normalizeVenueCode(v?: string): "torch1" | "torch2" | "both" | undefined {
+  if (!v) return undefined;
+  const lc = v.toLowerCase().trim();
+  if (lc === "torch 1" || lc === "torch1") return "torch1";
+  if (lc === "torch 2" || lc === "torch2") return "torch2";
+  if (lc === "both") return "both";
+  return undefined;
+}
+
 function StatusPill({ status }: { status: SRBStatus }) {
   return (
     <span style={{ background: BADGE[status] + "22", color: BADGE[status], padding: "3px 10px", borderRadius: 12, fontSize: "0.75rem", fontWeight: 600 }}>
@@ -255,11 +272,11 @@ export default function EventsPage() {
                   {isEditing ? (
                     <select value={target.venue || ""} onChange={b => setEditBuffer({ ...editBuffer, venue: b.target.value })} style={INPUT_STYLE}>
                       <option value="">Select Venue</option>
-                      <option value="Torch 1">Torch 1</option>
-                      <option value="Torch 2">Torch 2</option>
-                      <option value="Both">Both</option>
+                      <option value="torch1">Torch 1</option>
+                      <option value="torch2">Torch 2</option>
+                      <option value="both">Both</option>
                     </select>
-                  ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.venue || "—"}</p>}
+                  ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{formatVenueLabel(e.venue) || "—"}</p>}
                 </div>
 
                 <div style={{ gridColumn: "span 2" }}>
@@ -385,9 +402,9 @@ export default function EventsPage() {
                 <label style={LABEL_STYLE}>Venue Selection</label>
                 <select value={form.venue || ""} onChange={(e) => setForm(f => ({ ...f, venue: e.target.value }))} style={INPUT_STYLE}>
                     <option value="">Select Venue</option>
-                    <option value="Torch 1">Torch 1</option>
-                    <option value="Torch 2">Torch 2</option>
-                    <option value="Both">Both</option>
+                    <option value="torch1">Torch 1</option>
+                    <option value="torch2">Torch 2</option>
+                    <option value="both">Both</option>
                 </select>
               </div>
               <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
