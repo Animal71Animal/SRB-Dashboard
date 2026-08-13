@@ -1,5 +1,12 @@
 {
   "users": [
-    { "email": "ericmills71@gmail.com", "role": "SuperSuperAdmin" }
+    {
+      "email": "ericmills71@gmail.com",
+      "role": "SuperSuperAdmin"
+    },
+    {
+      "email": "joannatorchlounge@gmail.com",
+      "role": "SuperAdmin"
+    }
   ]
 }
