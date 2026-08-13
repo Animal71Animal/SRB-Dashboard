@@ -34,13 +34,13 @@ export default function Sidebar() {
     // Check role by matching current email
     const checkRole = async () => {
       try {
-        const preview = sessionStorage.getItem("srb-role-preview");
+        const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
         if (preview) {
           setRole(preview as Role);
           return;
         }
 
-        const currentEmail = sessionStorage.getItem("srb-session-email");
+        const currentEmail = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
         if (!currentEmail) { setRole("Employee"); return; }
         
         const res = await fetch("/api/users");
@@ -66,15 +66,20 @@ export default function Sidebar() {
   // Only show groups that have at least one allowed module
   const visibleGroups = groupOrder.filter(group => allowedGroupedModules[group].length > 0);
 
+  const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
+  const isSuper = role === "SuperSuperAdmin" || (preview === "SuperSuperAdmin");
+
   useEffect(() => {
-    const saved = localStorage.getItem("torch-sidebar-groups");
+    const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
     if (saved) {
       try { setExpandedGroups((prev) => ({ ...prev, ...JSON.parse(saved) })); } catch {}
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("torch-sidebar-groups", JSON.stringify(expandedGroups));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("torch-sidebar-groups", JSON.stringify(expandedGroups));
+    }
   }, [expandedGroups]);
 
   const toggleGroup = (group: ModuleGroup) => {
@@ -221,7 +226,7 @@ export default function Sidebar() {
         </nav>
 
         {/* Role Preview - Admin Only Tool */}
-        {hasPermission(activeRole as Role || role, "special", "role-preview") && (
+        {isSuper && (
           <div style={{ padding: "8px 20px", borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
             <div style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
               Role Preview {activeRole ? `(${activeRole})` : ""}
