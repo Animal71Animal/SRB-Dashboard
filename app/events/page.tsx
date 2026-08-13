@@ -33,6 +33,8 @@ interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
 
+const WEEKDAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
 function formatVenueLabel(v?: string) {
   if (v === "torch1") return "Torch 1";
   if (v === "torch2") return "Torch 2";
@@ -49,6 +51,43 @@ function normalizeVenueCode(v?: string): "torch1" | "torch2" | "both" | undefine
   if (lc === "both") return "both";
   return undefined;
 }
+
+/**
+ * Generate every YYYY-MM-DD date in [from, to] that matches the given weekday
+ * AND is on or after the series' startDate. Returns a sorted, deduplicated array.
+ */
+function generateRecurringDates(
+  startDate: string | undefined,
+  day: string | undefined,
+  fromISO: string,
+  toISO: string,
+): string[] {
+  if (!startDate || !day) return [];
+  // Canonicalize the weekday input
+  const target = WEEKDAYS.find((w) => w.toLowerCase() === String(day).toLowerCase().trim());
+  if (!target) return [];
+  const targetIdx = WEEKDAYS.indexOf(target); // 0=Sun..6=Sat
+  const out: string[] = [];
+  const start = new Date(startDate + "T12:00:00");
+  const from = new Date(fromISO + "T12:00:00");
+  const to = new Date(toISO + "T12:00:00");
+  if (Number.isNaN(start.getTime()) || Number.isNaN(from.getTime()) || Number.isNaN(to.getTime())) return [];
+  // Walk forward one day at a time from whichever is later (startDate, from)
+  const cursor = new Date(Math.max(start.getTime(), from.getTime()));
+  // Snap back to the most recent target weekday
+  while (cursor.getDay() !== targetIdx) cursor.setDate(cursor.getDate() - 1);
+  while (cursor.getTime() <= to.getTime()) {
+    const y = cursor.getFullYear();
+    const m = String(cursor.getMonth() + 1).padStart(2, "0");
+    const d = String(cursor.getDate()).padStart(2, "0");
+    out.push(`${y}-${m}-${d}`);
+    cursor.setDate(cursor.getDate() + 7);
+  }
+  return out;
+}
+
+const CALENDAR_FROM = "2026-08-01";
+const CALENDAR_TO = "2027-12-31";
 
 function StatusPill({ status }: { status: SRBStatus }) {
   return (
@@ -116,14 +155,10 @@ export default function EventsPage() {
     // Only show "Confirmed" events on the calendar
     const matchedOneOffs = (data.oneOffs || []).filter(e => e.date === date && e.status === "Confirmed");
     
-    const dt = new Date(date + "T12:00:00");
-    const dayName = dt.toLocaleDateString("en-US", { weekday: "long" });
-    
+    // Series match is purely date-array-based (source of truth = dates[])
     const matchedSeries = (data.series || []).filter(s => {
       if (s.status !== "Confirmed") return false;
-      const isCalculatedDate = s.day?.toLowerCase() === dayName.toLowerCase();
-      const isManualDate = (s.dates || []).includes(date);
-      return isCalculatedDate || isManualDate;
+      return (s.dates || []).includes(date);
     });
     
     return { oneOffs: matchedOneOffs, series: matchedSeries };
@@ -151,11 +186,9 @@ export default function EventsPage() {
       if (existsInSeries && !existsInOneOffs) kind = 'series';
       if (existsInOneOffs && !existsInSeries) kind = 'oneOff';
 
-      if (kind === 'series' && payload.startDate) {
-        if (!payload.dates) payload.dates = [];
-        if (!payload.dates.includes(payload.startDate)) {
-          payload.dates.push(payload.startDate);
-        }
+      if (kind === 'series' && payload.startDate && payload.day) {
+        // Regenerate the full dates array based on day + startDate for the calendar range
+        payload.dates = generateRecurringDates(payload.startDate, payload.day, CALENDAR_FROM, CALENDAR_TO);
       }
 
       await fetch("/api/events", { 
@@ -258,12 +291,22 @@ export default function EventsPage() {
                 <div>
                   <label style={LABEL_STYLE}>{refType === 'series' ? "Recurring Day" : "Target Audience"}</label>
                   {isEditing ? (
-                    <input
-                      value={refType === 'series' ? (target.day || "") : (target.who || "")}
-                      onChange={b => setEditBuffer({ ...editBuffer, [refType === 'series' ? 'day' : 'who']: b.target.value })}
-                      style={INPUT_STYLE}
-                      placeholder={refType === 'series' ? "e.g. Sunday" : ""}
-                    />
+                    refType === 'series' ? (
+                      <select
+                        value={target.day || ""}
+                        onChange={b => setEditBuffer({ ...editBuffer, day: b.target.value })}
+                        style={INPUT_STYLE}
+                      >
+                        <option value="">Select Recurring Day</option>
+                        {WEEKDAYS.map((w) => <option key={w} value={w}>{w}</option>)}
+                      </select>
+                    ) : (
+                      <input
+                        value={target.who || ""}
+                        onChange={b => setEditBuffer({ ...editBuffer, who: b.target.value })}
+                        style={INPUT_STYLE}
+                      />
+                    )
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{refType === 'series' ? (e.day || "—") : (e.who || "—")}</p>}
                 </div>
 
