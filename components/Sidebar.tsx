@@ -34,11 +34,13 @@ export default function Sidebar() {
     // Check role by matching current email
     const checkRole = async () => {
       try {
+        const currentEmail = localStorage.getItem("srb-session-email");
+        if (!currentEmail) { setRole("Employee"); return; }
+        
         const res = await fetch("/api/users");
         if (!res.ok) { setRole("Employee"); return; }
         const data = await res.json();
         const users = data.users || [];
-        const currentEmail = "ericmills71@gmail.com"; 
         const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
         if (matched) setRole(matched.role);
         else setRole("Employee");
