@@ -48,9 +48,15 @@ export default function Sidebar() {
         const data = await res.json();
         const users = data.users || [];
         const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
-        if (matched) setRole(matched.role);
-        else setRole("Employee");
-      } catch {
+        
+        // If we found a user, use their role. If not, default to Employee.
+        if (matched) {
+          setRole(matched.role);
+        } else {
+          setRole("Employee");
+        }
+      } catch (err) {
+        console.error("Role check failed:", err);
         setRole("Employee");
       }
     };
@@ -64,10 +70,25 @@ export default function Sidebar() {
   }, {} as Record<ModuleGroup, typeof modules>);
 
   // Only show groups that have at least one allowed module
-  const visibleGroups = groupOrder.filter(group => allowedGroupedModules[group].length > 0);
+  const visibleGroups = groupOrder.filter(group => (allowedGroupedModules[group]?.length || 0) > 0);
 
   const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
-  const isSuper = role === "SuperSuperAdmin" || (preview === "SuperSuperAdmin");
+  
+  // Real role check for admin tools visibility
+  const [actualRole, setActualRole] = useState<Role>("Employee");
+  useEffect(() => {
+    const checkActual = async () => {
+      const email = sessionStorage.getItem("srb-session-email");
+      if (!email) return;
+      const res = await fetch("/api/users");
+      const d = await res.json();
+      const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+      if (matched) setActualRole(matched.role);
+    };
+    checkActual();
+  }, []);
+
+  const isSuper = actualRole === "SuperSuperAdmin";
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
@@ -229,7 +250,7 @@ export default function Sidebar() {
         {isSuper && (
           <div style={{ padding: "8px 20px", borderTop: "1px solid var(--border)", background: "rgba(0,0,0,0.2)" }}>
             <div style={{ fontSize: "0.6rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", marginBottom: 8 }}>
-              Role Preview {activeRole ? `(${activeRole})` : ""}
+              Role Preview {preview ? `(${preview})` : ""}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
               {(["SuperSuperAdmin", "SuperAdmin", "Manager", "DJ", "Employee"] as Role[]).map(r => (
@@ -238,14 +259,14 @@ export default function Sidebar() {
                   onClick={() => handleRolePreview(r)}
                   style={{
                     fontSize: "0.6rem", padding: "4px", borderRadius: 4, border: "1px solid var(--border)",
-                    background: activeRole === r ? "var(--accent2)" : "var(--bg)",
-                    color: activeRole === r ? "#fff" : "var(--text)", cursor: "pointer"
+                    background: preview === r ? "var(--accent2)" : "var(--bg)",
+                    color: preview === r ? "#fff" : "var(--text)", cursor: "pointer"
                   }}
                 >
                   {r}
                 </button>
               ))}
-              {activeRole && (
+              {preview && (
                 <button 
                   onClick={clearRolePreview}
                   style={{
