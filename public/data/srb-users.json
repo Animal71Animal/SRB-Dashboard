@@ -7,6 +7,10 @@
     {
       "email": "joannatorchlounge@gmail.com",
       "role": "SuperAdmin"
+    },
+    {
+      "email": "me@me.com",
+      "role": "Manager"
     }
   ]
 }
