@@ -6,6 +6,7 @@ import { type Role, hasPermission } from "@/lib/auth/roles";
 
 export default function SchedulingPage() {
   const [role, setRole] = useState<Role>("Employee");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [requests, setRequests] = useState<any[]>([]);
   const [date, setDate] = useState("");
@@ -20,7 +21,10 @@ export default function SchedulingPage() {
       const res = await fetch("/api/users");
       const d = await res.json();
       const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
-      if (matched) setRole(matched.role);
+      if (matched) {
+        setRole(matched.role);
+        setUserName(matched.name || matched.email);
+      }
     };
     checkRole();
     fetchRequests();
@@ -38,7 +42,7 @@ export default function SchedulingPage() {
     if (!date) return;
     await fetch("/api/scheduling", {
       method: "POST",
-      body: JSON.stringify({ email, date, reason }),
+      body: JSON.stringify({ email: userName || email, date, reason }),
     });
     setDate("");
     setReason("");

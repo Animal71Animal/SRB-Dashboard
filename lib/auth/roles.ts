@@ -1,5 +1,11 @@
 export type Role = "SuperSuperAdmin" | "SuperAdmin" | "Manager" | "DJ" | "Employee";
 
+export interface User {
+  email: string;
+  role: Role;
+  name?: string; // Assigned name for referencing instead of email
+}
+
 export interface Permissions {
   view: string[];      // Module hrefs allowed to view
   edit: string[];      // Module hrefs allowed to edit

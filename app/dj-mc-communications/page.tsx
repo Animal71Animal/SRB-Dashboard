@@ -6,6 +6,7 @@ import { type Role, hasPermission } from "@/lib/auth/roles";
 
 export default function DjMcCommunicationPage() {
   const [role, setRole] = useState<Role>("Employee");
+  const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
@@ -20,7 +21,10 @@ export default function DjMcCommunicationPage() {
       const res = await fetch("/api/users");
       const d = await res.json();
       const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
-      if (matched) setRole(matched.role);
+      if (matched) {
+        setRole(matched.role);
+        setUserName(matched.name || matched.email);
+      }
     };
     checkRole();
     fetchMessages();
@@ -50,7 +54,7 @@ export default function DjMcCommunicationPage() {
 
     const res = await fetch("/api/dj-mc-communications", {
       method: "POST",
-      body: JSON.stringify({ sender: email, text: newMessage }),
+      body: JSON.stringify({ sender: userName || email, text: newMessage }),
     });
 
     if (res.ok) {
