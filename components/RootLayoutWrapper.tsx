@@ -106,14 +106,8 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
   return (
     <>
       <VenueSwitcher />
-      <Sidebar />
+      <Sidebar onLogout={handleLogout} />
       {children}
-      <button 
-        onClick={handleLogout}
-        style={{ position: "fixed", bottom: 12, right: 12, zIndex: 300, background: "rgba(255,255,255,0.05)", border: "1px solid var(--border)", color: "var(--muted)", padding: "4px 8px", borderRadius: 4, fontSize: "0.65rem", cursor: "pointer" }}
-      >
-        Logout
-      </button>
     </>
   );
 }

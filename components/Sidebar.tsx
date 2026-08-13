@@ -22,7 +22,7 @@ const groupedModules = groupOrder.reduce((acc, group) => {
   return acc;
 }, {} as Record<ModuleGroup, typeof modules>);
 
-export default function Sidebar() {
+export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [role, setRole] = useState<Role>("Employee");
@@ -282,8 +282,16 @@ export default function Sidebar() {
         )}
 
         {/* Footer */}
-        <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)" }}>
+        <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>PriScylla 🦞 online</div>
+          {onLogout && (
+            <button 
+              onClick={onLogout}
+              style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontWeight: 700, padding: 0 }}
+            >
+              Logout
+            </button>
+          )}
         </div>
       </aside>
 
