@@ -180,7 +180,7 @@ export default function EventsPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <div>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Schedule</h1>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>The Torch Boise weekly themes, monthly events, and yearly specials</p>
         </div>
       </div>

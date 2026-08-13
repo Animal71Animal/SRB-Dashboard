@@ -10,7 +10,7 @@ export interface Module {
 
 export const modules: Module[] = [
   // Events & Promotions
-  { href: "/events", icon: "📅", title: "Event Schedule", desc: "Upcoming Torch events by date.", group: "promotions" },
+  { href: "/events", icon: "📅", title: "Event Calendar", desc: "Upcoming Torch events by date.", group: "promotions" },
   { href: "/promotional-ideas", icon: "💡", title: "Promotional Ideas", desc: "Marketing strategies and promotional concepts.", group: "promotions" },
   { href: "/promo-campaigns", icon: "📢", title: "Promo Campaigns", desc: "Active and past campaign tracker.", group: "promotions" },
   { href: "/comp-codes", icon: "🎟️", title: "Comp Codes", desc: "Complimentary entry code management.", group: "promotions" },
