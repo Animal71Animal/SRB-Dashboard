@@ -211,8 +211,21 @@ export default function EventsPage() {
                   </h3>
                 )}
                 {isCollapsed && (
-                  <p style={{ margin: "2px 0 0", fontSize: "0.75rem", color: "var(--muted)" }}>
+                  <p style={{ margin: "2px 0 0", fontSize: "0.75rem", color: "var(--muted)", display: "flex", alignItems: "center", gap: 8 }}>
                     {refType === 'oneOff' ? fmtDate(e.date) : (e.day ? recurrenceLabel(e.day) : "—")} · {e.status}
+                    {e.venue && (
+                      <span style={{
+                        display: "inline-block",
+                        padding: "1px 6px",
+                        borderRadius: 4,
+                        fontSize: "0.65rem",
+                        fontWeight: 700,
+                        background: e.venue === "torch1" ? "#dc2626" : e.venue === "torch2" ? "#facc15" : "#fb923c",
+                        color: e.venue === "torch2" ? "#1a1a1a" : "#fff",
+                      }}>
+                        {formatVenueLabel(e.venue)}
+                      </span>
+                    )}
                   </p>
                 )}
               </div>
