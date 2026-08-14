@@ -34,6 +34,11 @@
       "email": "meganpilote@gmail.com",
       "role": "SuperAdmin",
       "name": "Megan"
+    },
+    {
+      "email": "stjkstr@gmail.com",
+      "role": "DJ",
+      "name": "Steven"
     }
   ]
 }
