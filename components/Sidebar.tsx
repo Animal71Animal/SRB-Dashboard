@@ -96,7 +96,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     checkActual();
   }, []);
 
-  const isSuper = actualRole === "SuperSuperAdmin";
+  const isSuper = actualRole === "Admin";
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
@@ -299,7 +299,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
               Role Preview {preview ? `(${preview})` : ""}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
-              {(["SuperSuperAdmin", "SuperAdmin", "Manager", "DJ", "Employee"] as Role[]).map(r => (
+              {(["Admin", "Admin", "Manager", "DJ", "Employee"] as Role[]).map(r => (
                 <button 
                   key={r}
                   onClick={() => handleRolePreview(r)}

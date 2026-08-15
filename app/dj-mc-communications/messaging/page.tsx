@@ -68,8 +68,8 @@ export default function MessagingPage() {
     fetchMessages();
   };
 
-  // Only SuperSuperAdmin (Eric) can delete
-  const canDelete = role === "SuperSuperAdmin";
+  // Only Admin (Eric) can delete
+  const canDelete = role === "SuperAdmin";
 
   return (
     <div className="relative min-h-screen p-8 text-white">

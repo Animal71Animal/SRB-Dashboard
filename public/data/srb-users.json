@@ -2,12 +2,12 @@
   "users": [
     {
       "email": "ericmills71@gmail.com",
-      "role": "SuperSuperAdmin",
+      "role": "Admin",
       "name": "ANIMAL"
     },
     {
       "email": "joannatorchlounge@gmail.com",
-      "role": "SuperAdmin",
+      "role": "Admin",
       "name": "Joanna"
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "email": "meganpilote@gmail.com",
-      "role": "SuperAdmin",
+      "role": "Admin",
       "name": "Megan"
     },
     {

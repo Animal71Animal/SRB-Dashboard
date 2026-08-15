@@ -102,7 +102,7 @@ export default function SchedulingPage() {
                     <div className="text-sm text-gray-300">Requested by: <span className="text-white">{req.email}</span></div>
                     {req.reason && <div className="text-sm text-gray-400 mt-1 italic">"{req.reason}"</div>}
                   </div>
-                  {(role === "SuperSuperAdmin" || role === "SuperAdmin") && (
+                  {(role === "Admin" || role === "Admin") && (
                     <button 
                       onClick={() => handleDelete(req.id)}
                       className="text-gray-500 hover:text-red-500 transition-colors"

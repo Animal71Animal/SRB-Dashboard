@@ -65,7 +65,7 @@ export default function PasswordsPage() {
     setLoading(false);
   };
 
-  const isAdmin = role === "SuperSuperAdmin";
+  const isAdmin = role === "SuperAdmin";
 
   const handleUpdate = (sheet: "torch1" | "torch2", id: string, field: keyof Entry, value: string) => {
     setData(prev => ({

@@ -1,4 +1,4 @@
-export type Role = "SuperSuperAdmin" | "SuperAdmin" | "Manager" | "DJ" | "Employee";
+export type Role = "SuperAdmin" | "Admin" | "Manager" | "DJ" | "Employee";
 
 export interface User {
   email: string;
@@ -13,12 +13,12 @@ export interface Permissions {
 }
 
 export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
-  SuperSuperAdmin: {
+  SuperAdmin: {
     view: ["*"],
     edit: ["*"],
     special: ["admin-console", "builder", "role-preview"]
   },
-  SuperAdmin: {
+  Admin: {
     view: ["*"],
     edit: ["*"],
     special: ["admin-console"]
