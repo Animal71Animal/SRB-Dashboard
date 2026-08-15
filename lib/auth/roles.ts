@@ -34,9 +34,9 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
     special: ["admin-console"]
   },
   Employee: {
-    view: ["/events", "/torchtv", "/staff-notes", "/dj-mc-communications/scheduling"],
+    view: ["/events", "/torchtv", "/dj-mc-communications/schedules", "/dj-mc-communications/scheduling"],
     edit: [],
-    special: []
+    special: ["admin-console"]
   },
 };
 
