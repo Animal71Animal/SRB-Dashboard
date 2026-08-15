@@ -261,18 +261,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                           overflow: "hidden", transition: "max-height 0.2s ease",
                           display: "flex", flexDirection: "column"
                         }}>
-                          {/* Main Hub Link */}
-                          <Link href="/dj-mc-communications" onClick={() => setMobileOpen(false)}
-                            style={{
-                              display: "flex", alignItems: "center", gap: 10,
-                              padding: "6px 20px 6px 45px", fontSize: "0.75rem",
-                              color: pathname === "/dj-mc-communications" ? "var(--accent2)" : "var(--muted)",
-                              background: pathname === "/dj-mc-communications" ? "rgba(201,0,43,0.1)" : "transparent",
-                              textDecoration: "none", transition: "all 0.15s",
-                            }}>
-                            <span style={{ fontSize: "0.8rem" }}>🏠</span>
-                            Main Hub
-                          </Link>
                           {[
                             { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
                             { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
