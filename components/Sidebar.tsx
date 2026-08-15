@@ -96,7 +96,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [actualRole, setActualRole] = useState<Role>("Employee");
   useEffect(() => {
     const checkActual = async () => {
-      const email = sessionStorage.getItem("srb-session-email");
+      const email = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
       if (!email) return;
       const res = await fetch("/api/users");
       const d = await res.json();
@@ -106,7 +106,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     checkActual();
   }, []);
 
-  const isSuper = hasPermission(role, "special", "role-preview");
+  const isSuper = hasPermission(actualRole, "special", "role-preview");
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
