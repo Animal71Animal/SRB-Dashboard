@@ -11,10 +11,7 @@ function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (password !== "1234") {
-      setError("Invalid password.");
-      return;
-    }
+    setError("");
 
     try {
       const res = await fetch("/api/users");
@@ -27,10 +24,10 @@ function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
       const normalizedEmail = email.toLowerCase().trim();
       const matched = users.find((u: any) => u.email.toLowerCase() === normalizedEmail);
       
-      if (matched) {
+      if (matched && matched.password === password) {
         onLogin(normalizedEmail);
       } else {
-        setError("Access denied. Email not recognized.");
+        setError("Invalid email or password.");
       }
     } catch {
       setError("Connection error.");
