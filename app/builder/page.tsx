@@ -28,9 +28,11 @@ export default function BuilderPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
+        action: 'upsert',
         email: email.toLowerCase().trim(), 
         role, 
-        name: name.trim() || undefined 
+        name: name.trim() || undefined,
+        mustResetPassword: true 
       }),
     });
     setEmail("");
@@ -92,14 +94,36 @@ export default function BuilderPage() {
               <span style={{ fontWeight: 600 }}>{u.email}</span>
               <span style={{ color: "var(--accent)" }}>{u.name || "—"}</span>
               <span>
-                <span style={{
-                  padding: "2px 8px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 700,
-                  background: u.role === "Admin" ? "#000" : (u.role === "Admin" ? "#dc2626" : u.role === "Manager" ? "#fb923c" : u.role === "DJ" ? "#facc15" : "var(--border)"),
-                  color: (u.role === "DJ" || u.role === "Admin") ? "inherit" : "#fff",
-                  boxShadow: u.role === "Admin" ? "0 0 0 1px #fff" : "none"
-                }}>
-                  {u.role}
-                </span>
+                <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                  <span style={{
+                    padding: "2px 8px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 700,
+                    background: u.role === "Admin" ? "#000" : (u.role === "Admin" ? "#dc2626" : u.role === "Manager" ? "#fb923c" : u.role === "DJ" ? "#facc15" : "var(--border)"),
+                    color: (u.role === "DJ" || u.role === "Admin") ? "inherit" : "#fff",
+                    boxShadow: u.role === "Admin" ? "0 0 0 1px #fff" : "none"
+                  }}>
+                    {u.role}
+                  </span>
+                  {(u as any).mustResetPassword && (
+                    <span style={{ fontSize: '0.6rem', color: 'var(--accent)', fontWeight: 700, textTransform: 'uppercase' }}>
+                      Reset Pending
+                    </span>
+                  )}
+                  {!(u as any).mustResetPassword && (
+                    <button 
+                      onClick={async () => {
+                        if (confirm(`Force password reset for ${u.name}?`)) {
+                          await fetch('/api/users', { 
+                            method: 'POST', 
+                            body: JSON.stringify({ action: 'force-reset', email: u.email }) 
+                          });
+                          window.location.reload();
+                        }
+                      }}
+                      style={{ fontSize: '0.65rem', color: 'var(--muted)', border: 'none', background: 'none', cursor: 'pointer', textDecoration: 'underline' }}>
+                      Force Reset
+                    </button>
+                  )}
+                </div>
               </span>
               <button onClick={() => remove(u.email)} style={{ background: "none", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 6, padding: "4px 8px", fontSize: "0.75rem", cursor: "pointer", width: "fit-content" }}>Remove</button>
             </div>

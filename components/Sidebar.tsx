@@ -58,6 +58,12 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           const data = await res.json();
           const users = data.users || [];
           const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
+          
+          // Force reset intercept
+          if (matched && matched.mustResetPassword && pathname !== "/auth/reset-password") {
+            window.location.href = "/auth/reset-password";
+          }
+
           setRole(matched ? matched.role : "Employee");
         }
       } catch (err) {

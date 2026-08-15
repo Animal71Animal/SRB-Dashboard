@@ -2,43 +2,59 @@
   "users": [
     {
       "email": "ericmills71@gmail.com",
-      "role": "Admin",
-      "name": "ANIMAL"
+      "role": "SuperAdmin",
+      "name": "ANIMAL",
+      "password": "change-me-now",
+      "mustResetPassword": true
     },
     {
       "email": "joannatorchlounge@gmail.com",
       "role": "Admin",
-      "name": "Joanna"
+      "name": "Joanna",
+      "password": "password123",
+      "mustResetPassword": true
     },
     {
       "email": "e.duboise@protonmail.com",
       "role": "DJ",
-      "name": "Nico"
+      "name": "Nico",
+      "password": "password123",
+      "mustResetPassword": true
     },
     {
       "email": "robertmares17@gmail.com",
       "role": "Manager",
-      "name": "Bob"
+      "name": "Bob",
+      "password": "password123",
+      "mustResetPassword": true
     },
     {
       "email": "+18088250324@tmomail.net",
       "role": "DJ",
-      "name": "Brandon"
+      "name": "Brandon",
+      "password": "password123",
+      "mustResetPassword": true
     },
     {
       "email": "christopherdouthit23@gmail.com",
       "role": "DJ",
-      "name": "Stylez"
+      "name": "Stylez",
+      "password": "password123",
+      "mustResetPassword": true
     },
     {
       "email": "meganpilote@gmail.com",
       "role": "Admin",
-      "name": "Megan"
+      "name": "Megan",
+      "password": "password123",
+      "mustResetPassword": true
     },
     {
       "email": "stjkstr@gmail.com",
       "role": "DJ",
-      "name": "Steven"
+      "name": "Steven",
+      "password": "password123",
+      "mustResetPassword": true
     }
   ]
 }
