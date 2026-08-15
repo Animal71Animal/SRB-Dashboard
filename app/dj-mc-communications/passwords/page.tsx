@@ -7,8 +7,19 @@ import { type Role } from "@/lib/auth/roles";
 interface Entry {
   id: string;
   application: string;
+  email?: string;
   password: string;
 }
+
+const DEFAULT_EMAILS = [
+  "eric@animalatwickedliquidproductions.com",
+  "ericmills71@gmail.com",
+  "joannatorchlounge@gmail.com",
+  "meganpilote@gmail.com",
+  "torchloungelv@gmail.com",
+  "officialtorchtv@gmail.com",
+  "wickedliquidproductions@gmail.com"
+];
 
 interface PasswordData {
   torch1: Entry[];
@@ -75,7 +86,7 @@ export default function PasswordsPage() {
   };
 
   const addRow = (sheet: "torch1" | "torch2") => {
-    const newEntry = { id: Date.now().toString(), application: "", password: "" };
+    const newEntry = { id: Date.now().toString(), application: "", email: DEFAULT_EMAILS[0], password: "" };
     setData(prev => ({ ...prev, [sheet]: [...prev[sheet], newEntry] }));
   };
 
@@ -116,6 +127,7 @@ export default function PasswordsPage() {
           <thead>
             <tr className="text-zinc-500 border-b font-bold uppercase tracking-widest" style={{ background: `${torchBrown}22`, borderColor: `${torchBrown}44` }}>
               <th className="px-4 py-3">Application</th>
+              <th className="px-4 py-3">Email</th>
               <th className="px-4 py-3">Password</th>
               {isAdmin && <th className="px-2 py-3 w-8"></th>}
             </tr>
@@ -133,6 +145,33 @@ export default function PasswordsPage() {
                     />
                   ) : (
                     <span className="text-zinc-300 font-medium">{item.application || "-"}</span>
+                  )}
+                </td>
+                <td className="px-4 py-2">
+                  {isAdmin ? (
+                    <div className="relative">
+                      <select 
+                        value={item.email || ""}
+                        onChange={(e) => handleUpdate(sheetKey, item.id, "email", e.target.value)}
+                        className="bg-black/50 border border-zinc-800 rounded px-2 py-1 w-full focus:border-orange-700 outline-none text-zinc-300 transition-colors appearance-none cursor-pointer"
+                      >
+                        {DEFAULT_EMAILS.map(email => (
+                          <option key={email} value={email}>{email}</option>
+                        ))}
+                        <option value="custom">Custom...</option>
+                      </select>
+                      {item.email && !DEFAULT_EMAILS.includes(item.email) && (
+                        <input 
+                          type="text"
+                          value={item.email}
+                          onChange={(e) => handleUpdate(sheetKey, item.id, "email", e.target.value)}
+                          placeholder="Enter custom email..."
+                          className="bg-black/50 border border-zinc-800 rounded px-2 py-1 w-full focus:border-orange-700 outline-none text-zinc-300 mt-2 transition-colors"
+                        />
+                      )}
+                    </div>
+                  ) : (
+                    <span className="text-zinc-400 text-[0.7rem]">{item.email || "-"}</span>
                   )}
                 </td>
                 <td className="px-4 py-2">
