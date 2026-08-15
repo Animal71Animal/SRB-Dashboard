@@ -443,28 +443,32 @@ export default function EventsPage() {
         </div>
       )}
 
-      <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: 12, marginBottom: 20 }}>
-        <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", margin: 0 }}>Registry Management</h2>
-        <div style={{ display: "flex", gap: 12 }}>
-          <button onClick={() => setOpenRegistryIds(new Set())} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Collapse All</button>
-          <button onClick={() => setOpenRegistryIds(new Set([...(data.series || []).map(s => s.id), ...(data.oneOffs || []).map(e => e.id)]))} style={{ background: "none", border: "none", color: "var(--accent2)", cursor: "pointer", fontSize: "0.8rem" }}>Expand All</button>
-        </div>
-      </div>
+      {hasPermission(role, "edit", "/events") && (
+        <div style={{ marginTop: 40 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: 12, marginBottom: 20 }}>
+            <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", margin: 0 }}>Registry Management</h2>
+            <div style={{ display: "flex", gap: 12 }}>
+              <button onClick={() => setOpenRegistryIds(new Set())} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Collapse All</button>
+              <button onClick={() => setOpenRegistryIds(new Set([...(data.series || []).map(s => s.id), ...(data.oneOffs || []).map(e => e.id)]))} style={{ background: "none", border: "none", color: "var(--accent2)", cursor: "pointer", fontSize: "0.8rem" }}>Expand All</button>
+            </div>
+          </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
-        <section>
-          <h3 style={LABEL_STYLE}>Weekly Series</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {(data.series || []).map(s => renderEventForm(s, 'series'))}
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+            <section>
+              <h3 style={LABEL_STYLE}>Weekly Series</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {(data.series || []).map(s => renderEventForm(s, 'series'))}
+              </div>
+            </section>
+            <section>
+              <h3 style={LABEL_STYLE}>One-Off Events</h3>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {(data.oneOffs || []).sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(e, 'oneOff'))}
+              </div>
+            </section>
           </div>
-        </section>
-        <section>
-          <h3 style={LABEL_STYLE}>One-Off Events</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            {(data.oneOffs || []).sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(e, 'oneOff'))}
-          </div>
-        </section>
-      </div>
+        </div>
+      )}
 
       {showForm && (
         <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
