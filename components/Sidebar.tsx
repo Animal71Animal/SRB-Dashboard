@@ -29,6 +29,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
     promotions: true, social: true, analytics: true, operations: true,
   });
+  const [djMcExpanded, setDjMcExpanded] = useState(false);
 
   useEffect(() => {
     // Check role by matching current email
@@ -226,26 +227,47 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
                       {/* Sub-tabs for DJ/MC Communications */}
                       {item.href === "/dj-mc-communications" && (
-                        <div style={{ display: "flex", flexDirection: "column" }}>
-                          {[
-                            { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
-                            { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
-                            { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
-                            { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
-                          ].map(sub => (
-                            <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
-                              style={{
-                                display: "flex", alignItems: "center", gap: 10,
-                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
-                                color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
-                                background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
-                                textDecoration: "none", transition: "all 0.15s",
-                              }}>
-                              <span style={{ fontSize: "0.8rem" }}>{sub.icon}</span>
-                              {sub.title}
-                            </Link>
-                          ))}
-                        </div>
+                        <>
+                          <button 
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setDjMcExpanded(!djMcExpanded);
+                            }}
+                            style={{
+                              display: "flex", alignItems: "center", justifyContent: "space-between",
+                              width: "100%", padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                              color: "var(--muted)", background: "transparent", border: "none", cursor: "pointer",
+                            }}
+                          >
+                            <span>Sub-sections</span>
+                            <ChevronIcon expanded={djMcExpanded} />
+                          </button>
+                          
+                          <div style={{
+                            maxHeight: djMcExpanded ? "500px" : "0",
+                            overflow: "hidden", transition: "max-height 0.2s ease",
+                            display: "flex", flexDirection: "column"
+                          }}>
+                            {[
+                              { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
+                              { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
+                              { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
+                              { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
+                            ].map(sub => (
+                              <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
+                                style={{
+                                  display: "flex", alignItems: "center", gap: 10,
+                                  padding: "6px 20px 6px 65px", fontSize: "0.72rem",
+                                  color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
+                                  background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
+                                  textDecoration: "none", transition: "all 0.15s",
+                                }}>
+                                <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
+                                {sub.title}
+                              </Link>
+                            ))}
+                          </div>
+                        </>
                       )}
                     </div>
                   );
