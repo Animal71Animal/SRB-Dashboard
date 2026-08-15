@@ -224,7 +224,29 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         </a>
                       )}
 
-                      {/* Scheduling Sub-tab removed per request */}
+                      {/* Sub-tabs for DJ/MC Communications */}
+                      {item.href === "/dj-mc-communications" && (
+                        <div style={{ display: "flex", flexDirection: "column" }}>
+                          {[
+                            { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
+                            { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
+                            { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
+                            { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
+                          ].map(sub => (
+                            <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
+                                background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
+                                textDecoration: "none", transition: "all 0.15s",
+                              }}>
+                              <span style={{ fontSize: "0.8rem" }}>{sub.icon}</span>
+                              {sub.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   );
                 })}
