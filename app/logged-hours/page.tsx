@@ -215,7 +215,7 @@ export default function LoggedHoursPage() {
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: "2rem" }}>⏱️</span>
           <div>
-            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0, color: "var(--accent)" }}>Logged Hours</h1>
+            <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0, color: "var(--accent)" }}>ANiMAL's Hours</h1>
             <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
               Off-site Torch work — clock in/out + manual entry
             </p>

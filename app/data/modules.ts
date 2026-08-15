@@ -24,7 +24,7 @@ export const modules: Module[] = [
   { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
   { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
   { href: "/dj-mc-communications", icon: "💬", title: "DJ/MC Communications", desc: "Internal messaging for DJs and MCs.", group: "operations" },
-  { href: "/logged-hours", icon: "⏱️", title: "Logged Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
+  { href: "/logged-hours", icon: "⏱️", title: "ANiMAL's Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
 ];
 
 export const groupLabels: Record<ModuleGroup, string> = {
