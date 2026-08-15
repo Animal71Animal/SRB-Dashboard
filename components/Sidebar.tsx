@@ -32,6 +32,13 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [djMcExpanded, setDjMcExpanded] = useState(false);
 
   useEffect(() => {
+    // Expand DJ/MC if current path is a sub-route
+    if (pathname.startsWith("/dj-mc-communications/")) {
+      setDjMcExpanded(true);
+    }
+  }, [pathname]);
+
+  useEffect(() => {
     // Check role by matching current email
     const checkRole = async () => {
       try {
@@ -199,18 +206,40 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
-                      <Link href={item.href} onClick={() => setMobileOpen(false)}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 20px", fontSize: "0.875rem",
-                          color: active ? "var(--accent2)" : "var(--text)",
-                          background: active ? "rgba(201,0,43,0.1)" : "transparent",
-                          borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                          textDecoration: "none", transition: "all 0.15s",
-                        }}>
-                        <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                        {item.title}
-                      </Link>
+                      {item.href === "/dj-mc-communications" ? (
+                        <button 
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setDjMcExpanded(!djMcExpanded);
+                          }}
+                          style={{
+                            display: "flex", alignItems: "center", justifyContent: "space-between",
+                            width: "101%", padding: "9px 20px", fontSize: "0.875rem",
+                            color: pathname.startsWith("/dj-mc-communications") ? "var(--accent2)" : "var(--text)",
+                            background: pathname.startsWith("/dj-mc-communications") ? "rgba(201,0,43,0.1)" : "transparent",
+                            borderLeft: pathname.startsWith("/dj-mc-communications") ? "2px solid var(--accent)" : "2px solid transparent",
+                            textDecoration: "none", transition: "all 0.15s", border: "none", cursor: "pointer", textAlign: "left"
+                          }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                            {item.title}
+                          </div>
+                          <ChevronIcon expanded={djMcExpanded} />
+                        </button>
+                      ) : (
+                        <Link href={item.href} onClick={() => setMobileOpen(false)}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            padding: "9px 20px", fontSize: "0.875rem",
+                            color: active ? "var(--accent2)" : "var(--text)",
+                            background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                            borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                            textDecoration: "none", transition: "all 0.15s",
+                          }}>
+                          <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                          {item.title}
+                        </Link>
+                      )}
 
                       {/* Admin Console Sub-tab */}
                       {item.href === "/torchtv" && hasPermission(role, "special", "admin-console") && (
@@ -227,47 +256,42 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
                       {/* Sub-tabs for DJ/MC Communications */}
                       {item.href === "/dj-mc-communications" && (
-                        <>
-                          <button 
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setDjMcExpanded(!djMcExpanded);
-                            }}
+                        <div style={{
+                          maxHeight: djMcExpanded ? "500px" : "0",
+                          overflow: "hidden", transition: "max-height 0.2s ease",
+                          display: "flex", flexDirection: "column"
+                        }}>
+                          {/* Main Hub Link */}
+                          <Link href="/dj-mc-communications" onClick={() => setMobileOpen(false)}
                             style={{
-                              display: "flex", alignItems: "center", justifyContent: "space-between",
-                              width: "100%", padding: "6px 20px 6px 45px", fontSize: "0.75rem",
-                              color: "var(--muted)", background: "transparent", border: "none", cursor: "pointer",
-                            }}
-                          >
-                            <span>Sub-sections</span>
-                            <ChevronIcon expanded={djMcExpanded} />
-                          </button>
-                          
-                          <div style={{
-                            maxHeight: djMcExpanded ? "500px" : "0",
-                            overflow: "hidden", transition: "max-height 0.2s ease",
-                            display: "flex", flexDirection: "column"
-                          }}>
-                            {[
-                              { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
-                              { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
-                              { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
-                              { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
-                            ].map(sub => (
-                              <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
-                                style={{
-                                  display: "flex", alignItems: "center", gap: 10,
-                                  padding: "6px 20px 6px 65px", fontSize: "0.72rem",
-                                  color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
-                                  background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
-                                  textDecoration: "none", transition: "all 0.15s",
-                                }}>
-                                <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
-                                {sub.title}
-                              </Link>
-                            ))}
-                          </div>
-                        </>
+                              display: "flex", alignItems: "center", gap: 10,
+                              padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                              color: pathname === "/dj-mc-communications" ? "var(--accent2)" : "var(--muted)",
+                              background: pathname === "/dj-mc-communications" ? "rgba(201,0,43,0.1)" : "transparent",
+                              textDecoration: "none", transition: "all 0.15s",
+                            }}>
+                            <span style={{ fontSize: "0.8rem" }}>🏠</span>
+                            Main Hub
+                          </Link>
+                          {[
+                            { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
+                            { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
+                            { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
+                            { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
+                          ].map(sub => (
+                            <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
+                                background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
+                                textDecoration: "none", transition: "all 0.15s",
+                              }}>
+                              <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
+                              {sub.title}
+                            </Link>
+                          ))}
+                        </div>
                       )}
                     </div>
                   );
