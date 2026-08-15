@@ -140,6 +140,14 @@ export default function OverviewPage() {
         </div>
       )}
 
+      {role === "Employee" && (
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+          <Link href="/dj-mc-communications/schedules" style={{ textDecoration: "none" }}>
+            <KpiCard label="View DJ Schedule" value="LIVE" icon="📅" />
+          </Link>
+        </div>
+      )}
+
       {/* Module Grid */}
       <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
         Quick Access
