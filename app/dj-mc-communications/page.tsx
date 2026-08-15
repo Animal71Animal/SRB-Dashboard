@@ -34,16 +34,16 @@ export default function DjMcCommunicationPage() {
   ];
 
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", paddingBottom: 100 }}>
       <div style={{ marginBottom: 48 }}>
-        <h1 style={{ fontSize: "1.75rem", fontWeight: 700, margin: 0 }}>DJ/MC Communications</h1>
+        <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 1.75rem)", fontWeight: 700, margin: 0 }}>DJ/MC Communications</h1>
         <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>The Professional Standard · Your Daily Tools for Success</p>
       </div>
 
       <div style={{ 
         display: "grid", 
-        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
-        gap: 20 
+        gridTemplateColumns: "repeat(auto-fill, minmax(clamp(250px, 100%, 300px), 1fr))", 
+        gap: 16 
       }}>
         {tabs.filter(t => hasPermission(role, "view", t.href)).map((tab) => (
           <Link key={tab.href} href={tab.href} style={{ textDecoration: "none" }}>
