@@ -60,6 +60,12 @@ export default function OverviewPage() {
   useEffect(() => {
     const checkRole = async () => {
       try {
+        const preview = sessionStorage.getItem("srb-role-preview");
+        if (preview) {
+          setRole(preview as Role);
+          return;
+        }
+
         const currentEmail = sessionStorage.getItem("srb-session-email");
         if (!currentEmail) return;
 
@@ -71,6 +77,13 @@ export default function OverviewPage() {
       } catch {}
     };
     checkRole();
+
+    window.addEventListener("venue-changed", checkRole);
+    window.addEventListener("storage", checkRole);
+    return () => {
+      window.removeEventListener("venue-changed", checkRole);
+      window.removeEventListener("storage", checkRole);
+    };
   }, []);
 
   useEffect(() => {

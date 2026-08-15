@@ -120,12 +120,15 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   // Role Preview logic
   const handleRolePreview = (pRole: Role) => {
     sessionStorage.setItem("srb-role-preview", pRole);
-    window.dispatchEvent(new Event("venue-changed")); // trigger context refresh
+    window.dispatchEvent(new Event("venue-changed"));
+    window.dispatchEvent(new Event("storage")); // Trigger role update in components
+    setMobileOpen(false);
   };
 
   const clearRolePreview = () => {
     sessionStorage.removeItem("srb-role-preview");
     window.dispatchEvent(new Event("venue-changed"));
+    window.dispatchEvent(new Event("storage"));
   };
 
   const activeRole = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
