@@ -28,7 +28,19 @@ export default function PasswordsPage() {
 
   useEffect(() => {
     const checkRole = async () => {
-      const email = sessionStorage.getItem("srb-session-email") || "";
+      const email = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
+      const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
+      
+      if (preview) {
+        setRole(preview as Role);
+        return;
+      }
+
+      if (!email) {
+        setRole("Employee");
+        return;
+      }
+      
       const res = await fetch("/api/users");
       const d = await res.json();
       const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
@@ -36,6 +48,11 @@ export default function PasswordsPage() {
     };
     checkRole();
     fetchData();
+    
+    // Listen for role preview changes
+    const handleRoleChange = () => checkRole();
+    window.addEventListener("venue-changed", handleRoleChange);
+    return () => window.removeEventListener("venue-changed", handleRoleChange);
   }, []);
 
   const fetchData = async () => {
