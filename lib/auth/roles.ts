@@ -29,7 +29,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
     special: ["admin-console"]
   },
   DJ: {
-    view: ["/events", "/torchtv", "/torch-radio", "/dj-mc-communications", "/dj-mc-communications/scheduling"],
+    view: ["/events", "/torchtv", "/torch-radio", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/scheduling"],
     edit: ["/torchtv"],
     special: ["admin-console"]
   },
