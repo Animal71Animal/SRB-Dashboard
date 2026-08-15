@@ -37,7 +37,7 @@ export default function DjMcCommunicationPage() {
     <div style={{ maxWidth: 1200, margin: "0 auto" }}>
       <div style={{ marginBottom: 48 }}>
         <h1 style={{ fontSize: "1.75rem", fontWeight: 700, margin: 0 }}>DJ/MC Communications</h1>
-        <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>Wicked Liquid Productions · Torch Staff Portal</p>
+        <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>The Professional Standard · Your Daily Tools for Success</p>
       </div>
 
       <div style={{ 
