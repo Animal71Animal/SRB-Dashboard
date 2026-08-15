@@ -36,6 +36,10 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     if (pathname.startsWith("/dj-mc-communications/")) {
       setDjMcExpanded(true);
     }
+
+    const handleExpand = () => setDjMcExpanded(true);
+    window.addEventListener("expand-dj-mc", handleExpand);
+    return () => window.removeEventListener("expand-dj-mc", handleExpand);
   }, [pathname]);
 
   useEffect(() => {

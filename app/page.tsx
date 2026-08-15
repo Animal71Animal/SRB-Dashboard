@@ -157,7 +157,13 @@ export default function OverviewPage() {
           <ModuleCard href="/builder" icon="🛡️" title="Permissions" desc="Manage staff emails and role-based permissions." />
         )}
         {modules.filter(m => hasPermission(role, "view", m.href)).map((m) => (
-          <ModuleCard key={m.href} href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
+          <div key={m.href} onClick={() => {
+            if (m.href === "/dj-mc-communications") {
+              window.dispatchEvent(new CustomEvent("expand-dj-mc"));
+            }
+          }}>
+            <ModuleCard href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
+          </div>
         ))}
       </div>
     </div>
