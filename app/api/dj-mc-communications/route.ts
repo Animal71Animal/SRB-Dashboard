@@ -1,13 +1,12 @@
 import { NextResponse } from 'next/server';
-import fs from 'fs';
-import path from 'path';
+import { safeRead, writeToGitHub } from '@/lib/github';
 
-const DATA_PATH = path.join(process.cwd(), 'public/data/srb-dj-mc-comm.json');
+const FILE_PATH = 'public/data/srb-dj-mc-comm.json';
 
 export async function GET() {
   try {
-    const data = fs.readFileSync(DATA_PATH, 'utf8');
-    return NextResponse.json(JSON.parse(data));
+    const { data } = await safeRead(FILE_PATH, { messages: [] });
+    return NextResponse.json(data);
   } catch (e) {
     return NextResponse.json({ messages: [] });
   }
@@ -16,8 +15,7 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const fileContent = fs.readFileSync(DATA_PATH, 'utf8');
-    const data = JSON.parse(fileContent);
+    const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
     
     const newMessage = {
       id: Date.now().toString(),
@@ -26,15 +24,15 @@ export async function POST(req: Request) {
       timestamp: new Date().toISOString()
     };
     
-    data.messages.push(newMessage);
-    // Keep only last 100 messages to prevent file bloat
-    if (data.messages.length > 100) {
-      data.messages = data.messages.slice(-100);
-    }
+    // @ts-ignore
+    const updatedMessages = [...(data.messages || []), newMessage].slice(-100);
+    const updatedData = { messages: updatedMessages };
     
-    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+    await writeToGitHub(FILE_PATH, updatedData, sha, `chat: new message from ${body.sender}`);
+    
     return NextResponse.json({ ok: true, message: newMessage });
   } catch (e) {
+    console.error('[messaging api] POST failed:', e);
     return NextResponse.json({ ok: false, error: "Failed to post message" }, { status: 500 });
   }
 }
@@ -43,14 +41,17 @@ export async function DELETE(req: Request) {
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get('id');
-    const fileContent = fs.readFileSync(DATA_PATH, 'utf8');
-    const data = JSON.parse(fileContent);
+    const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
     
-    data.messages = data.messages.filter((m: any) => m.id !== id);
+    // @ts-ignore
+    const updatedMessages = (data.messages || []).filter((m: any) => m.id !== id);
+    const updatedData = { messages: updatedMessages };
     
-    fs.writeFileSync(DATA_PATH, JSON.stringify(data, null, 2));
+    await writeToGitHub(FILE_PATH, updatedData, sha, `chat: delete message ${id}`);
+    
     return NextResponse.json({ ok: true });
   } catch (e) {
+    console.error('[messaging api] DELETE failed:', e);
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 }
