@@ -158,7 +158,7 @@ export default function PasswordsPage() {
           <div className="flex items-center gap-6">
             <div className="relative group">
               <img 
-                src="https://framerusercontent.com/images/kM0rP01qR9Lve6C9l5eN6U4.png" 
+                src="/images/torch-logo.png" 
                 alt="The Torch" 
                 className="h-24 object-contain transition-all duration-500"
                 style={{ 
