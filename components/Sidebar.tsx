@@ -312,24 +312,12 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   {r}
                 </button>
               ))}
-              {preview && (
-                <button 
-                  onClick={clearRolePreview}
-                  style={{
-                    gridColumn: "span 2", fontSize: "0.6rem", padding: "4px", borderRadius: 4,
-                    background: "var(--accent)", color: "#fff", border: "none", cursor: "pointer", marginTop: 4
-                  }}
-                >
-                  Reset to Actual
-                </button>
-              )}
             </div>
           </div>
         )}
 
         {/* Footer */}
-        <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>PriScylla 🦞 online</div>
+        <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
           {onLogout && (
             <button 
               onClick={onLogout}
