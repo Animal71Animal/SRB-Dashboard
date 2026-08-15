@@ -299,7 +299,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
               Role Preview {preview ? `(${preview})` : ""}
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 4 }}>
-              {(["Admin", "Admin", "Manager", "DJ", "Employee"] as Role[]).map(r => (
+              {(["SuperAdmin", "Admin", "Manager", "DJ", "Employee"] as Role[]).map(r => (
                 <button 
                   key={r}
                   onClick={() => handleRolePreview(r)}
