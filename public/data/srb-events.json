@@ -5,14 +5,14 @@
       "date": "2026-08-22",
       "name": "Bikini Bull Riding",
       "theme": "Mechanical Bull Riding Event",
-      "status": "Planned",
+      "status": "Confirmed",
       "icon": "",
       "who": "",
       "format": "",
       "drinks": "",
-      "games": "",
-      "costuming": "",
-      "venue": "torch1"
+      "games": "Mechanical Bull Riding",
+      "costuming": "Cowboys & Cowgirls",
+      "venue": "torch2"
     },
     {
       "id": "evt-1786755101421",
