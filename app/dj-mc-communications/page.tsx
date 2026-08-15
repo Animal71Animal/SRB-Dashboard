@@ -5,20 +5,6 @@ import Link from "next/link";
 import { type Role, hasPermission } from "@/lib/auth/roles";
 import { useEffect, useState } from "react";
 
-const KPI_CARD_STYLE = {
-  background: "rgba(0,0,0,0.6)",
-  backdropFilter: "blur(10px)",
-  border: "1px solid rgba(201,0,43,0.3)",
-  borderRadius: "12px",
-  padding: "24px",
-  transition: "all 0.2s ease",
-  cursor: "pointer",
-  display: "flex",
-  flexDirection: "column" as const,
-  gap: "8px",
-  textDecoration: "none",
-};
-
 export default function DjMcCommunicationPage() {
   const [role, setRole] = useState<Role>("Employee");
 
@@ -41,43 +27,59 @@ export default function DjMcCommunicationPage() {
   }, []);
 
   const tabs = [
-    { href: "/dj-mc-communications/schedules", title: "Schedules", desc: "View upcoming DJ & MC shift rotations.", icon: "📅" },
-    { href: "/dj-mc-communications/messaging", title: "Messaging", desc: "Secure internal board for staff communication.", icon: "💬" },
-    { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", desc: "Report issues or status of Torch equipment.", icon: "🛠️" },
-    { href: "/dj-mc-communications/passwords", title: "Passwords", desc: "Access the TOC Credential Vault.", icon: "🔑" },
+    { href: "/dj-mc-communications/schedules", title: "Schedules", desc: "View upcoming shift rotations and floor coverage.", icon: "📅" },
+    { href: "/dj-mc-communications/messaging", title: "Messaging", desc: "Internal board for staff updates and requests.", icon: "💬" },
+    { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", desc: "Status reports and maintenance logs.", icon: "🛠️" },
+    { href: "/dj-mc-communications/passwords", title: "Passwords", desc: "Access the secure TOC Credential Vault.", icon: "🔑" },
   ];
 
   return (
-    <div className="relative min-h-screen p-8 text-white">
-      <AnimatedBackground />
-      <div className="relative z-10 max-w-6xl mx-auto">
-        <div style={{ marginBottom: "32px" }}>
-          <h1 className="text-4xl font-black tracking-tighter" style={{ color: "var(--accent)" }}>DJ/MC COMMUNICATIONS</h1>
-          <p className="text-zinc-500 text-sm mt-1 uppercase tracking-widest font-bold">Torch Staff Operations Hub</p>
-        </div>
+    <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+      <div style={{ marginBottom: 48 }}>
+        <h1 style={{ fontSize: "1.75rem", fontWeight: 700, margin: 0 }}>DJ/MC Communications</h1>
+        <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>Wicked Liquid Productions · Torch Staff Portal</p>
+      </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
-          {tabs.map((tab) => (
-            <Link key={tab.href} href={tab.href} style={KPI_CARD_STYLE} 
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = "var(--accent2)";
-                e.currentTarget.style.transform = "translateY(-4px)";
-                e.currentTarget.style.background = "rgba(201,0,43,0.1)";
+      <div style={{ 
+        display: "grid", 
+        gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", 
+        gap: 20 
+      }}>
+        {tabs.filter(t => hasPermission(role, "view", t.href)).map((tab) => (
+          <Link key={tab.href} href={tab.href} style={{ textDecoration: "none" }}>
+            <div 
+              style={{
+                background: "var(--card)",
+                border: "1px solid var(--border)",
+                borderRadius: 12,
+                padding: "24px",
+                transition: "all 0.15s ease",
+                cursor: "pointer",
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
               }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = "rgba(201,0,43,0.3)";
-                e.currentTarget.style.transform = "translateX(0)";
-                e.currentTarget.style.background = "rgba(0,0,0,0.6)";
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = "var(--accent)";
+                e.currentTarget.style.background = "rgba(201,0,43,0.07)";
+                e.currentTarget.style.transform = "translateY(-2px)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = "var(--border)";
+                e.currentTarget.style.background = "var(--card)";
+                e.currentTarget.style.transform = "translateY(0)";
               }}
             >
-              <div style={{ fontSize: "2.5rem" }}>{tab.icon}</div>
-              <div style={{ fontSize: "1.25rem", fontWeight: 800, color: "var(--accent2)" }}>{tab.title}</div>
-              <div style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.4 }}>{tab.desc}</div>
-            </Link>
-          ))}
-        </div>
+              <div style={{ fontSize: "2rem" }}>{tab.icon}</div>
+              <div>
+                <div style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--text)", marginBottom: 4 }}>{tab.title}</div>
+                <div style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.5 }}>{tab.desc}</div>
+              </div>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   );
 }
-
