@@ -127,6 +127,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     window.dispatchEvent(new Event("venue-changed"));
     window.dispatchEvent(new Event("storage")); // Trigger role update in components
     setMobileOpen(false);
+    window.location.href = "/";
   };
 
   const clearRolePreview = () => {
