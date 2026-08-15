@@ -131,7 +131,7 @@ export default function OverviewPage() {
       </div>
 
       {/* KPI Cards */}
-      {(role === "Admin" || role === "Admin" || role === "Manager") && (
+      {(role === "SuperAdmin" || role === "Admin" || role === "Manager") && (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
           <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
           <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
