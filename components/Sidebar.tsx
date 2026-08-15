@@ -106,7 +106,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     checkActual();
   }, []);
 
-  const isSuper = actualRole === "Admin" || actualRole === "SuperAdmin";
+  const isSuper = hasPermission(role, "special", "role-preview");
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;

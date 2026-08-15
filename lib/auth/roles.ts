@@ -21,7 +21,7 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
   Admin: {
     view: ["*"],
     edit: ["*"],
-    special: ["admin-console"]
+    special: ["admin-console", "builder", "role-preview"]
   },
   Manager: {
     view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling"],
