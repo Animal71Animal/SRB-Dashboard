@@ -45,23 +45,16 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
         if (preview) {
           setRole(preview as Role);
-          return;
-        }
-
-        const currentEmail = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
-        if (!currentEmail) { setRole("Employee"); return; }
-        
-        const res = await fetch("/api/users");
-        if (!res.ok) { setRole("Employee"); return; }
-        const data = await res.json();
-        const users = data.users || [];
-        const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
-        
-        // If we found a user, use their role. If not, default to Employee.
-        if (matched) {
-          setRole(matched.role);
         } else {
-          setRole("Employee");
+          const currentEmail = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
+          if (!currentEmail) { setRole("Employee"); return; }
+          
+          const res = await fetch("/api/users");
+          if (!res.ok) { setRole("Employee"); return; }
+          const data = await res.json();
+          const users = data.users || [];
+          const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
+          setRole(matched ? matched.role : "Employee");
         }
       } catch (err) {
         console.error("Role check failed:", err);
@@ -69,6 +62,13 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
       }
     };
     checkRole();
+
+    window.addEventListener("storage", checkRole);
+    window.addEventListener("venue-changed", checkRole);
+    return () => {
+      window.removeEventListener("storage", checkRole);
+      window.removeEventListener("venue-changed", checkRole);
+    };
   }, [pathname]);
 
   // Filter modules based on viewing permissions
