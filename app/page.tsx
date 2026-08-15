@@ -54,9 +54,6 @@ export default function OverviewPage() {
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [influencers, setInfluencers] = useState<any[]>([]);
   const [socialPosts, setSocialPosts] = useState<any[]>([]);
-  const [allHours, setAllHours] = useState(0);
-  const [period1Hours, setPeriod1Hours] = useState(0);
-  const [period2Hours, setPeriod2Hours] = useState(0);
   const [loading, setLoading] = useState(true);
   const venue = useVenue();
 
@@ -83,9 +80,7 @@ export default function OverviewPage() {
       fetch(`/api/campaigns${v}`).then((r) => r.json()).catch(() => []),
       fetch(`/api/influencers${v}`).then((r) => r.json()).catch(() => []),
       fetch(`/api/social-calendar${v}`).then((r) => r.json()).catch(() => []),
-      // Logged hours are personal — never filtered by venue.
-      fetch("/api/hours").then((r) => r.json()).catch(() => []),
-    ]).then(([eventsData, campaignsData, influencersData, socialData, hoursData]) => {
+    ]).then(([eventsData, campaignsData, influencersData, socialData]) => {
       // Flatten events
       const oneOffs = (eventsData?.oneOffs ?? []).map((e: any) => ({ ...e, _kind: "oneoff" }));
       const seriesDates = (eventsData?.series ?? []).flatMap((s: any) =>
@@ -95,29 +90,6 @@ export default function OverviewPage() {
       setCampaigns(campaignsData);
       setInfluencers(influencersData);
       setSocialPosts(socialData);
-
-      // Hours — all time + two pay periods per month
-      const logs = Array.isArray(hoursData) ? hoursData : [];
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = now.getMonth(); // 0-indexed
-      // Period 1: 1st–15th. Period 2: 16th–end of month.
-      const period1Start = new Date(year, month, 1).getTime();
-      const period1End = new Date(year, month, 15, 23, 59, 59, 999).getTime();
-      const period2Start = new Date(year, month, 16).getTime();
-      const period2End = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
-      let all = 0;
-      let p1 = 0;
-      let p2 = 0;
-      for (const l of logs) {
-        all += l.hours || 0;
-        const ts = new Date(l.clockIn || l.date).getTime();
-        if (ts >= period1Start && ts <= period1End) p1 += l.hours || 0;
-        else if (ts >= period2Start && ts <= period2End) p2 += l.hours || 0;
-      }
-      setAllHours(all);
-      setPeriod1Hours(p1);
-      setPeriod2Hours(p2);
       setLoading(false);
     });
   }, [venue]);
@@ -152,13 +124,6 @@ export default function OverviewPage() {
           <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
           <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
           <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
-          {(role === "SuperSuperAdmin" || role === "SuperAdmin") && (
-            <>
-              <KpiCard label="Logged Hours (1st–15th)" value={loading ? "…" : `${period1Hours.toFixed(1)}h`} icon="📅" />
-              <KpiCard label="Logged Hours (16th–EOM)" value={loading ? "…" : `${period2Hours.toFixed(1)}h`} icon="📅" />
-              <KpiCard label="Logged Hours (All Time)" value={loading ? "…" : `${allHours.toFixed(1)}h`} icon="📊" />
-            </>
-          )}
         </div>
       )}
 
