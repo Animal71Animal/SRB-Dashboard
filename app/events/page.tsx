@@ -114,7 +114,12 @@ export default function EventsPage() {
   const load = () => {
     fetch(`/api/events?venue=${venue}`).then((r) => r.json()).then((d) => setData(d ?? { oneOffs: [], series: [] })).catch(() => {});
   };
-  useEffect(() => { load(); }, [venue]);
+  
+  useEffect(() => {
+    load();
+    // Verification log (Development only)
+    console.log("Current User Role:", role);
+  }, [venue, role]);
 
   // Calendar Logic
   const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
