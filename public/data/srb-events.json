@@ -1,6 +1,20 @@
 {
   "oneOffs": [
     {
+      "id": "evt-1786755185144",
+      "date": "2026-08-22",
+      "name": "Bikini Bull Riding",
+      "theme": "Mechanical Bull Riding Event",
+      "status": "Planned",
+      "icon": "",
+      "who": "",
+      "format": "",
+      "drinks": "",
+      "games": "",
+      "costuming": "",
+      "venue": "torch1"
+    },
+    {
       "id": "evt-1786755101421",
       "date": "2026-08-21",
       "name": "Buckle Bunny",
