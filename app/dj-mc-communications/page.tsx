@@ -44,7 +44,7 @@ export default function DjMcCommunicationPage() {
     { href: "/dj-mc-communications/schedules", title: "Schedules", desc: "View upcoming DJ & MC shift rotations.", icon: "📅" },
     { href: "/dj-mc-communications/messaging", title: "Messaging", desc: "Secure internal board for staff communication.", icon: "💬" },
     { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", desc: "Report issues or status of Torch equipment.", icon: "🛠️" },
-    { href: "/dj-mc-communications/passwords", title: "Passwords", desc: "Access the TOC Credential Vault (Role restricted).", icon: "🔑", restricted: true },
+    { href: "/dj-mc-communications/passwords", title: "Passwords", desc: "Access the TOC Credential Vault.", icon: "🔑" },
   ];
 
   return (
@@ -57,7 +57,7 @@ export default function DjMcCommunicationPage() {
         </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "24px" }}>
-          {tabs.filter(t => !t.restricted || hasPermission(role, "view", t.href)).map((tab) => (
+          {tabs.map((tab) => (
             <Link key={tab.href} href={tab.href} style={KPI_CARD_STYLE} 
               onMouseEnter={e => {
                 e.currentTarget.style.borderColor = "var(--accent2)";
