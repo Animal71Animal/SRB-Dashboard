@@ -428,7 +428,7 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {selectedEventIds.length > 0 && (
+      {selectedEventIds.length > 0 && (role === "SuperSuperAdmin" || role === "SuperAdmin" || role === "Manager") && (
         <div style={{ marginBottom: 40 }}>
            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
              <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", margin: 0 }}>Selected Day Events</h2>
