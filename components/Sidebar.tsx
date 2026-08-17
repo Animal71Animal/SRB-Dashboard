@@ -96,7 +96,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [actualRole, setActualRole] = useState<Role>("Employee");
   useEffect(() => {
     const checkActual = async () => {
-      const email = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
+      const email = sessionStorage.getItem("srb-session-email");
       if (!email) return;
       const res = await fetch("/api/users");
       const d = await res.json();
