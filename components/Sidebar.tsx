@@ -277,6 +277,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         }}>
                           {[
                             { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
+                            { href: "/dj-mc-communications/promotional-materials", title: "Promotional Materials", icon: "📣" },
                             { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
                             { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
                             { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
