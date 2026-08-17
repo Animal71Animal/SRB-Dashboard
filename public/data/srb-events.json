@@ -1,6 +1,20 @@
 {
   "oneOffs": [
     {
+      "id": "evt-1786933012374",
+      "date": "2026-09-17",
+      "name": "Bacardi Bikini Bash",
+      "theme": "",
+      "status": "Planned",
+      "icon": "",
+      "who": "",
+      "format": "",
+      "drinks": "",
+      "games": "",
+      "costuming": "",
+      "venue": "torch1"
+    },
+    {
       "id": "evt-1786932925688",
       "date": "2026-09-26",
       "name": "Back to School - Naughty ??",
