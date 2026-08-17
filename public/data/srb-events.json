@@ -1,6 +1,20 @@
 {
   "oneOffs": [
     {
+      "id": "evt-1786932646939",
+      "date": "2026-09-05",
+      "name": "Back to School - Gameday Hotties",
+      "theme": "Back to School for BSU",
+      "status": "Planned",
+      "icon": "",
+      "who": "",
+      "format": "",
+      "drinks": "",
+      "games": "",
+      "costuming": "",
+      "venue": "torch1"
+    },
+    {
       "id": "evt-1786755185144",
       "date": "2026-08-22",
       "name": "Bikini Bull Riding",
