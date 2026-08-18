@@ -23,8 +23,9 @@ function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
       const users = data.users || [];
       const normalizedEmail = email.toLowerCase().trim();
       const matched = users.find((u: any) => u.email.toLowerCase() === normalizedEmail);
+      const normalizedPassword = password.trim();
       
-      if (matched && matched.password === password) {
+      if (matched && (matched.password === normalizedPassword || matched.password === password)) {
         onLogin(normalizedEmail);
       } else {
         setError("Invalid email or password.");
