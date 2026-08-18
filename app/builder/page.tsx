@@ -44,7 +44,11 @@ export default function BuilderPage() {
 
   const remove = async (targetEmail: string) => {
     if (!confirm(`Remove ${targetEmail}?`)) return;
-    await fetch(`/api/users?email=${targetEmail}`, { method: "DELETE" });
+    await fetch("/api/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "delete", email: targetEmail })
+    });
     await load();
   };
 

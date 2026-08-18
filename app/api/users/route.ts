@@ -37,6 +37,16 @@ export async function POST(req: Request) {
       }
     }
 
+    if (action === 'delete') {
+      const initialCount = users.length;
+      users = users.filter((u: any) => u.email.toLowerCase() !== email.toLowerCase());
+      if (users.length < initialCount) {
+        await writeToGitHub(USERS_PATH, { users }, sha, `auth: delete user ${email}`);
+        return NextResponse.json({ success: true });
+      }
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
+
     if (action === 'upsert') {
       const userIndex = users.findIndex((u: any) => u.email.toLowerCase() === email.toLowerCase());
       if (userIndex > -1) {
