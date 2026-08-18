@@ -72,21 +72,45 @@ export default function LoggedHoursPage() {
   const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(a.clockIn).getTime() - new Date(b.clockIn).getTime()))).catch(() => {});
   useEffect(() => { load(); }, []);
 
-  const periodTotals = useMemo(() => {
+  const periods = useMemo(() => {
     const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth();
-    const p1Start = new Date(year, month, 1).getTime();
-    const p1End = new Date(year, month, 15, 23, 59, 59, 999).getTime();
-    const p2Start = new Date(year, month, 16).getTime();
-    const p2End = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
-    let p1 = 0, p2 = 0;
-    for (const l of logs) {
-      const ts = new Date(l.clockIn || l.date).getTime();
-      if (ts >= p1Start && ts <= p1End) p1 += l.hours || 0;
-      else if (ts >= p2Start && ts <= p2End) p2 += l.hours || 0;
-    }
-    return { p1, p2 };
+    const currentYear = now.getFullYear();
+    const currentMonth = now.getMonth();
+    const currentDay = now.getDate();
+
+    const months = [
+      { year: currentYear, month: currentMonth }, // Current
+      { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: (currentMonth + 1) % 12 } // Next
+    ];
+
+    return months.flatMap(({ year, month }) => {
+      const p1Start = new Date(year, month, 1).getTime();
+      const p1End = new Date(year, month, 15, 23, 59, 59, 999).getTime();
+      const p2Start = new Date(year, month, 16).getTime();
+      const p2End = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
+
+      const monthName = new Date(year, month).toLocaleString("en-US", { month: "short" });
+      const isCurrentMonth = year === currentYear && month === currentMonth;
+
+      return [
+        {
+          label: `${monthName} 1st–15th`,
+          hours: logs.reduce((s, l) => {
+            const ts = new Date(l.clockIn || l.date).getTime();
+            return (ts >= p1Start && ts <= p1End) ? s + (l.hours || 0) : s;
+          }, 0),
+          isCurrent: isCurrentMonth && currentDay <= 15
+        },
+        {
+          label: `${monthName} 16th–EOM`,
+          hours: logs.reduce((s, l) => {
+            const ts = new Date(l.clockIn || l.date).getTime();
+            return (ts >= p2Start && ts <= p2End) ? s + (l.hours || 0) : s;
+          }, 0),
+          isCurrent: isCurrentMonth && currentDay >= 16
+        }
+      ];
+    });
   }, [logs]);
   const allTimeTotal = useMemo(() => logs.reduce((s, l) => s + (l.hours || 0), 0), [logs]);
 
@@ -225,16 +249,15 @@ export default function LoggedHoursPage() {
 
       {/* KPIs */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
-        <div style={CARD}>
-          <div style={labelStyle}>1st–15th</div>
-          <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(periodTotals.p1)}</div>
-          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>Current pay period</div>
-        </div>
-        <div style={CARD}>
-          <div style={labelStyle}>16th–EOM</div>
-          <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(periodTotals.p2)}</div>
-          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>Current pay period</div>
-        </div>
+        {periods.map((p, i) => (
+          <div key={i} style={CARD}>
+            <div style={labelStyle}>{p.label}</div>
+            <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(p.hours)}</div>
+            {p.isCurrent && (
+              <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>Current pay period</div>
+            )}
+          </div>
+        ))}
         <div style={CARD}>
           <div style={labelStyle}>All Time</div>
           <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent2)" }}>{fmtDuration(allTimeTotal)}</div>
