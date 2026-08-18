@@ -55,6 +55,13 @@
       "name": "Steven",
       "password": "stjkstr@gmail.com",
       "mustResetPassword": false
+    },
+    {
+      "email": "nola04@gmail.com",
+      "role": "Admin",
+      "name": "Dave",
+      "password": "password123",
+      "mustResetPassword": true
     }
   ]
 }
