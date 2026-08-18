@@ -62,6 +62,13 @@
       "name": "Dave",
       "password": "password123",
       "mustResetPassword": true
+    },
+    {
+      "email": "preview@gmail.com",
+      "role": "Admin",
+      "name": "preview@gmail.com",
+      "password": "password123",
+      "mustResetPassword": true
     }
   ]
 }
