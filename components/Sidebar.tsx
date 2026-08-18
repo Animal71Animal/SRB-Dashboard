@@ -59,10 +59,10 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           const users = data.users || [];
           const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
           
-          // Force reset intercept
-          if (matched && matched.mustResetPassword && pathname !== "/auth/reset-password") {
-            window.location.href = "/auth/reset-password";
-          }
+          // No longer forcing password reset as requested
+          // if (matched && matched.mustResetPassword && pathname !== "/auth/reset-password") {
+          //   window.location.href = "/auth/reset-password";
+          // }
 
           setRole(matched ? matched.role : "Employee");
         }
