@@ -76,7 +76,7 @@ export default function ContentAssetsPage() {
         {assets.length === 0 && (
           <div style={{ ...CARD, color: "var(--muted)", textAlign: "center", padding: 48, gridColumn: "1/-1" }}>No assets yet.</div>
         )}
-        {assets.map((a) => (
+        {[...assets].sort((a, b) => a.name.localeCompare(b.name)).map((a) => (
           <div key={a.id} style={CARD}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
               <div style={{ fontSize: "1.75rem" }}>{TYPE_ICONS[a.type] || "📄"}</div>
