@@ -1,5 +1,14 @@
 [
   {
+    "id": "asset-1787418260278",
+    "name": "Bachelor Party",
+    "type": "Flyer",
+    "dateCreated": "2026-08-19",
+    "description": "",
+    "link": "https://drive.google.com/file/d/1hVwt3j3duUVMpTTuB1O_B1FkDaoWiJWo/view?usp=drive_link",
+    "venue": "torch1"
+  },
+  {
     "id": "asset-1787418208866",
     "name": "Hiring Security",
     "type": "Flyer",
