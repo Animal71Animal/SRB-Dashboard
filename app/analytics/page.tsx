@@ -58,7 +58,7 @@ export default function AnalyticsPage() {
       <h2 style={{ fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)", marginBottom: 12 }}>
         This Month
       </h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
         <MetricBox label="Events This Month" value={thisMonthEvents} sub="Confirmed + Planned" />
         <MetricBox label="Avg Nightly Attendance" value={avgAttendance} sub={`Based on ${attendance.length} entries`} />
         <MetricBox label="Best Night" value={bestNight.toLocaleString()} sub="Peak headcount" color="var(--accent)" />
@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
       <h2 style={{ fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)", marginBottom: 12 }}>
         Campaigns & Outreach
       </h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 32 }}>
         <MetricBox label="Active Campaigns" value={activeCampaigns.length} />
         <MetricBox label="Top Campaign" value={topCampaign} sub="Currently active" />
         <MetricBox label="Social Reach Est." value={socialReach} sub="Cross-platform estimate" />

@@ -18,7 +18,7 @@ export default function InfluencersPage() {
       {/* Campaign Overview */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>🎯 Campaign Overview</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
           <div style={{ background: "rgba(201,0,43,0.1)", borderRadius: 8, padding: 16, textAlign: "center" }}>
             <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>June 6</div>
             <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Launch Date</div>
@@ -39,7 +39,7 @@ export default function InfluencersPage() {
       </div>
 
       {/* Navigation Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: 16 }}>
         <Link
           href="/influencers/master-list"
           style={{ display: "block", padding: 24, borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", textDecoration: "none", color: "inherit" }}
@@ -88,7 +88,7 @@ export default function InfluencersPage() {
       {/* Qualification Criteria */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginTop: 24 }}>
         <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>✓ Qualification Criteria</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
           <div>
             <h3 style={{ fontSize: "0.85rem", fontWeight: 600, color: "#00a86b", margin: "0 0 8px" }}>Must Have</h3>
             <ul style={{ margin: 0, paddingLeft: 20, fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.8 }}>

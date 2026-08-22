@@ -405,7 +405,7 @@ export default function EventsPage() {
           </span>
         </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
             <div key={d} style={{ background: "var(--bg)", padding: 12, textAlign: "center", fontSize: "0.8rem", fontWeight: 700, color: "var(--muted)" }}>{d}</div>
           ))}
@@ -458,7 +458,7 @@ export default function EventsPage() {
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
             <section>
               <h3 style={LABEL_STYLE}>Weekly Series</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -490,7 +490,7 @@ export default function EventsPage() {
             </div>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div><label style={LABEL_STYLE}>Icon</label><input value={form.icon ?? ""} onChange={(e) => setForm(f => ({ ...f, icon: e.target.value }))} style={INPUT_STYLE} placeholder={formType === 'series' ? "e.g. 📁" : "e.g. 🎉"} /></div>
                 {formType === 'oneOff' ? (
                   <div><label style={LABEL_STYLE}>Date *</label><input type="date" value={form.date ?? ""} onChange={(e) => setForm(f => ({ ...f, date: e.target.value }))} style={INPUT_STYLE} /></div>
@@ -502,7 +502,7 @@ export default function EventsPage() {
               <div><label style={LABEL_STYLE}>Theme</label><input value={form.theme ?? ""} onChange={(e) => setForm(f => ({ ...f, theme: e.target.value }))} style={INPUT_STYLE} placeholder="Optional" /></div>
 
               {formType === 'series' && (
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                   <div>
                     <label style={LABEL_STYLE}>Recurring Day *</label>
                     <select value={form.day ?? ""} onChange={(e) => setForm(f => ({ ...f, day: e.target.value }))} style={INPUT_STYLE}>

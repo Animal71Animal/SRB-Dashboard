@@ -146,7 +146,7 @@ export default function InfluencerMasterListPage() {
       </div>
 
       {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 24 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 24 }}>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 10, padding: 16, textAlign: "center" }}>
           <div style={{ fontSize: "1.8rem", fontWeight: 700, color: "var(--text)" }}>{influencers.length}</div>
           <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Total</div>
@@ -192,7 +192,7 @@ export default function InfluencerMasterListPage() {
       {/* Form */}
       {showForm && (
         <form onSubmit={handleSubmit} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
             <div>
               <label style={{ fontSize: "0.8rem", color: "var(--muted)", display: "block", marginBottom: 4 }}>Name *</label>
               <input value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} required style={{ width: "100%", padding: "10px 12px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8, color: "var(--text)", fontSize: "0.9rem" }} />

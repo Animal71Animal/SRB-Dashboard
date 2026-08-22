@@ -214,7 +214,7 @@ export default function PromotionalMaterialsPage() {
         <p style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>Standardized Marketing · Visual & Verbal Consistency</p>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 40 }}>
         {/* Torch 1 Section */}
         <div>
            <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 24, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>

@@ -65,7 +65,7 @@ export default function CompCodesPage() {
       {/* Add Form */}
       <div style={{ ...CARD, marginBottom: 24 }}>
         <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Issue New Code</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 12 }}>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Code (auto-generated if blank)</label>
             <div style={{ display: "flex", gap: 8, marginTop: 4 }}>

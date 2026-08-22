@@ -61,7 +61,7 @@ export default function SocialCalendarPage() {
       {showForm && (
         <div style={{ ...CARD, marginBottom: 24 }}>
           <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>New Post</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <select value={form.platform} onChange={(e) => setForm((p) => ({ ...p, platform: e.target.value }))}>
               {["Instagram","TikTok","Facebook"].map((pl) => <option key={pl}>{pl}</option>)}
             </select>
@@ -88,7 +88,7 @@ export default function SocialCalendarPage() {
         </div>
       )}
 
-      <div style={{ display: "grid", gap: 12 }}>
+      <div className="responsive-grid" style={{ display: "grid", gap: 12 }}>
         {sorted.length === 0 && (
           <div style={{ ...CARD, color: "var(--muted)", textAlign: "center", padding: 48 }}>No posts scheduled.</div>
         )}

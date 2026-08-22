@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useVenue } from "@/components/VenueSwitcher";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
-const TYPE_ICONS: Record<string, string> = { Flyer: "🖼️", Logo: "✏️", Video: "🎥", Photo: "📸" };
+const TYPE_ICONS: Record<string, string> = { Audio: "🎶", Flyer: "🖼️", Logo: "✏️", Video: "🎥", Photo: "📸" };
 
 interface ContentAsset {
   id: string; name: string; type: string; dateCreated: string; description: string; link: string; venue?: string;
@@ -53,10 +53,10 @@ export default function ContentAssetsPage() {
       {showForm && (
         <div style={{ ...CARD, marginBottom: 24 }}>
           <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>New Asset</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <input placeholder="Asset Name" value={form.name ?? ""} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} style={{ gridColumn: "1 / -1" }} />
             <select value={form.type ?? "Flyer"} onChange={(e) => setForm((p) => ({ ...p, type: e.target.value }))}>
-              {["Flyer","Logo","Video","Photo"].map((t) => <option key={t}>{t}</option>)}
+              {["Audio","Flyer","Logo","Video","Photo"].sort().map((t) => <option key={t}>{t}</option>)}
             </select>
             <div>
               <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Date Created</label>
@@ -72,7 +72,7 @@ export default function ContentAssetsPage() {
         </div>
       )}
 
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
         {assets.length === 0 && (
           <div style={{ ...CARD, color: "var(--muted)", textAlign: "center", padding: 48, gridColumn: "1/-1" }}>No assets yet.</div>
         )}

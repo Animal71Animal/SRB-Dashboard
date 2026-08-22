@@ -112,7 +112,7 @@ export default function OutreachTemplatesPage() {
       {/* Cadence */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 20, marginBottom: 24 }}>
         <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>📅 Outreach Cadence</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
           <div style={{ padding: 12, background: "rgba(155,93,229,0.1)", borderRadius: 8 }}>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Initial Outreach</div>
             <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text)" }}>May 15-22</div>
@@ -146,7 +146,7 @@ export default function OutreachTemplatesPage() {
       </div>
 
       {/* Template Selector */}
-      <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 20 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 20 }}>
         <div>
           <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>Templates</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>

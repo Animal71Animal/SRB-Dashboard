@@ -350,7 +350,7 @@ export default function PartyConceptsPage() {
               <span>{emoji}</span> {label}
               <span style={{ fontSize: "0.75rem", color: "var(--muted)", fontWeight: 400 }}>({data[key].length})</span>
             </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 20 }}>
+            <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 20 }}>
               {data[key].map((c) => (
                 <ConceptCard key={c.id} concept={c} section={key} onEdit={key === "yearly" ? openEdit : undefined} />
               ))}
@@ -365,7 +365,7 @@ export default function PartyConceptsPage() {
           <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto" }}>
             <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Edit: {editConcept.name}</h3>
             <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+              <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
                 <div><label style={LABEL_STYLE}>Icon</label><input value={editForm.icon ?? ""} onChange={e => setEditForm(f => ({ ...f, icon: e.target.value }))} style={INPUT_STYLE} /></div>
                 <div><label style={LABEL_STYLE}>Day / Occasion</label><input value={editForm.day ?? ""} onChange={e => setEditForm(f => ({ ...f, day: e.target.value }))} style={INPUT_STYLE} /></div>
               </div>
@@ -381,7 +381,7 @@ export default function PartyConceptsPage() {
                 <p style={{ margin: "0 0 12px", fontSize: "0.8rem", fontWeight: 700, color: "var(--text)", textTransform: "uppercase", letterSpacing: "0.05em" }}>📅 Dates</p>
 
                 {/* Start date + weekly generator */}
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
+                <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 10 }}>
                   <div><label style={LABEL_STYLE}>Start Date</label><input type="date" value={editForm.startDate ?? ""} onChange={e => { setEditForm(f => ({ ...f, startDate: e.target.value })); setPreviewDates(null); }} style={INPUT_STYLE} /></div>
                   <div><label style={LABEL_STYLE}>Generate Through</label><input type="date" value={genEndDate} onChange={e => { setGenEndDate(e.target.value); setPreviewDates(null); }} style={INPUT_STYLE} /></div>
                 </div>
@@ -443,7 +443,7 @@ export default function PartyConceptsPage() {
             <span>💡</span> Promotional Ideas
             <span style={{ fontSize: "0.75rem", color: "var(--muted)", fontWeight: 400 }}>({data.promoIdeas.length})</span>
           </h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 20 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(340px, 1fr))", gap: 20 }}>
             {data.promoIdeas.map((p) => (
               <PromoCard key={p.id} idea={p} />
             ))}

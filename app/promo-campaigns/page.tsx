@@ -64,7 +64,7 @@ export default function PromoCampaignsPage() {
       {showForm && (
         <div style={{ ...CARD, marginBottom: 24 }}>
           <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>{editing ? "Edit Campaign" : "New Campaign"}</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <input placeholder="Campaign Name" value={form.name ?? ""} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} style={{ gridColumn: "1 / -1" }} />
             <select value={form.channel ?? "Instagram"} onChange={(e) => setForm((p) => ({ ...p, channel: e.target.value }))}>
               {["Instagram","TikTok","Facebook","Flyers","Radio","All"].map((c) => <option key={c}>{c}</option>)}

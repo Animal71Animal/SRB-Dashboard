@@ -54,7 +54,7 @@ export default function TrackingDashboardPage() {
       {/* Outreach Metrics */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 16px", color: "var(--text)" }}>📬 Outreach Metrics</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
           {([
             ["Identified", "identified", "target: 20-30"],
             ["Sent", "sent", ""],
@@ -82,7 +82,7 @@ export default function TrackingDashboardPage() {
       {/* Launch Night Attribution */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 16px", color: "var(--text)" }}>🎉 June 6 Launch Night Attribution</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 20 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 20 }}>
           {([
             ["Influencer Sourced", "influencerSourced", "#"],
             ["Street Team", "streetTeam", "#"],
@@ -103,7 +103,7 @@ export default function TrackingDashboardPage() {
         </div>
 
         <h3 style={{ fontSize: "0.9rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>Revenue</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 16 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 16 }}>
           <div>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Cover Charges</div>
             <input type="number" value={launch.coverCharges} onChange={(e) => updateLaunch("coverCharges", parseInt(e.target.value) || 0)} placeholder="$0" style={{ width: "100%", padding: "8px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
@@ -126,7 +126,7 @@ export default function TrackingDashboardPage() {
       {/* Long-Term Targets */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24 }}>
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>🎯 Long-Term Targets</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
           <div style={{ padding: 12, background: "rgba(0,200,124,0.08)", borderRadius: 8 }}>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>By July 6</div>
             <div style={{ fontSize: "0.85rem", color: "var(--text)", marginTop: 4 }}>Repeat rate from June 6 newcomers, Week-of revenue trend, Podcast listenership</div>

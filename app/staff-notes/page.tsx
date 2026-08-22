@@ -67,7 +67,7 @@ export default function StaffNotesPage() {
       {showForm && (
         <div style={{ ...CARD, marginBottom: 24 }}>
           <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>{editing ? "Edit Note" : "New Note"}</h3>
-          <div style={{ display: "grid", gap: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gap: 12 }}>
             <input placeholder="Title" value={form.title} onChange={(e) => setForm((p) => ({ ...p, title: e.target.value }))} />
             <div>
               <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Date</label>
@@ -88,7 +88,7 @@ export default function StaffNotesPage() {
         </div>
       )}
 
-      <div style={{ display: "grid", gap: 16 }}>
+      <div className="responsive-grid" style={{ display: "grid", gap: 16 }}>
         {notes.length === 0 && (
           <div style={{ ...CARD, color: "var(--muted)", textAlign: "center", padding: 48 }}>No notes yet.</div>
         )}

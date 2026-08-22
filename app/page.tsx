@@ -132,7 +132,7 @@ export default function OverviewPage() {
 
       {/* KPI Cards */}
       {(role === "SuperAdmin" || role === "Admin") && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+        <div className="responsive-grid" className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
           <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
           <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
           <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
@@ -141,7 +141,7 @@ export default function OverviewPage() {
       )}
 
       {role === "Employee" && (
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+        <div className="responsive-grid" className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
           <Link href="/dj-mc-communications/schedules" style={{ textDecoration: "none" }}>
             <KpiCard label="View DJ Schedule" value="LIVE" icon="📅" />
           </Link>
@@ -152,7 +152,7 @@ export default function OverviewPage() {
       <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
         Quick Access
       </h2>
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+      <div className="responsive-grid" className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
         {hasPermission(role, "special", "builder") && (
           <ModuleCard href="/builder" icon="🛡️" title="Permissions" desc="Manage staff emails and role-based permissions." />
         )}

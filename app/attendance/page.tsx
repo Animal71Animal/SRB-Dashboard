@@ -63,7 +63,7 @@ export default function AttendancePage() {
       </div>
 
       {/* Summary */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 24 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 24 }}>
         {[
           { label: "Total Entries", value: entries.length, icon: "📋" },
           { label: "Total Headcount", value: totalHeadcount.toLocaleString(), icon: "👥" },
@@ -83,7 +83,7 @@ export default function AttendancePage() {
       {showForm && (
         <div style={{ ...CARD, marginBottom: 24 }}>
           <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Log Night</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
               <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Date</label>
               <input type="date" value={form.date ?? ""} onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))} style={{ width: "100%", marginTop: 4 }} />

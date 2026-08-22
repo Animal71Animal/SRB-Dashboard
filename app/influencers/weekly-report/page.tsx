@@ -96,7 +96,7 @@ export default function WeeklyReportPage() {
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 16px", color: "var(--text)" }}>📊 Attendance & Revenue</h2>
         
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)", display: "block", marginBottom: 4 }}>Total Attendance</label>
             <input type="number" value={attendance.total} onChange={(e) => setAttendance({ ...attendance, total: parseInt(e.target.value) || 0 })} style={{ width: "100%", padding: "10px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
@@ -112,7 +112,7 @@ export default function WeeklyReportPage() {
         </div>
 
         <h3 style={{ fontSize: "0.9rem", fontWeight: 600, margin: "16px 0 12px", color: "var(--text)" }}>Traffic Source Attribution</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 16 }}>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)", display: "block", marginBottom: 4 }}>Street Team</label>
             <input type="number" value={attendance.streetTeam} onChange={(e) => setAttendance({ ...attendance, streetTeam: parseInt(e.target.value) || 0 })} style={{ width: "100%", padding: "10px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
@@ -132,7 +132,7 @@ export default function WeeklyReportPage() {
         </div>
 
         <h3 style={{ fontSize: "0.9rem", fontWeight: 600, margin: "16px 0 12px", color: "var(--text)" }}>Revenue</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 16 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 16 }}>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)", display: "block", marginBottom: 4 }}>Cover Charges</label>
             <input type="number" value={revenue.coverCharges} onChange={(e) => setRevenue({ ...revenue, coverCharges: parseInt(e.target.value) || 0 })} placeholder="$" style={{ width: "100%", padding: "10px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
@@ -188,7 +188,7 @@ export default function WeeklyReportPage() {
       {/* Social */}
       <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
         <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 16px", color: "var(--text)" }}>📱 Social & Marketing</h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12 }}>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)", display: "block", marginBottom: 4 }}>New IG Followers</label>
             <input type="number" value={social.newFollowers} onChange={(e) => setSocial({ ...social, newFollowers: parseInt(e.target.value) || 0 })} style={{ width: "100%", padding: "10px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
@@ -209,7 +209,7 @@ export default function WeeklyReportPage() {
       </div>
 
       {/* What Worked / Didn't */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
         <div style={{ background: "var(--card)", border: "1px solid rgba(0,200,124,0.3)", borderRadius: 12, padding: 20 }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: "0 0 12px", color: "#00c87c" }}>✅ What Worked</h2>
           <textarea value={whatWorked} onChange={(e) => setWhatWorked(e.target.value)} rows={4} placeholder="Best performing traffic source, most engaged segment, revenue driver, unexpected win..." style={{ width: "100%", padding: "10px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "0.9rem", resize: "vertical" }} />

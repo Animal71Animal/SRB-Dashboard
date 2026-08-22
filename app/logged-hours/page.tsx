@@ -248,7 +248,7 @@ export default function LoggedHoursPage() {
       </div>
 
       {/* KPIs */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
         {periods.map((p, i) => (
           <div key={i} style={CARD}>
             <div style={labelStyle}>{p.label}</div>
@@ -334,17 +334,17 @@ export default function LoggedHoursPage() {
       {/* Manual Log */}
       {mode === "manual" && (
         <div style={CARD}>
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <div>
               <label style={labelStyle}>Clock In (Date + Time)</label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+              <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                 <input style={inputStyle} type="date" value={manualInDate} onChange={(e) => setManualInDate(e.target.value)} />
                 <input style={inputStyle} type="time" value={manualInTime} onChange={(e) => setManualInTime(e.target.value)} />
               </div>
             </div>
             <div>
               <label style={labelStyle}>Clock Out (Date + Time)</label>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
+              <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                 <input style={inputStyle} type="date" value={manualOutDate} onChange={(e) => setManualOutDate(e.target.value)} />
                 <input style={inputStyle} type="time" value={manualOutTime} onChange={(e) => setManualOutTime(e.target.value)} />
               </div>
@@ -441,7 +441,7 @@ export default function LoggedHoursPage() {
         }} onClick={() => setEditing(null)}>
           <div style={{ ...CARD, maxWidth: 480, width: "100%" }} onClick={(e) => e.stopPropagation()}>
             <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Edit Entry</h3>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               <div>
                 <label style={labelStyle}>Clock In</label>
                 <input style={inputStyle} type="datetime-local" value={editIn} onChange={(e) => setEditIn(e.target.value)} />
