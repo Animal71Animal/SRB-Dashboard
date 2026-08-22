@@ -39,6 +39,21 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function PUT(req: NextRequest) {
+  try {
+    const body = await req.json();
+    if (!body.id) return NextResponse.json({ ok: false, error: "Missing id" }, { status: 400 });
+    const { data, sha } = await safeRead<ContentAsset[]>(FILE, []);
+    const index = data.findIndex((a) => a.id === body.id);
+    if (index === -1) return NextResponse.json({ ok: false, error: "Asset not found" }, { status: 404 });
+    data[index] = { ...data[index], ...body };
+    await safeWrite(FILE, data, sha, `feat: update asset "${body.name}"`);
+    return NextResponse.json({ ok: true });
+  } catch (err) {
+    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const id = new URL(req.url).searchParams.get("id");

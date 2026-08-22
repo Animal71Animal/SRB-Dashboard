@@ -16,6 +16,7 @@ export default function ContentAssetsPage() {
   const [assets, setAssets] = useState<ContentAsset[]>([]);
   const [form, setForm] = useState<Partial<ContentAsset>>(empty);
   const [showForm, setShowForm] = useState(false);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const venue = useVenue();
 
@@ -26,9 +27,21 @@ export default function ContentAssetsPage() {
     if (!form.name) { alert("Asset name required"); return; }
     setLoading(true);
     try {
-      await fetch("/api/content-assets", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...form, venue: form.venue ?? venue }) });
-      setForm(empty); setShowForm(false); await load();
+      const method = editingId ? "PUT" : "POST";
+      await fetch("/api/content-assets", { 
+        method, 
+        headers: { "Content-Type": "application/json" }, 
+        body: JSON.stringify({ ...form, venue: form.venue ?? venue }) 
+      });
+      setForm(empty); setShowForm(false); setEditingId(null); await load();
     } finally { setLoading(false); }
+  };
+
+  const edit = (a: ContentAsset) => {
+    setForm(a);
+    setEditingId(a.id);
+    setShowForm(true);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const del = async (id: string) => {
@@ -44,7 +57,7 @@ export default function ContentAssetsPage() {
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>🎨 Content Assets</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Flyer archive, logos, and asset links</p>
         </div>
-        <button onClick={() => setShowForm(!showForm)}
+        <button onClick={() => { if(showForm) { setForm(empty); setEditingId(null); } setShowForm(!showForm); }}
           style={{ background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 18px", fontSize: "0.875rem", fontWeight: 600 }}>
           {showForm ? "Cancel" : "+ Add Asset"}
         </button>
@@ -52,7 +65,7 @@ export default function ContentAssetsPage() {
 
       {showForm && (
         <div style={{ ...CARD, marginBottom: 24 }}>
-          <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>New Asset</h3>
+          <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>{editingId ? "Edit Asset" : "New Asset"}</h3>
           <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
             <input placeholder="Asset Name" value={form.name ?? ""} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} style={{ gridColumn: "1 / -1" }} />
             <select value={form.type ?? "Flyer"} onChange={(e) => setForm((p) => ({ ...p, type: e.target.value }))}>
@@ -67,7 +80,7 @@ export default function ContentAssetsPage() {
           </div>
           <button onClick={save} disabled={loading}
             style={{ marginTop: 16, background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 600 }}>
-            {loading ? "Saving..." : "Add Asset"}
+            {loading ? "Saving..." : (editingId ? "Update Asset" : "Add Asset")}
           </button>
         </div>
       )}
@@ -93,7 +106,8 @@ export default function ContentAssetsPage() {
                 🔗 {a.link}
               </a>
             )}
-            <div style={{ marginTop: 12 }}>
+            <div style={{ marginTop: 12, display: "flex", gap: 8 }}>
+              <button onClick={() => edit(a)} style={{ flex: 1, background: "none", border: "1px solid var(--border)", color: "var(--text)", borderRadius: 6, padding: "5px 14px", fontSize: "0.8rem" }}>Edit</button>
               <button onClick={() => del(a.id)} style={{ background: "none", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 6, padding: "5px 14px", fontSize: "0.8rem" }}>Delete</button>
             </div>
           </div>
