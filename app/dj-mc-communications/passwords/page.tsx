@@ -7,11 +7,9 @@ import { type Role } from "@/lib/auth/roles";
 interface Entry {
   id: string;
   application: string;
-  email?: string;
+  username?: string;
   password: string;
 }
-
-const DEFAULT_EMAILS = [];
 
 interface PasswordData {
   torch1: Entry[];
@@ -78,7 +76,7 @@ export default function PasswordsPage() {
   };
 
   const addRow = (sheet: "torch1" | "torch2") => {
-    const newEntry = { id: Date.now().toString(), application: "", email: "", password: "" };
+    const newEntry = { id: Date.now().toString(), application: "", username: "", password: "" };
     setData(prev => ({ ...prev, [sheet]: [...prev[sheet], newEntry] }));
   };
 
@@ -119,7 +117,7 @@ export default function PasswordsPage() {
           <thead>
             <tr className="text-zinc-500 border-b font-bold uppercase tracking-widest" style={{ background: `${torchBrown}22`, borderColor: `${torchBrown}44` }}>
               <th className="px-4 py-3">Application</th>
-              <th className="px-4 py-3">Email</th>
+              <th className="px-4 py-3">Username</th>
               <th className="px-4 py-3">Password</th>
               {isAdmin && <th className="px-2 py-3 w-8"></th>}
             </tr>
@@ -143,13 +141,13 @@ export default function PasswordsPage() {
                   {isAdmin ? (
                     <input 
                       type="text" 
-                      value={item.email || ""}
-                      onChange={(e) => handleUpdate(sheetKey, item.id, "email", e.target.value)}
-                      placeholder="Enter email..."
+                      value={item.username || ""}
+                      onChange={(e) => handleUpdate(sheetKey, item.id, "username", e.target.value)}
+                      placeholder="Enter username..."
                       className="bg-black/50 border border-zinc-800 rounded px-2 py-1 w-full focus:border-orange-700 outline-none text-zinc-300 transition-colors"
                     />
                   ) : (
-                    <span className="text-zinc-400 text-[0.7rem]">{item.email || "-"}</span>
+                    <span className="text-zinc-400 text-[0.7rem]">{item.username || "-"}</span>
                   )}
                 </td>
                 <td className="px-4 py-2">
