@@ -9,7 +9,7 @@
         "verbiage": "",
         "drinkSpecials": "",
         "mcVerbiage": "Join us\n",
-        "mcVerbiageCollapsed": false,
+        "mcVerbiageCollapsed": true,
         "eventId": "evt-1786755101421",
         "eventKind": "oneoff",
         "linkedEvent": {
