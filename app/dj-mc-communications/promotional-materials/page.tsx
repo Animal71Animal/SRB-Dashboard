@@ -106,13 +106,6 @@ interface EventSeries {
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
 // --- Helpers ---------------------------------------------------------------
-function formatVenueLabel(v?: string) {
-  if (v === "torch1") return "Torch 1";
-  if (v === "torch2") return "Torch 2";
-  if (v === "both") return "Both";
-  return v || "";
-}
-
 function fmtDate(d?: string) {
   if (!d) return "";
   const dt = new Date(d + "T12:00:00");
@@ -122,10 +115,6 @@ function fmtDate(d?: string) {
 
 function isConfirmed(status?: string): boolean {
   return String(status ?? "").trim().toLowerCase() === "confirmed";
-}
-
-function newLocalId(): string {
-  return `${Date.now().toString()}-${Math.random().toString(36).slice(2, 8)}`;
 }
 
 function eventDisplayLabel(e: { kind: EventKind; oneOff?: OneOffEvent; series?: EventSeries }): string {
@@ -234,8 +223,24 @@ export default function PromotionalMaterialsPage() {
 
   const canEdit = role === "Admin" || role === "SuperAdmin";
 
-  // Persist MC verbiage for a single item. Optimistic local update + PUT to backend.
+  /**
+   * Persist edits to a single promo item locally (so the section assignment and
+   * promo-specific fields survive) AND propagate any linked-event field changes
+   * back to the authoritative Event Calendar via /api/events PATCH.
+   *
+   * The promo card already mirrors the linked event through its `linkedEvent`
+   * snapshot, so when the user edits fields that map to Event Calendar fields
+   * we forward the same value to /api/events. This keeps Event Calendar the
+   * single source of truth and prevents divergent duplicate records.
+   *
+   * Recurring safety: for `kind === "series"` the linked card represents the
+   * whole series — that is how the Event Calendar models series (one row per
+   * series with a dates[] array). We therefore PATCH the series record as a
+   * whole, which matches the existing Event Calendar semantics. For one-off
+   * events we PATCH the single record. No new event rows are created.
+   */
   const persistItemUpdate = async (torch: TorchKey, section: SectionKey, id: string, update: Partial<PromoItem>) => {
+    // 1. Persist locally to the promo file (preserves section assignment, linkedEvent snapshot, etc.).
     try {
       await fetch("/api/promotional-materials", {
         method: "PUT",
@@ -243,7 +248,63 @@ export default function PromotionalMaterialsPage() {
         body: JSON.stringify({ torch, section, id, update }),
       });
     } catch (e) {
-      console.error("persistItemUpdate failed", e);
+      console.error("persistItemUpdate: local promo PUT failed", e);
+    }
+
+    // 2. Propagate to Event Calendar if this card is linked to one.
+    //    We need the existing item to know eventId/eventKind — the caller passes
+    //    the resolved item via `currentItem`. We resolve here too by reading
+    //    from current `data`.
+    const item = data[torch][section].find((m) => m.id === id);
+    if (!item || !item.eventId) return;
+
+    // Build a PATCH payload: only forward fields that exist on the Event Calendar
+    // event record. Promo-only fields (mcVerbiage, drinkSpecials, etc.) stay local.
+    const patch: Record<string, unknown> = {};
+    if ("title" in update) patch.name = update.title;
+    if ("date" in update) {
+      if (item.eventKind === "series") patch.startDate = update.date;
+      else patch.date = update.date;
+    }
+    if ("verbiage" in update) patch.costuming = update.verbiage ?? "";
+    if ("drinkSpecials" in update) patch.drinks = update.drinkSpecials ?? "";
+    // `description` on the promo card is a join of [theme, who, format].
+    // If the user changes it, split back into individual fields when possible.
+    if ("description" in update) {
+      const parts = String(update.description ?? "").split(" · ").map((s) => s.trim());
+      // Best-effort split: 3 parts → theme/who/format; 2 → theme/who; 1 → theme.
+      if (parts.length === 3) {
+        patch.theme = parts[0];
+        patch.who = parts[1];
+        patch.format = parts[2];
+      } else if (parts.length === 2) {
+        patch.theme = parts[0];
+        patch.who = parts[1];
+      } else if (parts.length === 1) {
+        patch.theme = parts[0];
+      } else {
+        // Empty description → clear theme.
+        patch.theme = "";
+      }
+    }
+
+    if (Object.keys(patch).length === 0) return;
+
+    try {
+      const res = await fetch("/api/events", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: item.eventId,
+          kind: item.eventKind === "series" ? "series" : "oneoff",
+          ...patch,
+        }),
+      });
+      if (!res.ok) {
+        console.error("persistItemUpdate: events PATCH failed", res.status);
+      }
+    } catch (e) {
+      console.error("persistItemUpdate: events PATCH error", e);
     }
   };
 
@@ -406,7 +467,7 @@ export default function PromotionalMaterialsPage() {
                 </button>
               </div>
               <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 8 }}>
-                Selecting an event copies its event card into this {torch === "torch1" ? "Torch 1" : "Torch 2"} · {section === "heavy" ? "Heavy Rotation" : "Upcoming"} section. An MC Verbiage box will appear under the card for staff to fill in.
+                Selecting an event copies its event card into this {torch === "torch1" ? "Torch 1" : "Torch 2"} · {section === "heavy" ? "Heavy Rotation" : "Upcoming"} section. Edits to the linked card (including verbiage) sync back to the authoritative Event Calendar record.
               </div>
             </div>
             <div style={{ display: "flex", justifyContent: "flex-end" }}>
@@ -506,46 +567,13 @@ function PromoCard({
   canEdit, onStartEdit, onCancelEdit, onSaveEdit, onDelete,
   persistItemUpdate,
 }: PromoCardProps) {
-  // Local MC verbiage buffer for the collapsible box. Initialize from item, but
-  // allow controlled editing. We persist on blur.
-  const [mcBuffer, setMcBuffer] = useState<string>(item.mcVerbiage ?? "");
-  const [mcDirty, setMcDirty] = useState(false);
-  const [mcSaving, setMcSaving] = useState(false);
-
-  // Sync local buffer if item.mcVerbiage changes externally (after fetch).
-  useEffect(() => {
-    if (!mcDirty) setMcBuffer(item.mcVerbiage ?? "");
-  }, [item.mcVerbiage, mcDirty]);
-
-  const isMcCollapsed = item.mcVerbiageCollapsed ?? false;
-
-  const toggleMc = async () => {
-    const next = !isMcCollapsed;
-    // Optimistic local
-    item.mcVerbiageCollapsed = next;
-    await persistItemUpdate({ mcVerbiageCollapsed: next });
-  };
-
-  const saveMc = async () => {
-    if (!mcDirty) return;
-    setMcSaving(true);
-    try {
-      item.mcVerbiage = mcBuffer;
-      await persistItemUpdate({ mcVerbiage: mcBuffer });
-      setMcDirty(false);
-    } finally {
-      setMcSaving(false);
-    }
-  };
+  // The verbiage field is part of the collapsible event card body. When the
+  // user edits (via Edit mode) and saves, `handleSave` -> `persistItemUpdate`
+  // writes to BOTH /api/promotional-materials (local) AND /api/events (the
+  // authoritative Event Calendar source). No standalone MC verbiage box.
 
   const linked = item.linkedEvent;
   const hasLink = !!item.eventId;
-
-  const venueLabel = formatVenueLabel(linked?.venue);
-  const venueColor =
-    linked?.venue === "torch1" ? "#fb923c" :
-    linked?.venue === "torch2" ? "#facc15" :
-    linked?.venue === "both" ? "#dc2626" : "var(--muted)";
 
   return (
     <div
@@ -655,124 +683,44 @@ function PromoCard({
               )}
             </div>
             <div style={{ gridColumn: "1 / -1" }}>
-              <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>Verbiage Ideas</div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
+                <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase" }}>
+                  🎙️ MC Verbiage{hasLink && " (synced to Event Calendar)"}
+                </div>
+                {hasLink && (item.verbiage ?? "") && !isEditing && (
+                  <span
+                    title="This card is linked to the Event Calendar record above. Edits sync back automatically."
+                    style={{ fontSize: "0.65rem", color: "#22c55e", background: "rgba(34,197,94,0.15)", padding: "1px 6px", borderRadius: 8 }}
+                  >
+                    Linked · edits sync
+                  </span>
+                )}
+              </div>
               {isEditing ? (
                 <textarea
                   value={editBuffer.verbiage ?? ""}
                   onChange={(e) => setEditBuffer({ ...editBuffer, verbiage: e.target.value })}
-                  style={{ width: "100%", minHeight: 80, background: "rgba(0,0,0,0.2)", border: "1px solid var(--border)", color: "white", padding: 8, borderRadius: 6, fontFamily: "inherit" }}
+                  placeholder="Suggested MC verbiage for this event…"
+                  style={{ width: "100%", minHeight: 100, background: "rgba(0,0,0,0.2)", border: "1px solid var(--border)", color: "white", padding: 12, borderRadius: 6, fontFamily: "inherit", outline: "none", resize: "vertical" }}
                 />
               ) : (
-                <div style={{ fontSize: "0.9rem", color: "var(--text)", lineHeight: 1.5, whiteSpace: "pre-wrap", background: "rgba(0,0,0,0.15)", padding: 12, borderRadius: 8, borderLeft: "2px solid var(--accent)" }}>{item.verbiage || "N/A"}</div>
+                <div
+                  data-testid={`verbiage-readonly-${item.id}`}
+                  style={{ fontSize: "0.9rem", color: "var(--text)", lineHeight: 1.5, whiteSpace: "pre-wrap", background: "rgba(0,0,0,0.15)", padding: 12, borderRadius: 8, borderLeft: "2px solid var(--accent)" }}
+                >
+                  {item.verbiage || "—"}
+                </div>
               )}
             </div>
           </div>
-
-          {/* Linked event details — only when this card was created from the picker */}
-          {hasLink && (
-            <div style={{ marginTop: 16, padding: 12, background: "rgba(0,0,0,0.18)", borderRadius: 8, border: "1px solid var(--border)" }}>
-              <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", marginBottom: 8, letterSpacing: "0.05em", fontWeight: 700 }}>
-                Linked Event Calendar Record · {item.eventKind === "series" ? "Series" : "One-off"}
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12, fontSize: "0.85rem" }}>
-                <DetailKV k="Event ID" v={linked?.id} mono />
-                <DetailKV k="Venue" v={venueLabel || "—"} accentColor={venueColor} />
-                <DetailKV k="Theme" v={linked?.theme} />
-                <DetailKV k="Audience" v={linked?.who} />
-                <DetailKV k="Format" v={linked?.format} />
-                <DetailKV k="Games" v={linked?.games} />
-                <DetailKV k="Costuming" v={linked?.costuming} />
-              </div>
-            </div>
-          )}
         </div>
       )}
 
-      {/* MC Verbiage box — collapsible, always visible directly below the card */}
-      <div
-        data-testid={`mc-verbiage-${item.id}`}
-        style={{
-          borderTop: "1px solid rgba(255,255,255,0.05)",
-          background: "rgba(201,0,43,0.04)",
-        }}
-      >
-        <button
-          onClick={toggleMc}
-          aria-expanded={!isMcCollapsed}
-          aria-controls={`mc-verbiage-body-${item.id}`}
-          style={{
-            width: "100%", display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "12px 20px", background: "transparent", border: "none",
-            color: "var(--text)", cursor: "pointer", textAlign: "left",
-          }}
-        >
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8, fontSize: "0.8rem", fontWeight: 700, color: "var(--accent)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-            🎙️ Suggested MC Verbiage
-            {(item.mcVerbiage ?? "") && (
-              <span style={{ fontSize: "0.65rem", color: "#22c55e", background: "rgba(34,197,94,0.15)", padding: "1px 6px", borderRadius: 8 }}>
-                Saved
-              </span>
-            )}
-          </span>
-          <span style={{ color: "var(--muted)" }}>
-            {isMcCollapsed ? <ChevronDown /> : <ChevronUp />}
-          </span>
-        </button>
-        {!isMcCollapsed && (
-          <div id={`mc-verbiage-body-${item.id}`} style={{ padding: "0 20px 16px" }}>
-            <textarea
-              value={mcBuffer}
-              onChange={(e) => { setMcBuffer(e.target.value); setMcDirty(true); }}
-              onBlur={saveMc}
-              placeholder="Enter suggested MC verbiage for this event…"
-              disabled={!canEdit && !hasLink}
-              style={{
-                width: "100%", minHeight: 100, padding: 12,
-                background: "rgba(0,0,0,0.25)", border: "1px solid var(--border)",
-                color: "var(--text)", borderRadius: 8, fontSize: "0.9rem",
-                fontFamily: "inherit", resize: "vertical", outline: "none",
-              }}
-            />
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 8 }}>
-              <span style={{ fontSize: "0.7rem", color: "var(--muted)" }}>
-                {mcSaving ? "Saving…" : mcDirty ? "Unsaved changes (blur to save)" : "Auto-saves on blur"}
-              </span>
-              {canEdit && (
-                <button
-                  onClick={saveMc}
-                  disabled={!mcDirty || mcSaving}
-                  style={{
-                    background: mcDirty && !mcSaving ? "var(--accent)" : "var(--border)",
-                    color: "white", border: "none", borderRadius: 6,
-                    padding: "6px 14px", cursor: mcDirty && !mcSaving ? "pointer" : "not-allowed",
-                    fontSize: "0.8rem",
-                  }}
-                >
-                  Save Verbiage
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-      </div>
+      {/* No separate MC Verbiage box below the card — verbiage lives inside the
+          expanded event card body and syncs to Event Calendar on save. */}
     </div>
   );
 }
 
-// --- Tiny detail row used inside the linked-event box ---------------------
-function DetailKV({ k, v, mono, accentColor }: { k: string; v?: string; mono?: boolean; accentColor?: string }) {
-  return (
-    <div>
-      <div style={{ fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.04em", marginBottom: 2 }}>{k}</div>
-      <div
-        style={{
-          fontSize: "0.85rem", color: accentColor ?? "var(--text)",
-          fontFamily: mono ? "ui-monospace, SFMono-Regular, Menlo, monospace" : "inherit",
-          wordBreak: "break-word",
-        }}
-      >
-        {v || "—"}
-      </div>
-    </div>
-  );
-}
+// (DetailKV helper removed — was only used inside the removed
+// "Linked Event Calendar Record" badge box.)
