@@ -60,6 +60,36 @@
           "linkedAt": "2026-08-25T09:37:43.043Z"
         },
         "timestamp": "2026-08-25T09:37:43.463Z"
+      },
+      {
+        "id": "1787650690918-rueqjn",
+        "title": "Back to School - Hot For Teacher",
+        "date": "2026-09-19",
+        "description": "Back to School",
+        "verbiage": "",
+        "drinkSpecials": "",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1786932816000",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1786932816000",
+          "kind": "oneoff",
+          "name": "Back to School - Hot For Teacher",
+          "date": "2026-09-19",
+          "theme": "Back to School",
+          "who": "",
+          "format": "",
+          "drinks": "",
+          "games": "",
+          "costuming": "",
+          "verbiage": "",
+          "icon": "",
+          "venue": "torch1",
+          "status": "Confirmed",
+          "linkedAt": "2026-08-25T09:38:10.148Z"
+        },
+        "timestamp": "2026-08-25T09:38:10.918Z"
       }
     ],
     "upcoming": []
