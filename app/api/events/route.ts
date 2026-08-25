@@ -28,6 +28,8 @@ export interface OneOffEvent {
   drinks?: string;
   games?: string;
   costuming?: string;
+  /** Dedicated MC/promo verbiage. Separate from `costuming`. Synced bidirectionally with linked Promotional Materials cards. */
+  verbiage?: string;
   shows?: ShowEntry[];
 }
 
@@ -46,6 +48,8 @@ export interface EventSeries {
   drinks?: string;
   games?: string;
   costuming?: string;
+  /** Dedicated MC/promo verbiage. Separate from `costuming`. Synced bidirectionally with linked Promotional Materials cards. */
+  verbiage?: string;
   flyerImage?: string;
   shows?: ShowEntry[];
 }
@@ -110,6 +114,7 @@ export async function POST(req: NextRequest) {
         drinks: body.drinks ?? "",
         games: body.games ?? "",
         costuming: body.costuming ?? "",
+        verbiage: body.verbiage ?? "",
       });
       await safeWrite(FILE, { oneOffs, series: [item, ...series] }, sha, `feat: add event series "${item.name}"`);
       return NextResponse.json({ ok: true, item });
@@ -127,6 +132,7 @@ export async function POST(req: NextRequest) {
       drinks: body.drinks ?? "",
       games: body.games ?? "",
       costuming: body.costuming ?? "",
+      verbiage: body.verbiage ?? "",
     });
     await safeWrite(FILE, { oneOffs: [item, ...oneOffs], series }, sha, `feat: add event "${item.name}"`);
     return NextResponse.json({ ok: true, item });

@@ -21,13 +21,13 @@ interface ShowEntry {
 
 interface OneOffEvent {
   id: string; date: string; name: string; theme: string; status: SRBStatus;
-  icon?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string;
+  icon?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string; verbiage?: string;
   shows?: ShowEntry[]; venue?: string;
 }
 
 interface EventSeries {
   id: string; name: string; theme: string; status: SRBStatus; dates: string[];
-  icon?: string; day?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string; flyerImage?: string; startDate?: string;
+  icon?: string; day?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string; verbiage?: string; flyerImage?: string; startDate?: string;
   shows?: ShowEntry[]; venue?: string;
 }
 
@@ -35,7 +35,7 @@ type NewEventForm = Partial<OneOffEvent> & Partial<EventSeries> & { id: string }
 
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
-const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", shows: [] };
+const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", verbiage: "", shows: [] };
 
 function formatVenueLabel(v?: string) {
   if (v === "torch1") return "Torch 1";
@@ -361,6 +361,31 @@ export default function EventsPage() {
                   {isEditing ? (
                     <input value={target.costuming || ""} onChange={b => setEditBuffer({ ...editBuffer, costuming: b.target.value })} style={INPUT_STYLE} />
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.costuming || "—"}</p>}
+                </div>
+                <div style={{ gridColumn: "span 2" }}>
+                  <label style={LABEL_STYLE} title="MC / promo verbiage — synced bidirectionally with linked Promotional Materials cards">
+                    🎙️ Verbiage <span style={{ fontSize: "0.65rem", color: "var(--muted)", textTransform: "none", letterSpacing: 0, fontWeight: 500 }}>(synced to Promotional Materials)</span>
+                  </label>
+                  {isEditing ? (
+                    <textarea
+                      data-testid="event-verbiage-input"
+                      value={target.verbiage || ""}
+                      onChange={b => setEditBuffer({ ...editBuffer, verbiage: b.target.value })}
+                      placeholder="Suggested MC verbiage for this event…"
+                      style={{ ...INPUT_STYLE, minHeight: 80, fontFamily: "inherit", resize: "vertical" }}
+                    />
+                  ) : (
+                    <div
+                      data-testid="event-verbiage-readonly"
+                      style={{
+                        margin: 0, fontSize: "0.9rem", lineHeight: 1.5, whiteSpace: "pre-wrap",
+                        background: "rgba(0,0,0,0.15)", padding: 12, borderRadius: 8,
+                        borderLeft: "2px solid var(--accent)", color: e.verbiage ? "var(--text)" : "var(--muted)",
+                      }}
+                    >
+                      {e.verbiage || "—"}
+                    </div>
+                  )}
                 </div>
               </div>
             )}

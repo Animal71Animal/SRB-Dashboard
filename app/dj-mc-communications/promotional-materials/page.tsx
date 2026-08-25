@@ -47,6 +47,8 @@ interface LinkedEventSnapshot {
   drinks?: string;
   games?: string;
   costuming?: string;
+  /** Authoritative MC/promo verbiage, mirrored from Event Calendar's `verbiage` field. Never aliased to `costuming`. */
+  verbiage?: string;
   icon?: string;
   venue?: string;
   status?: string;
@@ -83,6 +85,7 @@ interface OneOffEvent {
   drinks?: string;
   games?: string;
   costuming?: string;
+  verbiage?: string;
   venue?: string;
 }
 
@@ -101,6 +104,7 @@ interface EventSeries {
   drinks?: string;
   games?: string;
   costuming?: string;
+  verbiage?: string;
 }
 
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
@@ -184,6 +188,121 @@ export default function PromotionalMaterialsPage() {
     }
   };
 
+  /**
+   * Authoritative hydration from /api/events.
+   *
+   * On every load (and after any promo edit that propagates to events), refetch
+   * the canonical events and overwrite the linkedEvent snapshot + display
+   * fields on every linked promo card. This guarantees that:
+   *   - edits made directly on Event Calendar cards (including `verbiage`)
+   *     surface on linked promo cards on reload/refetch,
+   *   - the `verbiage` field on the promo card always reflects the
+   *     authoritative Event Calendar `verbiage` (never aliased to costuming),
+   *   - the snapshot stays in sync without requiring a separate write.
+   *
+   * Does not mutate the promo file — local edits like `description`,
+   * `drinkSpecials`, and `mcVerbiage` survive. Only the mirrored subset
+   * (title/date/status/venue/theme/who/format/drinks/games/costuming/verbiage)
+   * is overwritten from the events record.
+   */
+  const hydrateFromEvents = async () => {
+    try {
+      const res = await fetch("/api/events");
+      const json: EventsFile = await res.json();
+      const byId = new Map<string, OneOffEvent | EventSeries>();
+      for (const o of json.oneOffs ?? []) byId.set(o.id, o);
+      for (const s of json.series ?? []) byId.set(s.id, s);
+
+      const current = data;
+      let mutated = false;
+      const next: PromoData = {
+        torch1: { heavy: [], upcoming: [] },
+        torch2: { heavy: [], upcoming: [] },
+      };
+      (["torch1", "torch2"] as TorchKey[]).forEach((torch) => {
+        (["heavy", "upcoming"] as SectionKey[]).forEach((section) => {
+          next[torch][section] = current[torch][section].map((item) => {
+            if (!item.eventId) return item;
+            const ev = byId.get(item.eventId);
+            if (!ev) return item; // Source event gone. Keep promo as-is.
+            const isSeries = item.eventKind === "series";
+            const merged: PromoItem = {
+              ...item,
+              title: ev.name ?? item.title,
+              date: isSeries
+                ? ((ev as EventSeries).startDate ?? (ev as EventSeries).dates?.[0] ?? item.date)
+                : ((ev as OneOffEvent).date ?? item.date),
+              verbiage: ev.verbiage ?? "",
+              drinkSpecials: ev.drinks ?? item.drinkSpecials,
+              description: [ev.theme, ev.who, ev.format].filter(Boolean).join(" · "),
+              linkedEvent: {
+                id: ev.id,
+                kind: isSeries ? "series" : "oneoff",
+                name: ev.name,
+                date: isSeries ? undefined : (ev as OneOffEvent).date,
+                startDate: isSeries ? (ev as EventSeries).startDate : undefined,
+                dates: isSeries ? (ev as EventSeries).dates : undefined,
+                theme: ev.theme,
+                who: ev.who,
+                format: ev.format,
+                drinks: ev.drinks,
+                games: ev.games,
+                costuming: ev.costuming,
+                verbiage: ev.verbiage ?? "",
+                icon: ev.icon,
+                venue: ev.venue,
+                status: ev.status,
+                linkedAt: item.linkedEvent?.linkedAt ?? new Date().toISOString(),
+              },
+            };
+            // Cheap identity check — if nothing changed, keep the original object
+            // reference so React doesn't re-render unnecessarily.
+            if (
+              merged.title === item.title &&
+              merged.date === item.date &&
+              merged.verbiage === item.verbiage &&
+              merged.drinkSpecials === item.drinkSpecials &&
+              merged.description === item.description &&
+              merged.linkedEvent?.verbiage === item.linkedEvent?.verbiage &&
+              merged.linkedEvent?.costuming === item.linkedEvent?.costuming &&
+              merged.linkedEvent?.theme === item.linkedEvent?.theme &&
+              merged.linkedEvent?.who === item.linkedEvent?.who &&
+              merged.linkedEvent?.format === item.linkedEvent?.format &&
+              merged.linkedEvent?.drinks === item.linkedEvent?.drinks &&
+              merged.linkedEvent?.name === item.linkedEvent?.name &&
+              merged.linkedEvent?.venue === item.linkedEvent?.venue &&
+              merged.linkedEvent?.status === item.linkedEvent?.status
+            ) {
+              return item;
+            }
+            mutated = true;
+            return merged;
+          });
+        });
+      });
+      if (mutated) setData(next);
+    } catch (e) {
+      console.error("hydrateFromEvents failed", e);
+    }
+  };
+
+  /**
+   * Authoritative hydration effect.
+   *
+   * Once `data` is populated (after the initial /api/promotional-materials
+   * fetch resolves), re-fetch /api/events and refresh every linked card's
+   * mirrored fields. Re-runs whenever `data` changes (e.g. after a save) so
+   * promo cards always reflect the latest Event Calendar state.
+   */
+  useEffect(() => {
+    const anyItem =
+      data.torch1.heavy.length + data.torch1.upcoming.length +
+      data.torch2.heavy.length + data.torch2.upcoming.length > 0;
+    if (!anyItem) return;
+    hydrateFromEvents();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data]);
+
   const fetchConfirmedEvents = async () => {
     try {
       // Fetch without a venue filter so all confirmed events appear regardless of the
@@ -266,7 +385,7 @@ export default function PromotionalMaterialsPage() {
       if (item.eventKind === "series") patch.startDate = update.date;
       else patch.date = update.date;
     }
-    if ("verbiage" in update) patch.costuming = update.verbiage ?? "";
+    if ("verbiage" in update) patch.verbiage = update.verbiage ?? "";
     if ("drinkSpecials" in update) patch.drinks = update.drinkSpecials ?? "";
     // `description` on the promo card is a join of [theme, who, format].
     // If the user changes it, split back into individual fields when possible.
@@ -359,6 +478,7 @@ export default function PromotionalMaterialsPage() {
         drinks: event.kind === "oneoff" ? event.oneOff!.drinks : event.series!.drinks,
         games: event.kind === "oneoff" ? event.oneOff!.games : event.series!.games,
         costuming: event.kind === "oneoff" ? event.oneOff!.costuming : event.series!.costuming,
+        verbiage: event.kind === "oneoff" ? (event.oneOff!.verbiage ?? "") : (event.series!.verbiage ?? ""),
         icon: event.kind === "oneoff" ? event.oneOff!.icon : event.series!.icon,
         venue: event.kind === "oneoff" ? event.oneOff!.venue : event.series!.venue,
         status: event.kind === "oneoff" ? event.oneOff!.status : event.series!.status,
@@ -368,7 +488,7 @@ export default function PromotionalMaterialsPage() {
         title: name,
         date: date ?? "",
         description: [linkedEvent.theme, linkedEvent.who, linkedEvent.format].filter(Boolean).join(" · "),
-        verbiage: linkedEvent.costuming ?? "",
+        verbiage: linkedEvent.verbiage ?? "",
         drinkSpecials: linkedEvent.drinks ?? "",
         mcVerbiage: "",
         mcVerbiageCollapsed: false,
