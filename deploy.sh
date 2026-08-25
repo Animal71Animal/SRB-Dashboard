@@ -35,8 +35,22 @@ echo -e "${OK} Vercel token valid — $VC_CHECK"
 mkdir -p ~/.local/share/com.vercel.cli
 echo "{\"token\":\"${VERCEL_TOKEN}\"}" > ~/.local/share/com.vercel.cli/auth.json
 
-# ── Commit pending changes if any ─────────────────────
+# ── Sync with remote before committing ─────────────────
 cd "$PROJECT_DIR"
+# GitHub is the source of truth. Rebase local work so remote-only dashboard
+# changes cannot be overwritten by a pre-deploy sync.
+if [ "$1" != "--skip-push" ]; then
+  git fetch origin main
+  if ! git diff --quiet || [ -n "$(git status --porcelain)" ]; then
+    git stash push --include-untracked -m "pre-deploy-local-work" >/dev/null
+    git rebase origin/main
+    git stash pop >/dev/null || true
+  else
+    git rebase origin/main
+  fi
+fi
+
+# ── Commit pending changes if any ─────────────────────
 PENDING=$(git status --short | wc -l | tr -d ' ')
 if [ "$PENDING" -gt 0 ] && [ "$1" != "--skip-push" ]; then
   if [ -n "$GITHUB_TOKEN" ]; then

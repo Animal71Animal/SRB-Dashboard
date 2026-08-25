@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { safeRead, safeWrite } from "@/lib/github";
-import { filterByVenue, getVenueParam, withDefaultVenue } from "@/lib/venue";
+import { getVenueParam, withDefaultVenue } from "@/lib/venue";
 
 const FILE = "public/data/srb-content-assets.json";
 
@@ -16,7 +16,17 @@ export interface ContentAsset {
 
 export async function GET(req: NextRequest) {
   const { data } = await safeRead<ContentAsset[]>(FILE, []);
-  return NextResponse.json(filterByVenue(data, getVenueParam(req)));
+  const venue = getVenueParam(req);
+
+  // Shared assets are visible from either venue. Keep the legacy "both"
+  // value working while accepting the UI's explicit torch12 value.
+  if (venue && venue !== "combined") {
+    return NextResponse.json(data.filter((asset) =>
+      asset.venue === venue || asset.venue === "torch12" || asset.venue === "both"
+    ));
+  }
+
+  return NextResponse.json(data);
 }
 
 export async function POST(req: NextRequest) {
