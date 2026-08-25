@@ -52,17 +52,11 @@ const ANNOUNCEMENTS = [
 
 export default function StageAnnouncementIdeasPage() {
   const [query, setQuery] = useState("");
-  const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
 
   const filtered = ANNOUNCEMENTS.map((text, idx) => ({ text, index: idx + 1 })).filter((item) =>
     item.text.toLowerCase().includes(query.toLowerCase())
   );
 
-  const copyText = (text: string, idx: number) => {
-    navigator.clipboard.writeText(text);
-    setCopiedIndex(idx);
-    setTimeout(() => setCopiedIndex(null), 1800);
-  };
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", paddingBottom: 100 }}>
@@ -168,13 +162,9 @@ export default function StageAnnouncementIdeasPage() {
               border: "1px solid var(--border)",
               borderRadius: 10,
               padding: "16px 20px",
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: 16,
             }}
           >
-            <div style={{ display: "flex", gap: 14, alignItems: "flex-start", flex: 1 }}>
+            <div style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
               <span
                 style={{
                   color: "var(--accent2)",
@@ -190,23 +180,6 @@ export default function StageAnnouncementIdeasPage() {
                 {item.text}
               </p>
             </div>
-            <button
-              onClick={() => copyText(item.text, item.index)}
-              style={{
-                background: copiedIndex === item.index ? "rgba(0,168,107,0.15)" : "rgba(255,255,255,0.05)",
-                border: `1px solid ${copiedIndex === item.index ? "#00a86b" : "var(--border)"}`,
-                color: copiedIndex === item.index ? "#00a86b" : "var(--text)",
-                borderRadius: 6,
-                padding: "8px 14px",
-                fontSize: "0.78rem",
-                fontWeight: 700,
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                transition: "all 0.15s ease",
-              }}
-            >
-              {copiedIndex === item.index ? "✓ Copied" : "Copy Line"}
-            </button>
           </div>
         ))}
       </div>
