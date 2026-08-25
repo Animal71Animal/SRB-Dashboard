@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { type Role } from "@/lib/auth/roles";
+import { type Role, resolveClientRole } from "@/lib/auth/roles";
 import { isPastDate, seriesHasFutureOccurrence } from "@/lib/date";
 
 // --- Inline icons (avoid lucide dependency) -------------------------------
@@ -194,20 +194,24 @@ export default function PromotionalMaterialsPage() {
 
   useEffect(() => {
     const checkRole = async () => {
-      const preview = sessionStorage.getItem("srb-role-preview");
-      if (preview) { setRole(preview as Role); return; }
-      const email = sessionStorage.getItem("srb-session-email");
-      if (!email) return;
       try {
-        const res = await fetch("/api/users");
-        const d = await res.json();
-        const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
-        if (matched) setRole(matched.role);
-      } catch {}
+        const resolved = await resolveClientRole();
+        setRole(resolved);
+      } catch (err) {
+        console.error("Role check failed:", err);
+        setRole("Employee");
+      }
     };
     checkRole();
     fetchData();
     fetchConfirmedEvents();
+
+    window.addEventListener("venue-changed", checkRole);
+    window.addEventListener("storage", checkRole);
+    return () => {
+      window.removeEventListener("venue-changed", checkRole);
+      window.removeEventListener("storage", checkRole);
+    };
   }, []);
 
   const fetchData = async () => {

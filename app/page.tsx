@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useVenue } from "@/components/VenueSwitcher";
 import { modules } from "./data/modules";
-import { type Role, hasPermission } from "@/lib/auth/roles";
+import { type Role, hasPermission, resolveClientRole } from "@/lib/auth/roles";
 
 const CARD = {
   background: "var(--card)",
@@ -60,21 +60,12 @@ export default function OverviewPage() {
   useEffect(() => {
     const checkRole = async () => {
       try {
-        const preview = sessionStorage.getItem("srb-role-preview");
-        if (preview) {
-          setRole(preview as Role);
-          return;
-        }
-
-        const currentEmail = sessionStorage.getItem("srb-session-email");
-        if (!currentEmail) return;
-
-        const res = await fetch("/api/users");
-        if (!res.ok) return;
-        const d = await res.json();
-        const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
-        if (matched) setRole(matched.role);
-      } catch {}
+        const resolved = await resolveClientRole();
+        setRole(resolved);
+      } catch (err) {
+        console.error("Role check failed:", err);
+        setRole("Employee");
+      }
     };
     checkRole();
 

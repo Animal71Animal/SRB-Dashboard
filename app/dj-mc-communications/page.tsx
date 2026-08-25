@@ -2,7 +2,7 @@
 
 import AnimatedBackground from "@/components/AnimatedBackground";
 import Link from "next/link";
-import { type Role, hasPermission } from "@/lib/auth/roles";
+import { type Role, hasPermission, resolveClientRole } from "@/lib/auth/roles";
 import { useEffect, useState } from "react";
 
 export default function DjMcCommunicationPage() {
@@ -10,20 +10,22 @@ export default function DjMcCommunicationPage() {
 
   useEffect(() => {
     const checkRole = async () => {
-      const preview = sessionStorage.getItem("srb-role-preview");
-      if (preview) {
-        setRole(preview as Role);
-        return;
+      try {
+        const resolved = await resolveClientRole();
+        setRole(resolved);
+      } catch (err) {
+        console.error("Role check failed:", err);
+        setRole("Employee");
       }
-      const email = sessionStorage.getItem("srb-session-email");
-      if (!email) return;
-
-      const res = await fetch("/api/users");
-      const d = await res.json();
-      const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
-      if (matched) setRole(matched.role);
     };
     checkRole();
+
+    window.addEventListener("venue-changed", checkRole);
+    window.addEventListener("storage", checkRole);
+    return () => {
+      window.removeEventListener("venue-changed", checkRole);
+      window.removeEventListener("storage", checkRole);
+    };
   }, []);
 
   const tabs = [

@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { modules, groupLabels, groupOrder } from "../app/data/modules";
 import type { ModuleGroup } from "../app/data/modules";
-import { type Role, hasPermission } from "@/lib/auth/roles";
+import { type Role, hasPermission, resolveClientRole, canUseRolePreview, clearRolePreview, ROLE_PREVIEW_KEY } from "@/lib/auth/roles";
 
 function ChevronIcon({ expanded }: { expanded: boolean }) {
   return (
@@ -26,6 +26,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [role, setRole] = useState<Role>("Employee");
+  const [actualRole, setActualRole] = useState<Role>("Employee");
+  const [isSuper, setIsSuper] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
     promotions: true, social: true, analytics: true, operations: true,
   });
@@ -43,29 +45,13 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   }, [pathname]);
 
   useEffect(() => {
-    // Check role by matching current email
+    // Resolve role through the central helper. This validates any stored
+    // role-preview against the actual authenticated user — non-SuperAdmins
+    // never inherit an elevated preview.
     const checkRole = async () => {
       try {
-        const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
-        if (preview) {
-          setRole(preview as Role);
-        } else {
-          const currentEmail = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
-          if (!currentEmail) { setRole("Employee"); return; }
-          
-          const res = await fetch("/api/users");
-          if (!res.ok) { setRole("Employee"); return; }
-          const data = await res.json();
-          const users = data.users || [];
-          const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
-          
-          // No longer forcing password reset as requested
-          // if (matched && matched.mustResetPassword && pathname !== "/auth/reset-password") {
-          //   window.location.href = "/auth/reset-password";
-          // }
-
-          setRole(matched ? matched.role : "Employee");
-        }
+        const resolved = await resolveClientRole();
+        setRole(resolved);
       } catch (err) {
         console.error("Role check failed:", err);
         setRole("Employee");
@@ -90,23 +76,32 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   // Only show groups that have at least one allowed module
   const visibleGroups = groupOrder.filter(group => (allowedGroupedModules[group]?.length || 0) > 0);
 
-  const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
-  
-  // Real role check for admin tools visibility
-  const [actualRole, setActualRole] = useState<Role>("Employee");
+  const preview = typeof window !== "undefined" ? sessionStorage.getItem(ROLE_PREVIEW_KEY) : null;
+
+  // Real role check for admin tools visibility — uses the central helper so
+  // the preview UI is only exposed to actual SuperAdmins.
   useEffect(() => {
     const checkActual = async () => {
-      const email = sessionStorage.getItem("srb-session-email");
-      if (!email) return;
+      const ok = await canUseRolePreview();
+      if (!ok) {
+        setActualRole("Employee");
+        setIsSuper(false);
+        // Purge any stale preview left by a previous session.
+        clearRolePreview();
+        return;
+      }
+      // It's a SuperAdmin — fetch actual role for the badge/label.
       const res = await fetch("/api/users");
       const d = await res.json();
-      const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
-      if (matched) setActualRole(matched.role);
+      const email = sessionStorage.getItem("srb-session-email");
+      const matched = email
+        ? (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase())
+        : null;
+      setActualRole(matched?.role ?? "Employee");
+      setIsSuper(true);
     };
     checkActual();
   }, []);
-
-  const isSuper = hasPermission(actualRole, "special", "role-preview");
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
@@ -127,22 +122,21 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
   const isOverviewActive = pathname === "/";
 
-  // Role Preview logic
+  // Role Preview logic — only functional when the actual user is SuperAdmin.
   const handleRolePreview = (pRole: Role) => {
-    sessionStorage.setItem("srb-role-preview", pRole);
+    if (!isSuper) return; // Hard guard: never let a non-SuperAdmin set a preview.
+    sessionStorage.setItem(ROLE_PREVIEW_KEY, pRole);
     window.dispatchEvent(new Event("venue-changed"));
     window.dispatchEvent(new Event("storage")); // Trigger role update in components
     setMobileOpen(false);
     window.location.href = "/";
   };
 
-  const clearRolePreview = () => {
-    sessionStorage.removeItem("srb-role-preview");
-    window.dispatchEvent(new Event("venue-changed"));
-    window.dispatchEvent(new Event("storage"));
+  const handleClearRolePreview = () => {
+    clearRolePreview();
   };
 
-  const activeRole = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
+  const activeRole = typeof window !== "undefined" ? sessionStorage.getItem(ROLE_PREVIEW_KEY) : null;
 
   return (
     <>

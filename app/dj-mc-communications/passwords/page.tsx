@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import AnimatedBackground from "@/components/AnimatedBackground";
-import { type Role } from "@/lib/auth/roles";
+import { type Role, resolveClientRole } from "@/lib/auth/roles";
 
 interface Entry {
   id: string;
@@ -29,31 +29,25 @@ export default function PasswordsPage() {
 
   useEffect(() => {
     const checkRole = async () => {
-      const email = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
-      const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
-      
-      if (preview) {
-        setRole(preview as Role);
-        return;
-      }
-
-      if (!email) {
+      try {
+        const resolved = await resolveClientRole();
+        setRole(resolved);
+      } catch (err) {
+        console.error("Role check failed:", err);
         setRole("Employee");
-        return;
       }
-      
-      const res = await fetch("/api/users");
-      const d = await res.json();
-      const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
-      if (matched) setRole(matched.role);
     };
     checkRole();
     fetchData();
-    
-    // Listen for role preview changes
+
+    // Listen for role preview / session changes.
     const handleRoleChange = () => checkRole();
     window.addEventListener("venue-changed", handleRoleChange);
-    return () => window.removeEventListener("venue-changed", handleRoleChange);
+    window.addEventListener("storage", handleRoleChange);
+    return () => {
+      window.removeEventListener("venue-changed", handleRoleChange);
+      window.removeEventListener("storage", handleRoleChange);
+    };
   }, []);
 
   const fetchData = async () => {

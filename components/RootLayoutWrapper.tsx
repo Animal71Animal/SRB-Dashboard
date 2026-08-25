@@ -2,6 +2,7 @@
 import Sidebar from "@/components/Sidebar";
 import { useState, useEffect } from "react";
 import type { Role } from "@/lib/auth/roles";
+import { ROLE_PREVIEW_KEY } from "@/lib/auth/roles";
 import VenueSwitcher from "@/components/VenueSwitcher";
 
 function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
@@ -87,12 +88,31 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
   }, []);
 
   const handleLogin = (email: string) => {
+    // Defense in depth: purge any stale role-preview left by a previous
+    // session BEFORE recording the new identity. Otherwise a DJ who logs
+    // in on the same tab after a SuperAdmin previewed another role would
+    // briefly inherit elevated access before the per-page resolvers catch
+    // up. This is the first line of defense; the per-page resolvers are
+    // the second.
+    try {
+      sessionStorage.removeItem(ROLE_PREVIEW_KEY);
+    } catch {
+      /* noop */
+    }
     sessionStorage.setItem("srb-session-email", email);
     setSession({ email });
     window.location.href = "/"; // Force full reload to Overview to reset all state
   };
 
   const handleLogout = () => {
+    // Clear BOTH the session email and any role-preview. Leaving a preview
+    // behind would let the next person to log in on this tab inherit it
+    // before any per-page resolver runs.
+    try {
+      sessionStorage.removeItem(ROLE_PREVIEW_KEY);
+    } catch {
+      /* noop */
+    }
     sessionStorage.removeItem("srb-session-email");
     setSession(null);
     window.location.href = "/"; // Send to home and allow LoginPage to take over
