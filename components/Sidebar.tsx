@@ -160,10 +160,11 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
       {/* Sidebar */}
       <aside className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}
         style={{
-          width: "220px", minHeight: "100vh", background: "var(--card)",
-          borderRight: "1px solid var(--border)", padding: "24px 0",
+          width: "220px", height: "100vh", background: "var(--card)",
+          borderRight: "1px solid var(--border)", padding: "16px 0",
           display: "flex", flexDirection: "column", flexShrink: 0,
-          position: "fixed", left: 0, top: 40, zIndex: 50,
+          position: "fixed", left: 0, top: 0, zIndex: 50,
+          overflow: "hidden",
           transition: "transform 0.3s ease",
         }}>
 
@@ -182,12 +183,12 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, padding: "16px 0", overflowY: "auto" }}>
+        <nav style={{ flex: 1, minHeight: 0, padding: "10px 0", overflowY: "auto", overflowX: "hidden" }}>
           {/* Overview */}
           <Link href="/" onClick={() => setMobileOpen(false)}
             style={{
               display: "flex", alignItems: "center", gap: 10,
-              padding: "9px 20px", fontSize: "0.875rem",
+              padding: "7px 16px", fontSize: "0.78rem",
               color: isOverviewActive ? "var(--accent2)" : "var(--text)",
               background: isOverviewActive ? "rgba(201,0,43,0.1)" : "transparent",
               borderLeft: isOverviewActive ? "2px solid var(--accent)" : "2px solid transparent",
@@ -228,7 +229,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                           }}
                           style={{
                             display: "flex", alignItems: "center", justifyContent: "space-between",
-                            width: "101%", padding: "9px 20px", fontSize: "0.875rem",
+                            width: "101%", padding: "7px 16px", fontSize: "0.78rem",
                             color: pathname.startsWith("/dj-mc-communications") ? "var(--accent2)" : "var(--text)",
                             background: pathname.startsWith("/dj-mc-communications") ? "rgba(201,0,43,0.1)" : "transparent",
                             borderLeft: pathname.startsWith("/dj-mc-communications") ? "2px solid var(--accent)" : "2px solid transparent",
@@ -244,7 +245,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         <Link href={item.href} onClick={() => setMobileOpen(false)}
                           style={{
                             display: "flex", alignItems: "center", gap: 10,
-                            padding: "9px 20px", fontSize: "0.875rem",
+                            padding: "7px 16px", fontSize: "0.78rem",
                             color: active ? "var(--accent2)" : "var(--text)",
                             background: active ? "rgba(201,0,43,0.1)" : "transparent",
                             borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
@@ -260,7 +261,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         <a href="https://12b0afb612.abacusai.cloud/admin" target="_blank" rel="noopener noreferrer"
                           style={{
                             display: "flex", alignItems: "center", gap: 10,
-                            padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                            padding: "5px 16px 5px 36px", fontSize: "0.68rem",
                             color: "var(--muted)", textDecoration: "none", transition: "all 0.15s",
                           }}>
                           <span style={{ fontSize: "0.8rem" }}>⚙️</span>
@@ -286,7 +287,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
                               style={{
                                 display: "flex", alignItems: "center", gap: 10,
-                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                padding: "5px 16px 5px 36px", fontSize: "0.68rem",
                                 color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
                                 background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
                                 textDecoration: "none", transition: "all 0.15s",
@@ -330,7 +331,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         )}
 
         {/* Footer */}
-        <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+        <div style={{ padding: "10px 16px", borderTop: "1px solid var(--border)", fontSize: "0.65rem", color: "var(--muted)", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
           {onLogout && (
             <button 
               onClick={onLogout}
