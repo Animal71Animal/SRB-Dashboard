@@ -30,36 +30,6 @@
           "linkedAt": "2026-08-25T07:35:35.445Z"
         },
         "timestamp": "2026-08-25T07:35:36.001Z"
-      },
-      {
-        "id": "1787646538213-qtuk3c",
-        "title": "DJ/MC Meeting",
-        "date": "2026-08-30",
-        "description": "",
-        "verbiage": "gonna be a good one",
-        "drinkSpecials": "",
-        "mcVerbiage": "",
-        "mcVerbiageCollapsed": false,
-        "eventId": "evt-1786587963277",
-        "eventKind": "oneoff",
-        "linkedEvent": {
-          "id": "evt-1786587963277",
-          "kind": "oneoff",
-          "name": "DJ/MC Meeting",
-          "date": "2026-08-30",
-          "theme": "",
-          "who": "",
-          "format": "",
-          "drinks": "",
-          "games": "",
-          "costuming": "",
-          "verbiage": "",
-          "icon": "DJ ",
-          "venue": "torch2",
-          "status": "Confirmed",
-          "linkedAt": "2026-08-25T08:28:57.690Z"
-        },
-        "timestamp": "2026-08-25T08:28:58.213Z"
       }
     ],
     "upcoming": []
