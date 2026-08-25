@@ -9,11 +9,13 @@
   --text: #ece8e8;
   --muted: #7a6060;
   --sidebar-width: 220px;
+  --header-height: 44px;
 }
 
 @media (max-width: 768px) {
   :root {
     --sidebar-width: 0px;
+    --header-height: 56px;
   }
 }
 
@@ -21,16 +23,19 @@
   box-sizing: border-box;
 }
 
+html,
 body {
   background: var(--bg);
   color: var(--text);
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   margin: 0;
   padding: 0;
+  overflow-x: hidden;
 }
 
 ::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 ::-webkit-scrollbar-track {
   background: var(--bg);
@@ -40,7 +45,9 @@ body {
   border-radius: 3px;
 }
 
-input, textarea, select {
+input,
+textarea,
+select {
   background: var(--bg);
   color: var(--text);
   border: 1px solid var(--border);
@@ -50,26 +57,96 @@ input, textarea, select {
   font-family: inherit;
   outline: none;
   transition: border-color 0.15s;
+  max-width: 100%;
 }
 
-input:focus, textarea:focus, select:focus {
+input:focus,
+textarea:focus,
+select:focus {
   border-color: var(--accent);
 }
 
 button {
   cursor: pointer;
   font-family: inherit;
+  max-width: 100%;
 }
 
-table {
-  width: 100%;
-  border-collapse: collapse;
+/* ──────────────────────────────────────────────────────────────────────
+   RESPONSIVE UTILITIES — share across all pages
+   These collapse multi-column grids & tables on phones so nothing
+   overflows sideways. Page sections can keep their desktop layout
+   while still shrinking cleanly below 768px.
+   ────────────────────────────────────────────────────────────────────── */
+
+.responsive-grid {
+  /* Default desktop layout; overridable per-call by inline gridTemplateColumns */
+  display: grid;
 }
 
 @media (max-width: 768px) {
   .responsive-grid {
     grid-template-columns: 1fr !important;
   }
+
+  /* Stack button rows that look like flex with multiple items */
+  .stack-on-mobile {
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .stack-on-mobile > * {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /* Compress dense calendar/grid cells used by Event Calendar.
+     We intentionally keep `repeat(7, 1fr)` so the week still feels like
+     a week, but the chrome shrinks so cells remain readable. */
+  .calendar-grid > div {
+    padding: 4px !important;
+    min-height: 64px !important;
+    font-size: 0.7rem !important;
+  }
+  .calendar-grid .cal-day-num {
+    font-size: 0.75rem !important;
+  }
+  .calendar-grid .cal-pill {
+    font-size: 0.6rem !important;
+    padding: 1px 4px !important;
+    border-radius: 3px !important;
+  }
+}
+
+/* Scrollable table wrapper — keeps wide tables inside their CARD
+   instead of letting them blow out the viewport. */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-wrap > table {
+  min-width: 560px; /* floor that lets key columns breathe */
+}
+
+/* Card-aware container */
+.toc-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* On phones, the page container itself should respect viewport edges and
+   avoid any forced inner widths. */
+html,
+body {
+  width: 100%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
 th {
@@ -81,6 +158,7 @@ th {
   letter-spacing: 0.05em;
   color: var(--muted);
   border-bottom: 1px solid var(--border);
+  white-space: nowrap;
 }
 
 td {
@@ -96,4 +174,59 @@ tr:last-child td {
 
 tr:hover td {
   background: rgba(201, 0, 43, 0.04);
+}
+
+/* Mobile-only helper — force-fit any inline-styled flex row that contains a
+   title + button, so headers don't blow past the screen. */
+@media (max-width: 768px) {
+  .toc-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+  }
+  .toc-header > * + * {
+    margin-left: 0 !important;
+  }
+  .toc-header button {
+    align-self: stretch;
+  }
+}
+
+/* Sidebar mobile drawer state — defined here so .mobile-open > nav scroll
+   works regardless of who's mounting the sidebar. */
+.sidebar.mobile-open {
+  transform: translateX(0) !important;
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: block !important;
+  }
+  .sidebar {
+    transform: translateX(-100%);
+    /* Push sidebar below the fixed header bar (VenueSwitcher + mobile
+       menu button row). HeaderHeight + small gap. */
+    padding-top: var(--header-height);
+  }
+  .mobile-overlay {
+    display: block !important;
+  }
+  .toc-main {
+    margin-left: 0 !important;
+    padding: calc(var(--header-height) + 12px) 16px 32px !important;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+@media (min-width: 769px) {
+  .toc-main {
+    margin-left: var(--sidebar-width) !important;
+  }
+  .mobile-menu-btn {
+    display: none !important;
+  }
+  .mobile-overlay {
+    display: none !important;
+  }
 }

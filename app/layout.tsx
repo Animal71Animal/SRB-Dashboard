@@ -16,23 +16,20 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnimatedBackground />
         <RootLayoutWrapper />
         <VenueSwitcher />
-        <main className="main-content" style={{
-          flex: 1, padding: "32px 28px", overflowY: "auto",
-          position: "relative", zIndex: 1, marginLeft: 0,
-          paddingTop: "80px",
-        }}>
+        <main
+          className="toc-main"
+          style={{
+            flex: 1,
+            padding: "32px 28px",
+            overflowY: "auto",
+            position: "relative",
+            zIndex: 1,
+            marginLeft: 0,
+            paddingTop: "calc(var(--header-height) + 36px)",
+          }}
+        >
           {children}
         </main>
-        <style>{`
-          @media (min-width: 769px) { .main-content { margin-left: 220px !important; } }
-          @media (max-width: 768px) {
-            .main-content {
-              margin-left: 0 !important;
-              padding: 80px 16px 32px !important;
-              width: 100vw; max-width: 100vw; box-sizing: border-box;
-            }
-          }
-        `}</style>
       </body>
     </html>
   );

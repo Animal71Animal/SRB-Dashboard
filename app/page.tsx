@@ -120,10 +120,10 @@ export default function OverviewPage() {
   return (
     <div>
       {/* Header */}
-      <div style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>
-        <img src="/images/torch-logo.png" alt="The Torch" style={{ width: 56, height: 56, objectFit: "contain" }} />
-        <div>
-          <h1 style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--accent)", margin: 0 }}>
+      <div className="toc-header" style={{ marginBottom: 32, display: "flex", alignItems: "center", gap: 16 }}>
+        <img src="/images/torch-logo.png" alt="The Torch" style={{ width: 56, height: 56, objectFit: "contain", flexShrink: 0 }} />
+        <div style={{ minWidth: 0 }}>
+          <h1 style={{ fontSize: "clamp(1.25rem, 4.5vw, 1.75rem)", fontWeight: 700, color: "var(--accent)", margin: 0, lineHeight: 1.1 }}>
             The Torch Operations Center
           </h1>
           <div style={{ color: "var(--muted)", fontSize: "0.875rem", marginTop: 4 }}>{dateStr}</div>
@@ -132,7 +132,7 @@ export default function OverviewPage() {
 
       {/* KPI Cards */}
       {(role === "SuperAdmin" || role === "Admin") && (
-        <div className="responsive-grid" className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 40 }}>
           <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
           <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
           <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
@@ -141,7 +141,7 @@ export default function OverviewPage() {
       )}
 
       {role === "Employee" && (
-        <div className="responsive-grid" className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 40 }}>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 40 }}>
           <Link href="/dj-mc-communications/schedules" style={{ textDecoration: "none" }}>
             <KpiCard label="View DJ Schedule" value="LIVE" icon="📅" />
           </Link>
@@ -152,7 +152,7 @@ export default function OverviewPage() {
       <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
         Quick Access
       </h2>
-      <div className="responsive-grid" className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
         {hasPermission(role, "special", "builder") && (
           <ModuleCard href="/builder" icon="🛡️" title="Permissions" desc="Manage staff emails and role-based permissions." />
         )}

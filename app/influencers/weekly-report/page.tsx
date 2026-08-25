@@ -69,8 +69,8 @@ export default function WeeklyReportPage() {
     <div>
       {/* Header */}
       <div style={{ marginBottom: 28 }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1 style={{ fontSize: "1.8rem", fontWeight: 700, margin: 0, background: "linear-gradient(135deg, #9b5de5, #c77dff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+        <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <h1 style={{ fontSize: "clamp(1.25rem, 4.5vw, 1.8rem)", fontWeight: 700, margin: 0, background: "linear-gradient(135deg, #9b5de5, #c77dff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
             📝 Weekly Report Template
           </h1>
           <Link href="/influencers" style={{ fontSize: "0.85rem", color: "var(--muted)", textDecoration: "none" }}>← Back</Link>
@@ -209,7 +209,7 @@ export default function WeeklyReportPage() {
       </div>
 
       {/* What Worked / Didn't */}
-      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24 }}>
+      <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20, marginBottom: 24, minWidth: 0 }}>
         <div style={{ background: "var(--card)", border: "1px solid rgba(0,200,124,0.3)", borderRadius: 12, padding: 20 }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: "0 0 12px", color: "#00c87c" }}>✅ What Worked</h2>
           <textarea value={whatWorked} onChange={(e) => setWhatWorked(e.target.value)} rows={4} placeholder="Best performing traffic source, most engaged segment, revenue driver, unexpected win..." style={{ width: "100%", padding: "10px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "0.9rem", resize: "vertical" }} />

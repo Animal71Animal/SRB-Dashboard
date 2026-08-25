@@ -59,7 +59,7 @@ export default function BuilderPage() {
 
       <div style={{ ...CARD, marginBottom: 32 }}>
         <h3 style={{ margin: "0 0 20px", fontWeight: 700 }}>Add / Update User</h3>
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 12, alignItems: "end" }}>
+        <div className="responsive-grid stack-on-mobile" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: 12, alignItems: "end" }}>
           <div>
             <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}>Email Address</label>
             <input value={email} onChange={e => setEmail(e.target.value)} style={INPUT} placeholder="user@example.com" />
@@ -94,7 +94,7 @@ export default function BuilderPage() {
             <span>Action</span>
           </div>
           {users.map((u, i) => (
-            <div key={u.email} className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 100px", padding: "16px 12px", borderTop: "1px solid var(--border)", alignItems: "center", fontSize: "0.9rem" }}>
+            <div key={u.email} className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", padding: "16px 12px", borderTop: "1px solid var(--border)", alignItems: "center", fontSize: "0.9rem", gap: 8, minWidth: 0 }}>
               <span style={{ fontWeight: 600 }}>{u.email}</span>
               <span style={{ color: "var(--accent)" }}>{u.name || "—"}</span>
               <span>

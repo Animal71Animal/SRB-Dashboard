@@ -50,9 +50,11 @@ export default function AnalyticsPage() {
 
   return (
     <div>
-      <div style={{ marginBottom: 28 }}>
-        <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📊 Campaign Analytics</h1>
-        <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Performance summaries from live data</p>
+      <div className="toc-header" style={{ marginBottom: 28 }}>
+        <div style={{ minWidth: 0 }}>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📊 Campaign Analytics</h1>
+          <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Performance summaries from live data</p>
+        </div>
       </div>
 
       <h2 style={{ fontSize: "0.8rem", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)", marginBottom: 12 }}>

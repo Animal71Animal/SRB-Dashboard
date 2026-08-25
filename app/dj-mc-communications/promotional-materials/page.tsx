@@ -835,7 +835,7 @@ function PromoCard({
       {/* Expandable body */}
       {isExpanded && (
         <div style={{ padding: "0 20px 20px", borderTop: "1px solid rgba(255,255,255,0.05)", marginTop: 0 }}>
-          <div style={{ paddingTop: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+          <div className="responsive-grid" style={{ paddingTop: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
             <div>
               <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>Event Description</div>
               {isEditing ? (

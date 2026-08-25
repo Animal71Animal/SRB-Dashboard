@@ -4,10 +4,10 @@ export default function TorchTVPage() {
   return (
     <div style={{ height: "calc(100vh - 120px)", display: "flex", flexDirection: "column", gap: 20 }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <span style={{ fontSize: "2rem" }}>📺</span>
-            <div>
+      <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
+            <span style={{ fontSize: "2rem", flexShrink: 0 }}>📺</span>
+            <div style={{ minWidth: 0 }}>
                 <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0, color: "var(--accent)" }}>TorchTV — Master Broadcast</h1>
                 <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Live feed from Supercomputer</p>
             </div>

@@ -51,8 +51,8 @@ export default function AttendancePage() {
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-        <div>
+      <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <div style={{ minWidth: 0 }}>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>👥 Attendance Tracker</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Nightly headcount log</p>
         </div>
@@ -100,7 +100,7 @@ export default function AttendancePage() {
         </div>
       )}
 
-      <div style={CARD}>
+      <div style={CARD} className="table-wrap">
         <table>
           <thead>
             <tr><th>Date</th><th>Day</th><th>Event / Theme</th><th>Headcount</th><th>Revenue</th><th>Notes</th><th></th></tr>

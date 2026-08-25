@@ -146,13 +146,19 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+      {/* Mobile Menu Button — sits below the VenueSwitcher (header height).
+          Uses a fixed offset that adapts at the 768px breakpoint via
+          globals.css .mobile-menu-btn. */}
       <button onClick={() => setMobileOpen(!mobileOpen)} className="mobile-menu-btn"
+        aria-label="Open navigation"
         style={{
-          position: "fixed", top: 16, left: 16, zIndex: 100,
+          position: "fixed",
+          top: "calc(var(--header-height) + 6px)",
+          left: 12, zIndex: 60,
           background: "var(--card)", border: "1px solid var(--border)",
-          borderRadius: 8, padding: "10px 12px", color: "var(--text)",
-          fontSize: "1.2rem", cursor: "pointer", display: "none",
+          borderRadius: 8, padding: "8px 12px", color: "var(--text)",
+          fontSize: "1.1rem", cursor: "pointer", display: "none",
+          lineHeight: 1,
         }}>
         ☰
       </button>
@@ -345,17 +351,9 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
       {mobileOpen && (
         <div onClick={() => setMobileOpen(false)} className="mobile-overlay"
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 40, display: "none" }} />
+          role="presentation"
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 40, display: "none" }} />
       )}
-
-      <style>{`
-        @media (max-width: 768px) {
-          .mobile-menu-btn { display: block !important; }
-          .sidebar { transform: translateX(-100%); }
-          .sidebar.mobile-open { transform: translateX(0); }
-          .mobile-overlay { display: block !important; }
-        }
-      `}</style>
     </>
   );
 }

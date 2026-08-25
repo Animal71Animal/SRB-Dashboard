@@ -100,7 +100,7 @@ export default function PasswordsPage() {
   };
 
   const renderSheet = (title: string, sheetKey: "torch1" | "torch2") => (
-    <div className="flex-1 min-w-[400px]">
+    <div className="flex-1 min-w-0">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold flex items-center gap-2" style={{ color: torchOrange }}>
           <span className="w-2 h-6 rounded-full" style={{ background: torchRed }}></span>
@@ -113,7 +113,8 @@ export default function PasswordsPage() {
         )}
       </div>
       <div className="bg-black/80 backdrop-blur-md border rounded-lg overflow-hidden" style={{ borderColor: `${torchBrown}55` }}>
-        <table className="w-full text-left text-xs border-collapse">
+        <div className="table-wrap">
+        <table className="w-full text-left text-xs border-collapse" style={{ minWidth: 360 }}>
           <thead>
             <tr className="text-zinc-500 border-b font-bold uppercase tracking-widest" style={{ background: `${torchBrown}22`, borderColor: `${torchBrown}44` }}>
               <th className="px-4 py-3">Application</th>
@@ -173,11 +174,12 @@ export default function PasswordsPage() {
             ))}
             {data[sheetKey].length === 0 && (
               <tr>
-                <td colSpan={isAdmin ? 3 : 2} className="px-4 py-8 text-center text-zinc-700 italic">No entries in {title}</td>
+                <td colSpan={isAdmin ? 4 : 3} className="px-4 py-8 text-center text-zinc-700 italic">No entries in {title}</td>
               </tr>
             )}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   );
@@ -218,7 +220,7 @@ export default function PasswordsPage() {
           )}
         </div>
 
-        <div className="flex flex-wrap gap-10">
+        <div className="flex flex-col md:flex-row md:flex-wrap gap-6 md:gap-10">
           {loading ? (
             <div className="w-full text-center py-20 text-zinc-700 animate-pulse uppercase tracking-[0.3em] font-bold">Connecting to Vault...</div>
           ) : (

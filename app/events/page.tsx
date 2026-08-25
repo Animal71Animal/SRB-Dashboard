@@ -417,8 +417,8 @@ export default function EventsPage() {
 
   return (
     <div>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
-        <div>
+      <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+        <div style={{ minWidth: 0 }}>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>📅 Event Calendar</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>Confirmed Events Layout</p>
         </div>
@@ -450,7 +450,7 @@ export default function EventsPage() {
           </span>
         </div>
 
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
+        <div className="calendar-grid responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 1, background: "var(--border)", border: "1px solid var(--border)", borderRadius: 8, overflow: "hidden" }}>
           {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map(d => (
             <div key={d} style={{ background: "var(--bg)", padding: 12, textAlign: "center", fontSize: "0.8rem", fontWeight: 700, color: "var(--muted)" }}>{d}</div>
           ))}
@@ -459,17 +459,17 @@ export default function EventsPage() {
             const events = getEventsForDate(d.date);
             return (
               <div key={i} onClick={() => handleDayClick(d.date)} style={{ background: "var(--card)", padding: 8, minHeight: 110, border: "0.5px solid var(--border)", cursor: "pointer" }}>
-                <span style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
+                <span className="cal-day-num" style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
                 <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
                   {events.series.map(s => {
                     const bg = s.venue === "torch1" ? "#fb923c" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#dc2626" : "var(--border)";
                     const fg = s.venue === "torch2" ? "#1a1a1a" : "#fff";
-                    return <div key={s.id} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{s.icon || "📁"} {s.name}</div>;
+                    return <div key={s.id} className="cal-pill" style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{s.icon || "📁"} {s.name}</div>;
                   })}
                   {events.oneOffs.map(e => {
                     const bg = e.venue === "torch1" ? "#fb923c" : e.venue === "torch2" ? "#facc15" : e.venue === "both" ? "#dc2626" : "var(--accent2)";
                     const fg = e.venue === "torch2" ? "#1a1a1a" : "#fff";
-                    return <div key={e.id} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{e.icon || "📅"} {e.name}</div>;
+                    return <div key={e.id} className="cal-pill" style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{e.icon || "📅"} {e.name}</div>;
                   })}
                 </div>
               </div>
@@ -480,7 +480,7 @@ export default function EventsPage() {
 
       {selectedEventIds.length > 0 && (role === "Admin" || role === "Admin" || role === "Manager") && (
         <div style={{ marginBottom: 40 }}>
-           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+           <div className="toc-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
              <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", margin: 0 }}>Selected Day Events</h2>
              <button onClick={() => setSelectedEventIds([])} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
            </div>
@@ -495,7 +495,7 @@ export default function EventsPage() {
 
       {hasPermission(role, "edit", "/events") && (
         <div style={{ marginTop: 40 }}>
-          <div style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: 12, marginBottom: 20 }}>
+          <div className="toc-header" style={{ display: "flex", justifyContent: "space-between", borderBottom: "1px solid var(--border)", paddingBottom: 12, marginBottom: 20 }}>
             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", margin: 0 }}>Registry Management</h2>
             <div style={{ display: "flex", gap: 12 }}>
               <button onClick={() => setOpenRegistryIds(new Set())} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Collapse All</button>
@@ -521,10 +521,10 @@ export default function EventsPage() {
       )}
 
       {showForm && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
-          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 28, width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
-              <h3 style={{ margin: 0, fontWeight: 700 }}>Add {formType === 'series' ? 'Weekly Series' : 'One-Off Event'}</h3>
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.6)", zIndex: 100, display: "flex", alignItems: "center", justifyContent: "center", padding: 12 }}>
+          <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, padding: 20, width: "100%", maxWidth: 560, maxHeight: "90vh", overflowY: "auto" }}>
+            <div className="toc-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+              <h3 style={{ margin: 0, fontWeight: 700, fontSize: "1.05rem" }}>Add {formType === 'series' ? 'Weekly Series' : 'One-Off Event'}</h3>
               <button onClick={() => setShowForm(false)} style={{ background: "none", border: "none", color: "var(--muted)", fontSize: "1.2rem", cursor: "pointer" }}>✕</button>
             </div>
 

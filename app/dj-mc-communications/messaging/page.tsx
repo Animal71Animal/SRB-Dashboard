@@ -72,15 +72,15 @@ export default function MessagingPage() {
   const canDelete = role === "SuperAdmin";
 
   return (
-    <div className="relative min-h-screen p-8 text-white">
+    <div className="relative min-h-screen p-4 md:p-8 text-white">
       <AnimatedBackground />
       <div className="relative z-10 max-w-4xl mx-auto flex flex-col h-[85vh]">
-        <h1 className="text-4xl font-bold mb-4">Messaging Board</h1>
+        <h1 className="text-3xl md:text-4xl font-bold mb-4">Messaging Board</h1>
         
         {/* Chat Feed */}
-        <div 
+        <div
           ref={scrollRef}
-          className="flex-1 bg-black/60 backdrop-blur-md border border-red-900/30 rounded-t-xl p-6 overflow-y-auto flex flex-col gap-4 scrollbar-thin scrollbar-thumb-red-900"
+          className="flex-1 bg-black/60 backdrop-blur-md border border-red-900/30 rounded-t-xl p-4 md:p-6 overflow-y-auto flex flex-col gap-4 scrollbar-thin scrollbar-thumb-red-900"
         >
           {loading ? (
             <p className="text-gray-500 italic text-center mt-10">Loading messages...</p>
@@ -91,7 +91,7 @@ export default function MessagingPage() {
               const isMe = msg.sender.toLowerCase() === email.toLowerCase();
               return (
                 <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                  <div className={`max-w-[80%] p-3 rounded-lg ${isMe ? 'bg-red-900/40 border border-red-800/50' : 'bg-zinc-900/80 border border-zinc-800'}`}>
+                  <div className={`max-w-[85%] p-3 rounded-lg ${isMe ? 'bg-red-900/40 border border-red-800/50' : 'bg-zinc-900/80 border border-zinc-800'}`}>
                     <div className="text-[0.65rem] text-gray-400 mb-1 flex justify-between gap-4">
                       <span>{msg.sender}</span>
                       <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>

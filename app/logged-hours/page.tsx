@@ -235,10 +235,10 @@ export default function LoggedHoursPage() {
   return (
     <div>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
+      <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
           <span style={{ fontSize: "2rem" }}>⏱️</span>
-          <div>
+          <div style={{ minWidth: 0 }}>
             <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0, color: "var(--accent)" }}>ANiMAL's Hours</h1>
             <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
               Off-site Torch work — clock in/out + manual entry
@@ -381,7 +381,8 @@ export default function LoggedHoursPage() {
             No logs yet. Start a timer or add a manual entry.
           </div>
         ) : (
-          <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <div className="table-wrap">
+          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
             <thead>
               <tr style={{ background: "var(--bg)" }}>
                 <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Activity</th>
@@ -430,6 +431,7 @@ export default function LoggedHoursPage() {
               ))}
             </tbody>
           </table>
+          </div>
         )}
       </div>
 
