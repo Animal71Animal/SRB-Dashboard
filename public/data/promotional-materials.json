@@ -155,6 +155,36 @@
           "linkedAt": "2026-08-25T09:38:24.848Z"
         },
         "timestamp": "2026-08-25T09:38:25.343Z"
+      },
+      {
+        "id": "1787650827252-pg30cx",
+        "title": "Bacardi Bikini Bash",
+        "date": "2026-09-17",
+        "description": "",
+        "verbiage": "",
+        "drinkSpecials": "",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1786933012374",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1786933012374",
+          "kind": "oneoff",
+          "name": "Bacardi Bikini Bash",
+          "date": "2026-09-17",
+          "theme": "",
+          "who": "",
+          "format": "",
+          "drinks": "",
+          "games": "",
+          "costuming": "",
+          "verbiage": "",
+          "icon": "",
+          "venue": "torch2",
+          "status": "Confirmed",
+          "linkedAt": "2026-08-25T09:40:26.526Z"
+        },
+        "timestamp": "2026-08-25T09:40:27.252Z"
       }
     ],
     "upcoming": []
