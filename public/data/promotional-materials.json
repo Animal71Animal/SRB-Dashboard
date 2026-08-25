@@ -65,7 +65,38 @@
     "upcoming": []
   },
   "torch2": {
-    "heavy": [],
+    "heavy": [
+      {
+        "id": "1787650675667-fwhcdk",
+        "title": "Back to School - Teachers Pet",
+        "date": "2026-09-12",
+        "description": "Back to School",
+        "verbiage": "",
+        "drinkSpecials": "",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1786932744202",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1786932744202",
+          "kind": "oneoff",
+          "name": "Back to School - Teachers Pet",
+          "date": "2026-09-12",
+          "theme": "Back to School",
+          "who": "",
+          "format": "",
+          "drinks": "",
+          "games": "",
+          "costuming": "",
+          "verbiage": "",
+          "icon": "",
+          "venue": "torch2",
+          "status": "Confirmed",
+          "linkedAt": "2026-08-25T09:37:55.253Z"
+        },
+        "timestamp": "2026-08-25T09:37:55.667Z"
+      }
+    ],
     "upcoming": []
   }
 }
