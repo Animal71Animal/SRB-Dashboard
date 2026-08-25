@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useVenue } from "@/components/VenueSwitcher";
 import { RECURRENCE_RULES, computeSeriesDates, normalizeRecurrenceCode, recurrenceLabel, CALENDAR_FROM, CALENDAR_TO } from "@/lib/recurrence";
 import { type Role, hasPermission } from "@/lib/auth/roles";
@@ -90,6 +90,7 @@ export default function EventsPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editBuffer, setEditBuffer] = useState<any>(null);
   const [openRegistryIds, setOpenRegistryIds] = useState<Set<string>>(new Set());
+  const selectedCardRefs = useRef<Record<string, HTMLDivElement | null>>({});
 
   const venue = useVenue();
   const [role, setRole] = useState<Role>("Employee");
@@ -175,6 +176,10 @@ export default function EventsPage() {
     return { oneOffs: matchedOneOffs, series: matchedSeries };
   };
 
+  const selectCalendarEvent = (type: 'oneOff' | 'series', id: string) => {
+    setSelectedEventIds([{ type, id }]);
+  };
+
   const handleDayClick = (date: string) => {
     const events = getEventsForDate(date);
     const combined = [
@@ -183,6 +188,17 @@ export default function EventsPage() {
     ];
     setSelectedEventIds(combined);
   };
+
+  useEffect(() => {
+    if (selectedEventIds.length !== 1) return;
+    const key = `${selectedEventIds[0].type}-${selectedEventIds[0].id}`;
+    const card = selectedCardRefs.current[key];
+    if (!card) return;
+    requestAnimationFrame(() => {
+      card.scrollIntoView({ behavior: "smooth", block: "start" });
+      card.focus({ preventScroll: true });
+    });
+  }, [selectedEventIds]);
 
   const save = async (payload: any, explicitKind?: 'oneOff' | 'series') => {
     setLoading(true);
@@ -228,7 +244,13 @@ export default function EventsPage() {
     const target = isEditing ? editBuffer : e;
 
     return (
-      <div key={e.id} style={{ ...CARD, padding: isCollapsed ? "12px 20px" : "24px" }}>
+      <div
+        key={e.id}
+        ref={isCalendarDetail ? (node) => { selectedCardRefs.current[`${refType}-${e.id}`] = node; } : undefined}
+        tabIndex={isCalendarDetail ? -1 : undefined}
+        data-testid={isCalendarDetail ? `selected-event-card-${e.id}` : `registry-event-card-${e.id}`}
+        style={{ ...CARD, padding: isCollapsed ? "12px 20px" : "24px" }}
+      >
         <div style={{ display: "flex", alignItems: "flex-start", gap: 16 }}>
           <span style={{ fontSize: isCollapsed ? "1.2rem" : "2rem", minWidth: isCollapsed ? 24 : 44, textAlign: "center" }}>
             {isEditing ? (
@@ -464,12 +486,12 @@ export default function EventsPage() {
                   {events.series.map(s => {
                     const bg = s.venue === "torch1" ? "#fb923c" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#dc2626" : "var(--border)";
                     const fg = s.venue === "torch2" ? "#1a1a1a" : "#fff";
-                    return <div key={s.id} className="cal-pill" style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{s.icon || "📁"} {s.name}</div>;
+                    return <div key={s.id} className="cal-pill" role="button" tabIndex={0} onClick={(event) => { event.stopPropagation(); selectCalendarEvent('series', s.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectCalendarEvent('series', s.id); } }} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", cursor: "pointer" }} title={`Open ${s.name}`} >{s.icon || "📁"} {s.name}</div>;
                   })}
                   {events.oneOffs.map(e => {
                     const bg = e.venue === "torch1" ? "#fb923c" : e.venue === "torch2" ? "#facc15" : e.venue === "both" ? "#dc2626" : "var(--accent2)";
                     const fg = e.venue === "torch2" ? "#1a1a1a" : "#fff";
-                    return <div key={e.id} className="cal-pill" style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden" }}>{e.icon || "📅"} {e.name}</div>;
+                    return <div key={e.id} className="cal-pill" role="button" tabIndex={0} onClick={(event) => { event.stopPropagation(); selectCalendarEvent('oneOff', e.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectCalendarEvent('oneOff', e.id); } }} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", cursor: "pointer" }} title={`Open ${e.name}`} >{e.icon || "📅"} {e.name}</div>;
                   })}
                 </div>
               </div>
