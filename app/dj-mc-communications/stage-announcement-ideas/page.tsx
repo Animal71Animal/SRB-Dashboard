@@ -211,28 +211,6 @@ export default function StageAnnouncementIdeasPage() {
         ))}
       </div>
 
-      <div
-        style={{
-          background: "var(--card)",
-          border: "1px solid var(--border)",
-          borderRadius: 12,
-          padding: 24,
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-          <h2 style={{ fontSize: "1.1rem", fontWeight: 700, margin: 0, color: "var(--text)" }}>
-            📄 Embedded Document Viewer
-          </h2>
-          <span style={{ fontSize: "0.8rem", color: "var(--muted)" }}>Official Torch 1 & 2 PDF</span>
-        </div>
-        <div style={{ width: "100%", height: 750, borderRadius: 8, overflow: "hidden", border: "1px solid var(--border)" }}>
-          <iframe
-            src="/documents/stage-announcement-ideas.pdf"
-            title="Stage Announcement Ideas Master Compendium"
-            style={{ width: "100%", height: "100%", border: "none", background: "#050505" }}
-          />
-        </div>
-      </div>
     </div>
   );
 }
