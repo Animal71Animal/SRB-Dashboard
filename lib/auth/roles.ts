@@ -21,22 +21,22 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
   Admin: {
     view: ["*"],
     edit: ["*"],
-    special: []
+    special: ["admin-console"]
   },
   Manager: {
     view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling"],
     edit: ["/events", "/torchtv"],
-    special: []
+    special: ["admin-console"]
   },
   DJ: {
     view: ["/events", "/torchtv", "/torch-radio", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling"],
     edit: ["/torchtv"],
-    special: []
+    special: ["admin-console"]
   },
   Employee: {
     view: ["/events", "/torchtv"],
     edit: [],
-    special: []
+    special: ["admin-console"]
   },
 };
 
