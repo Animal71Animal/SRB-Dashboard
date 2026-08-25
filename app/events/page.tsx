@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { useVenue } from "@/components/VenueSwitcher";
 import { RECURRENCE_RULES, computeSeriesDates, normalizeRecurrenceCode, recurrenceLabel, CALENDAR_FROM, CALENDAR_TO } from "@/lib/recurrence";
 import { type Role, hasPermission } from "@/lib/auth/roles";
+import { isPastDate, seriesHasFutureOccurrence } from "@/lib/date";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 const BADGE: Record<string, string> = {
@@ -142,16 +143,35 @@ export default function EventsPage() {
 
   const monthYearLabel = currentMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" });
 
+  // Derived visible lists: hide expired events from display without mutating
+  // the authoritative records. A one-off is expired when its date is before
+  // today (lexical YYYY-MM-DD comparison). A series is expired when all of its
+  // computed occurrences have passed; series with no dates are kept visible
+  // so admins can fix broken schedules.
+  const visibleOneOffs = useMemo(
+    () => (data.oneOffs || []).filter((e) => !isPastDate(e.date)),
+    [data.oneOffs]
+  );
+  const visibleSeries = useMemo(
+    () => (data.series || []).filter((s) => seriesHasFutureOccurrence(s.dates)),
+    [data.series]
+  );
+
   const getEventsForDate = (date: string) => {
-    // Only show "Confirmed" events on the calendar
-    const matchedOneOffs = (data.oneOffs || []).filter(e => e.date === date && e.status === "Confirmed");
-    
-    // Series match is purely date-array-based (source of truth = dates[])
-    const matchedSeries = (data.series || []).filter(s => {
+    // Only show "Confirmed" events on the calendar, and skip expired entries.
+    const matchedOneOffs = (data.oneOffs || []).filter(
+      (e) => e.date === date && e.status === "Confirmed" && !isPastDate(e.date)
+    );
+
+    // Series match is purely date-array-based (source of truth = dates[]).
+    // Past occurrences are never rendered here because the dates[] array only
+    // contains dates that pass the series generation rule, so past occurrences
+    // (if any) are already absent from the grid.
+    const matchedSeries = (data.series || []).filter((s) => {
       if (s.status !== "Confirmed") return false;
       return (s.dates || []).includes(date);
     });
-    
+
     return { oneOffs: matchedOneOffs, series: matchedSeries };
   };
 
@@ -479,7 +499,7 @@ export default function EventsPage() {
             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", margin: 0 }}>Registry Management</h2>
             <div style={{ display: "flex", gap: 12 }}>
               <button onClick={() => setOpenRegistryIds(new Set())} style={{ background: "none", border: "none", color: "var(--accent)", cursor: "pointer", fontSize: "0.8rem" }}>Collapse All</button>
-              <button onClick={() => setOpenRegistryIds(new Set([...(data.series || []).map(s => s.id), ...(data.oneOffs || []).map(e => e.id)]))} style={{ background: "none", border: "none", color: "var(--accent2)", cursor: "pointer", fontSize: "0.8rem" }}>Expand All</button>
+              <button onClick={() => setOpenRegistryIds(new Set([...visibleSeries.map(s => s.id), ...visibleOneOffs.map(e => e.id)]))} style={{ background: "none", border: "none", color: "var(--accent2)", cursor: "pointer", fontSize: "0.8rem" }}>Expand All</button>
             </div>
           </div>
 
@@ -487,13 +507,13 @@ export default function EventsPage() {
             <section>
               <h3 style={LABEL_STYLE}>Weekly Series</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {(data.series || []).map(s => renderEventForm(s, 'series'))}
+                {(visibleSeries).map(s => renderEventForm(s, 'series'))}
               </div>
             </section>
             <section>
               <h3 style={LABEL_STYLE}>One-Off Events</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                {(data.oneOffs || []).sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(e, 'oneOff'))}
+                {(visibleOneOffs).sort((a,b) => (a.date || "").localeCompare(b.date || "")).map(e => renderEventForm(e, 'oneOff'))}
               </div>
             </section>
           </div>

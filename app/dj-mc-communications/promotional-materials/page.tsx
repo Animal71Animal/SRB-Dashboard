@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { type Role } from "@/lib/auth/roles";
+import { isPastDate, seriesHasFutureOccurrence } from "@/lib/date";
 
 // --- Inline icons (avoid lucide dependency) -------------------------------
 const ChevronDown = () => (
@@ -137,6 +138,41 @@ function eventDisplayLabel(e: { kind: EventKind; oneOff?: OneOffEvent; series?: 
     return name;
   }
   return name;
+}
+
+/** Canonicalize any legacy / fuzzy venue string to the display label. */
+function venueLabel(v?: string): string {
+  if (!v) return "";
+  const lc = String(v).toLowerCase().trim();
+  if (lc === "torch1" || lc === "torch 1") return "Torch 1";
+  if (lc === "torch2" || lc === "torch 2") return "Torch 2";
+  if (lc === "both") return "Both";
+  return v;
+}
+
+/** Background + foreground colors for the venue badge (matches Event Calendar legend). */
+function venueBadgeStyle(v?: string): { bg: string; fg: string } | null {
+  const lc = String(v ?? "").toLowerCase().trim();
+  if (lc === "torch1") return { bg: "#fb923c", fg: "#fff" };
+  if (lc === "torch2") return { bg: "#facc15", fg: "#1a1a1a" };
+  if (lc === "both") return { bg: "#dc2626", fg: "#fff" };
+  return null;
+}
+
+/**
+ * True when the promo card's linked event should be hidden from view.
+ * - oneoff with date strictly before today → hide
+ * - series with no remaining future occurrence → hide
+ * - linked event missing (source gone) → keep (snapshot still useful)
+ * - no link (free-form promo card) → never hide based on date
+ */
+function isLinkedEventExpired(item: PromoItem): boolean {
+  if (!item.eventId || !item.linkedEvent) return false;
+  if (item.eventKind === "series") {
+    return !seriesHasFutureOccurrence(item.linkedEvent.dates ?? []);
+  }
+  // oneoff
+  return isPastDate(item.linkedEvent.date ?? item.date);
 }
 
 // --- Page ------------------------------------------------------------------
@@ -511,7 +547,10 @@ export default function PromotionalMaterialsPage() {
   };
 
   const renderSection = (torch: TorchKey, section: SectionKey, title: string) => {
-    const items = data[torch][section];
+    // Filter out cards linked to expired events (one-off past date / series
+    // with no future occurrence). Underlying records in
+    // promotional-materials.json are NOT modified.
+    const items = data[torch][section].filter((it) => !isLinkedEventExpired(it));
     const pickerKey = `${torch}|${section}`;
     const showPicker = canEdit && addingTo?.torch === torch && addingTo?.section === section;
 
@@ -740,6 +779,25 @@ function PromoCard({
               <span>{item.date ? fmtDate(item.date) : ""}</span>
             )}
           </div>
+          {hasLink && (() => {
+            const vStyle = venueBadgeStyle(linked?.venue ?? item.linkedEvent?.venue);
+            const vLabel = venueLabel(linked?.venue ?? item.linkedEvent?.venue);
+            return vStyle && vLabel ? (
+              <span
+                data-testid={`promo-venue-badge-${item.id}`}
+                title={`Venue (from Event Calendar): ${vLabel}`}
+                style={{
+                  display: "inline-flex", alignItems: "center", gap: 4,
+                  background: vStyle.bg, color: vStyle.fg,
+                  padding: "2px 8px", borderRadius: 6, fontSize: "0.7rem", fontWeight: 800,
+                  letterSpacing: "0.04em", textTransform: "uppercase",
+                  flexShrink: 0,
+                }}
+              >
+                {vLabel}
+              </span>
+            ) : null;
+          })()}
           {hasLink && (
             <span
               title={`Linked to Event Calendar: ${linked?.name ?? item.eventId}`}
