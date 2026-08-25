@@ -28,8 +28,8 @@ export default function DjMcCommunicationPage() {
 
   const tabs = [
     { href: "/dj-mc-communications/schedules", title: "Schedules", desc: "View upcoming shift rotations and floor coverage.", icon: "📅" },
-    { href: "/dj-mc-communications/stage-announcement-ideas", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcement lines.", icon: "🎙️" },
     { href: "/dj-mc-communications/promotional-materials", title: "Promotional Materials", desc: "Heavy rotational and upcoming promo feeds for Torch 1 & 2.", icon: "📣" },
+    { href: "/dj-mc-communications/stage-announcement-ideas", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcement lines.", icon: "🎙️" },
     { href: "/dj-mc-communications/messaging", title: "Messaging", desc: "Internal board for staff updates and requests.", icon: "💬" },
     { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", desc: "Status reports and maintenance logs.", icon: "🛠️" },
     { href: "/dj-mc-communications/passwords", title: "Passwords", desc: "Access the secure TOC Credential Vault.", icon: "🔑" },

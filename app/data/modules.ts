@@ -26,8 +26,8 @@ export const modules: Module[] = [
   { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
   { href: "/dj-mc-communications", icon: "💬", title: "DJ/MC Communications", desc: "Internal messaging for DJs and MCs.", group: "operations", children: [
     { href: "/dj-mc-communications/schedules", icon: "📅", title: "Schedules", desc: "View upcoming shift rotations.", group: "operations" },
-    { href: "/dj-mc-communications/stage-announcement-ideas", icon: "🎙️", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcements.", group: "operations" },
     { href: "/dj-mc-communications/promotional-materials", icon: "📣", title: "Promotional Materials", desc: "Standardized marketing feeds.", group: "operations" },
+    { href: "/dj-mc-communications/stage-announcement-ideas", icon: "🎙️", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcements.", group: "operations" },
     { href: "/dj-mc-communications/messaging", icon: "💬", title: "Messaging", desc: "Internal board for staff updates.", group: "operations" },
     { href: "/dj-mc-communications/equipment-reports", icon: "🛠️", title: "Equipment Reports", desc: "Maintenance logs.", group: "operations" },
     { href: "/dj-mc-communications/passwords", icon: "🔑", title: "Passwords", desc: "Credential Vault.", group: "operations" },
