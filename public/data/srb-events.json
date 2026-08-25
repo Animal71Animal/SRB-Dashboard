@@ -328,12 +328,12 @@
     {
       "id": "ser-002",
       "name": "Chicks 'n' Kicks ",
-      "theme": "Sneakerheadz and B-boys",
+      "theme": "SneakerHead Culture",
       "status": "Confirmed",
       "icon": "👟",
       "day": "Thursday",
       "who": "Sneakerhead Culture, Hypebeast Culture - People who have disposable income.",
-      "format": "Sneaker culture night. Cross-promotion with local high-end sneaker stores.",
+      "format": "Sneaker culture night. Targeting Sneakerheadz and B-boys. Cross-promotion with local high-end sneaker stores.",
       "drinks": "Sneakertini, My Adidas, The Air Force One, etc",
       "games": "Sneaker Trivia",
       "costuming": "Entertainers wear dope sneakers with coordinating outfits. Fresh kicks front and center with fits that match the energy.",
@@ -408,7 +408,8 @@
         "2027-12-30"
       ],
       "startDate": "2026-09-24",
-      "venue": "torch2"
+      "venue": "torch2",
+      "verbiage": "Get ready to see our entertainers like never before! 🔥 Step into the weekend early with the launch of \"Chicks 'n' Kicks\" Thursdays. Our girls are pairing fresh sneakers with killer coordinating fits, bringing a whole new energy to the floor. The inaugural kickoff drops on September 24—and we’re keeping the vibe going every single Thursday night after that. Come for the dope kicks, stay for the show! 👟✨"
     },
     {
       "id": "ser-003",
