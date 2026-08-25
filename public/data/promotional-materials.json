@@ -30,6 +30,36 @@
           "linkedAt": "2026-08-25T07:35:35.445Z"
         },
         "timestamp": "2026-08-25T07:35:36.001Z"
+      },
+      {
+        "id": "1787650663463-8pfwud",
+        "title": "Back to School - Gameday Hotties",
+        "date": "2026-09-05",
+        "description": "Back to School for BSU",
+        "verbiage": "",
+        "drinkSpecials": "",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1786932646939",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1786932646939",
+          "kind": "oneoff",
+          "name": "Back to School - Gameday Hotties",
+          "date": "2026-09-05",
+          "theme": "Back to School for BSU",
+          "who": "",
+          "format": "",
+          "drinks": "",
+          "games": "",
+          "costuming": "",
+          "verbiage": "",
+          "icon": "",
+          "venue": "torch1",
+          "status": "Confirmed",
+          "linkedAt": "2026-08-25T09:37:43.043Z"
+        },
+        "timestamp": "2026-08-25T09:37:43.463Z"
       }
     ],
     "upcoming": []
