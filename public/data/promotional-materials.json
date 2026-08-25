@@ -125,6 +125,36 @@
           "linkedAt": "2026-08-25T09:37:55.253Z"
         },
         "timestamp": "2026-08-25T09:37:55.667Z"
+      },
+      {
+        "id": "1787650705343-lzrxim",
+        "title": "Back to School - Naughty ??",
+        "date": "2026-09-26",
+        "description": "Back to School",
+        "verbiage": "",
+        "drinkSpecials": "",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1786932925688",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1786932925688",
+          "kind": "oneoff",
+          "name": "Back to School - Naughty ??",
+          "date": "2026-09-26",
+          "theme": "Back to School",
+          "who": "",
+          "format": "",
+          "drinks": "",
+          "games": "",
+          "costuming": "",
+          "verbiage": "",
+          "icon": "",
+          "venue": "torch2",
+          "status": "Confirmed",
+          "linkedAt": "2026-08-25T09:38:24.848Z"
+        },
+        "timestamp": "2026-08-25T09:38:25.343Z"
       }
     ],
     "upcoming": []
