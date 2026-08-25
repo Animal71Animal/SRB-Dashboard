@@ -752,7 +752,7 @@ function PromoCard({
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 12, flex: 1, minWidth: 0 }}>
-          <div style={{ fontWeight: 700, fontSize: "1.05rem", minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          <div style={{ fontWeight: 700, fontSize: "1.05rem", minWidth: 0, flex: "1 1 auto", overflow: "visible", whiteSpace: "normal", overflowWrap: "anywhere" }}>
             {isEditing ? (
               <input
                 value={editBuffer.title ?? ""}
@@ -763,7 +763,7 @@ function PromoCard({
             ) : (
               <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
                 <span>{linked?.icon || ""}</span>
-                <span>{item.title}</span>
+                <span style={{ whiteSpace: "normal", overflowWrap: "anywhere" }}>{item.title}</span>
               </span>
             )}
           </div>
