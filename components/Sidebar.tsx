@@ -184,7 +184,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, minHeight: 0, padding: "16px 0", overflowY: "auto", overflowX: "hidden" }}>
+        <nav style={{ flex: 1, minHeight: 0, padding: "16px 0", overflowY: "auto", overflowX: "hidden", overscrollBehavior: "contain", WebkitOverflowScrolling: "touch" }}>
           {/* Overview */}
           <Link href="/" onClick={() => setMobileOpen(false)}
             style={{

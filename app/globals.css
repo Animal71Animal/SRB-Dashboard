@@ -206,6 +206,19 @@ tr:hover td {
     /* Push sidebar below the fixed header bar (VenueSwitcher + mobile
        menu button row). HeaderHeight + small gap. */
     padding-top: var(--header-height);
+    /* Use dynamic viewport height on mobile so URL bar collapse doesn't
+       leave a dead scroll zone at the bottom. */
+    height: 100dvh;
+    /* Contain scroll gestures inside the sidebar — without this, swiping
+       on the open sidebar scrolls the main page underneath. */
+    overscroll-behavior: contain;
+  }
+  .sidebar nav {
+    /* Make sure nav fills the aside height and traps scroll on mobile. */
+    flex: 1 1 auto;
+    min-height: 0;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
   }
   .mobile-overlay {
     display: block !important;
