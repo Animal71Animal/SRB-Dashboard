@@ -29,7 +29,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
     promotions: true, social: true, analytics: true, operations: true,
   });
-  const [djMcExpanded, setDjMcExpanded] = useState(false);
+  const [djMcExpanded, setDjMcExpanded] = useState(true);
 
   useEffect(() => {
     // Expand DJ/MC if current path is a sub-route
