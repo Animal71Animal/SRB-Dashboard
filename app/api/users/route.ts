@@ -1,12 +1,18 @@
 import { NextResponse } from 'next/server';
-import { safeRead, writeToGitHub } from '@/lib/github';
+import { safeRead, safeWrite } from '@/lib/github';
 
 const USERS_PATH = 'public/data/srb-users.json';
 
+/**
+ * GET /api/users
+ * Returns the public user list (no passwords) for role/identity lookups
+ * across the dashboard. Never expose password hashes to the browser.
+ */
 export async function GET() {
   try {
-    const { data } = await safeRead(USERS_PATH, { users: [] });
-    return NextResponse.json(data);
+    const { data } = await safeRead<{ users: any[] }>(USERS_PATH, { users: [] });
+    const users = (data.users || []).map(({ password: _pw, ...rest }) => rest);
+    return NextResponse.json({ users });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to read users' }, { status: 500 });
   }
@@ -23,7 +29,7 @@ export async function POST(req: Request) {
       if (userIndex > -1) {
         users[userIndex].password = password;
         users[userIndex].mustResetPassword = false;
-        await writeToGitHub(USERS_PATH, { users }, sha, `auth: password reset for ${email}`);
+        await safeWrite(USERS_PATH, { users }, sha, `auth: password reset for ${email}`);
         return NextResponse.json({ success: true });
       }
     }
@@ -32,7 +38,7 @@ export async function POST(req: Request) {
       const userIndex = users.findIndex((u: any) => u.email.toLowerCase() === email.toLowerCase());
       if (userIndex > -1) {
         users[userIndex].mustResetPassword = true;
-        await writeToGitHub(USERS_PATH, { users }, sha, `auth: force reset for ${email}`);
+        await safeWrite(USERS_PATH, { users }, sha, `auth: force reset for ${email}`);
         return NextResponse.json({ success: true });
       }
     }
@@ -41,7 +47,7 @@ export async function POST(req: Request) {
       const initialCount = users.length;
       users = users.filter((u: any) => u.email.toLowerCase() !== email.toLowerCase());
       if (users.length < initialCount) {
-        await writeToGitHub(USERS_PATH, { users }, sha, `auth: delete user ${email}`);
+        await safeWrite(USERS_PATH, { users }, sha, `auth: delete user ${email}`);
         return NextResponse.json({ success: true });
       }
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
@@ -54,7 +60,7 @@ export async function POST(req: Request) {
       } else {
         users.push({ email, role, name, password: 'password123', mustResetPassword: true });
       }
-      await writeToGitHub(USERS_PATH, { users }, sha, `auth: upsert user ${email}`);
+      await safeWrite(USERS_PATH, { users }, sha, `auth: upsert user ${email}`);
       return NextResponse.json({ success: true });
     }
 

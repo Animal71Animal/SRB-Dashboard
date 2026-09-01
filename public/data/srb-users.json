@@ -5,63 +5,63 @@
       "role": "SuperAdmin",
       "name": "ANIMAL",
       "password": "ericmills71@gmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "joannatorchlounge@gmail.com",
       "role": "Admin",
       "name": "Joanna",
       "password": "joannatorchlounge@gmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "e.duboise@protonmail.com",
       "role": "DJ",
       "name": "Nico",
       "password": "e.duboise@protonmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "robertmares17@gmail.com",
       "role": "Manager",
       "name": "Bob",
       "password": "robertmares17@gmail.com",
-      "mustResetPassword": false
-    },
-    {
-      "email": "+18088250324@tmomail.net",
-      "role": "DJ",
-      "name": "Brandon",
-      "password": "+18088250324@tmomail.net",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "christopherdouthit23@gmail.com",
       "role": "DJ",
       "name": "Stylez",
       "password": "christopherdouthit23@gmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "meganpilote@gmail.com",
       "role": "Admin",
       "name": "Megan",
       "password": "meganpilote@gmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "stjkstr@gmail.com",
       "role": "DJ",
       "name": "Steven",
       "password": "stjkstr@gmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "nola04@gmail.com",
       "role": "Admin",
       "name": "Dave",
       "password": "nola04@gmail.com",
-      "mustResetPassword": false
+      "mustResetPassword": true
+    },
+    {
+      "email": "talonreeves3@gmail.com",
+      "role": "DJ",
+      "name": "Star",
+      "password": "talonreeves3@gmail.com",
+      "mustResetPassword": true
     }
   ]
 }

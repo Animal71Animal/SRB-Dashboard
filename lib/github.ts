@@ -70,7 +70,13 @@ export async function writeToGitHub<T>(
 
 // Local fallback helpers
 function localPath(filePath: string) {
-  return path.join(process.cwd(), "public", "data", filePath);
+  // Some callers pass "public/data/<name>.json" (GitHub path form) and
+  // others pass just "<name>.json". Strip the leading "public/data/" if
+  // present so both work with the same filesystem layout.
+  const stripped = filePath.startsWith("public/data/")
+    ? filePath.slice("public/data/".length)
+    : filePath;
+  return path.join(process.cwd(), "public", "data", stripped);
 }
 
 export function readLocal<T>(filePath: string): T | null {

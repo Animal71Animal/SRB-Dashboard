@@ -2,10 +2,9 @@
 import Sidebar from "@/components/Sidebar";
 import { useState, useEffect } from "react";
 import type { Role } from "@/lib/auth/roles";
-import { ROLE_PREVIEW_KEY } from "@/lib/auth/roles";
 import VenueSwitcher from "@/components/VenueSwitcher";
 
-function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
+function LoginPage({ onLogin }: { onLogin: (email: string, opts?: { mustResetPassword?: boolean }) => void }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -15,19 +14,16 @@ function LoginPage({ onLogin }: { onLogin: (email: string) => void }) {
     setError("");
 
     try {
-      const res = await fetch("/api/users");
-      if (!res.ok) {
-        setError("System error. Try again later.");
-        return;
-      }
-      const data = await res.json();
-      const users = data.users || [];
-      const normalizedEmail = email.toLowerCase().trim();
-      const matched = users.find((u: any) => u.email.toLowerCase() === normalizedEmail);
-      const normalizedPassword = password.trim();
-      
-      if (matched && (matched.password === normalizedPassword || matched.password === password)) {
-        onLogin(normalizedEmail);
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: email.toLowerCase().trim(), password }),
+      });
+      const data = await res.json().catch(() => ({ ok: false }));
+      if (res.ok && data?.ok) {
+        onLogin(data.email || email.toLowerCase().trim(), {
+          mustResetPassword: !!data.mustResetPassword,
+        });
       } else {
         setError("Invalid email or password.");
       }
@@ -87,32 +83,45 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
     setReady(true);
   }, []);
 
-  const handleLogin = (email: string) => {
-    // Defense in depth: purge any stale role-preview left by a previous
-    // session BEFORE recording the new identity. Otherwise a DJ who logs
-    // in on the same tab after a SuperAdmin previewed another role would
-    // briefly inherit elevated access before the per-page resolvers catch
-    // up. This is the first line of defense; the per-page resolvers are
-    // the second.
-    try {
-      sessionStorage.removeItem(ROLE_PREVIEW_KEY);
-    } catch {
-      /* noop */
-    }
+  // Enforce password reset before allowing protected app access.
+  // New users (force-reset flag set) or any account whose record has
+  // mustResetPassword=true must complete the reset flow first.
+  useEffect(() => {
+    if (!session) return;
+    if (typeof window === "undefined") return;
+    if (window.location.pathname === "/auth/reset-password") return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch("/api/users");
+        if (!res.ok) return;
+        const data = await res.json();
+        const users = data.users || [];
+        const matched = users.find((u: any) => (u.email || "").toLowerCase() === session.email.toLowerCase());
+        if (!cancelled && matched && matched.mustResetPassword) {
+          window.location.replace("/auth/reset-password");
+        }
+      } catch {
+        // Non-fatal: if the lookup fails we don't lock the user out.
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [session]);
+
+  const handleLogin = (email: string, opts?: { mustResetPassword?: boolean }) => {
     sessionStorage.setItem("srb-session-email", email);
     setSession({ email });
+    // If the account must reset, send the user straight into the reset
+    // flow before any protected app state mounts.
+    if (opts?.mustResetPassword) {
+      window.location.replace("/auth/reset-password");
+      return;
+    }
     window.location.href = "/"; // Force full reload to Overview to reset all state
   };
 
   const handleLogout = () => {
-    // Clear BOTH the session email and any role-preview. Leaving a preview
-    // behind would let the next person to log in on this tab inherit it
-    // before any per-page resolver runs.
-    try {
-      sessionStorage.removeItem(ROLE_PREVIEW_KEY);
-    } catch {
-      /* noop */
-    }
     sessionStorage.removeItem("srb-session-email");
     setSession(null);
     window.location.href = "/"; // Send to home and allow LoginPage to take over

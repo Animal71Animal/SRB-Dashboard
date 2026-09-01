@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { modules, groupLabels, groupOrder } from "../app/data/modules";
 import type { ModuleGroup } from "../app/data/modules";
-import { type Role, hasPermission, resolveClientRole, canUseRolePreview, clearRolePreview, ROLE_PREVIEW_KEY } from "@/lib/auth/roles";
+import { type Role, hasPermission } from "@/lib/auth/roles";
 
 function ChevronIcon({ expanded }: { expanded: boolean }) {
   return (
@@ -26,8 +26,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [role, setRole] = useState<Role>("Employee");
-  const [actualRole, setActualRole] = useState<Role>("Employee");
-  const [isSuper, setIsSuper] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
     promotions: true, social: true, analytics: true, operations: true,
   });
@@ -45,13 +43,31 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   }, [pathname]);
 
   useEffect(() => {
-    // Resolve role through the central helper. This validates any stored
-    // role-preview against the actual authenticated user — non-SuperAdmins
-    // never inherit an elevated preview.
+    // Check role by matching current email
     const checkRole = async () => {
       try {
-        const resolved = await resolveClientRole();
-        setRole(resolved);
+        const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
+        if (preview) {
+          setRole(preview as Role);
+        } else {
+          const currentEmail = typeof window !== "undefined" ? sessionStorage.getItem("srb-session-email") : null;
+          if (!currentEmail) { setRole("Employee"); return; }
+          
+          const res = await fetch("/api/users");
+          if (!res.ok) { setRole("Employee"); return; }
+          const data = await res.json();
+          const users = data.users || [];
+          const matched = users.find((u: any) => u.email.toLowerCase() === currentEmail.toLowerCase());
+
+          // Defense-in-depth: if the account still needs to reset, send it to
+          // the reset page before any protected module state hydrates.
+          if (matched && matched.mustResetPassword && pathname !== "/auth/reset-password") {
+            window.location.replace("/auth/reset-password");
+            return;
+          }
+
+          setRole(matched ? matched.role : "Employee");
+        }
       } catch (err) {
         console.error("Role check failed:", err);
         setRole("Employee");
@@ -76,32 +92,23 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   // Only show groups that have at least one allowed module
   const visibleGroups = groupOrder.filter(group => (allowedGroupedModules[group]?.length || 0) > 0);
 
-  const preview = typeof window !== "undefined" ? sessionStorage.getItem(ROLE_PREVIEW_KEY) : null;
-
-  // Real role check for admin tools visibility — uses the central helper so
-  // the preview UI is only exposed to actual SuperAdmins.
+  const preview = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
+  
+  // Real role check for admin tools visibility
+  const [actualRole, setActualRole] = useState<Role>("Employee");
   useEffect(() => {
     const checkActual = async () => {
-      const ok = await canUseRolePreview();
-      if (!ok) {
-        setActualRole("Employee");
-        setIsSuper(false);
-        // Purge any stale preview left by a previous session.
-        clearRolePreview();
-        return;
-      }
-      // It's a SuperAdmin — fetch actual role for the badge/label.
+      const email = sessionStorage.getItem("srb-session-email");
+      if (!email) return;
       const res = await fetch("/api/users");
       const d = await res.json();
-      const email = sessionStorage.getItem("srb-session-email");
-      const matched = email
-        ? (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase())
-        : null;
-      setActualRole(matched?.role ?? "Employee");
-      setIsSuper(true);
+      const matched = (d.users || []).find((u: any) => u.email.toLowerCase() === email.toLowerCase());
+      if (matched) setActualRole(matched.role);
     };
     checkActual();
   }, []);
+
+  const isSuper = hasPermission(actualRole, "special", "role-preview");
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
@@ -122,37 +129,32 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
   const isOverviewActive = pathname === "/";
 
-  // Role Preview logic — only functional when the actual user is SuperAdmin.
+  // Role Preview logic
   const handleRolePreview = (pRole: Role) => {
-    if (!isSuper) return; // Hard guard: never let a non-SuperAdmin set a preview.
-    sessionStorage.setItem(ROLE_PREVIEW_KEY, pRole);
+    sessionStorage.setItem("srb-role-preview", pRole);
     window.dispatchEvent(new Event("venue-changed"));
     window.dispatchEvent(new Event("storage")); // Trigger role update in components
     setMobileOpen(false);
     window.location.href = "/";
   };
 
-  const handleClearRolePreview = () => {
-    clearRolePreview();
+  const clearRolePreview = () => {
+    sessionStorage.removeItem("srb-role-preview");
+    window.dispatchEvent(new Event("venue-changed"));
+    window.dispatchEvent(new Event("storage"));
   };
 
-  const activeRole = typeof window !== "undefined" ? sessionStorage.getItem(ROLE_PREVIEW_KEY) : null;
+  const activeRole = typeof window !== "undefined" ? sessionStorage.getItem("srb-role-preview") : null;
 
   return (
     <>
-      {/* Mobile Menu Button — sits below the VenueSwitcher (header height).
-          Uses a fixed offset that adapts at the 768px breakpoint via
-          globals.css .mobile-menu-btn. */}
+      {/* Mobile Menu Button */}
       <button onClick={() => setMobileOpen(!mobileOpen)} className="mobile-menu-btn"
-        aria-label="Open navigation"
         style={{
-          position: "fixed",
-          top: "calc(var(--header-height) + 6px)",
-          left: 12, zIndex: 60,
+          position: "fixed", top: 16, left: 16, zIndex: 100,
           background: "var(--card)", border: "1px solid var(--border)",
-          borderRadius: 8, padding: "8px 12px", color: "var(--text)",
-          fontSize: "1.1rem", cursor: "pointer", display: "none",
-          lineHeight: 1,
+          borderRadius: 8, padding: "10px 12px", color: "var(--text)",
+          fontSize: "1.2rem", cursor: "pointer", display: "none",
         }}>
         ☰
       </button>
@@ -160,11 +162,10 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
       {/* Sidebar */}
       <aside className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}
         style={{
-          width: "220px", height: "100vh", background: "var(--card)",
-          borderRight: "1px solid var(--border)", padding: "16px 0",
+          width: "220px", minHeight: "100vh", background: "var(--card)",
+          borderRight: "1px solid var(--border)", padding: "24px 0",
           display: "flex", flexDirection: "column", flexShrink: 0,
-          position: "fixed", left: 0, top: 0, zIndex: 50,
-          overflow: "hidden",
+          position: "fixed", left: 0, top: 40, zIndex: 50,
           transition: "transform 0.3s ease",
         }}>
 
@@ -183,12 +184,12 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, minHeight: 0, padding: "10px 0", overflowY: "auto", overflowX: "hidden" }}>
+        <nav style={{ flex: 1, padding: "16px 0", overflowY: "auto" }}>
           {/* Overview */}
           <Link href="/" onClick={() => setMobileOpen(false)}
             style={{
               display: "flex", alignItems: "center", gap: 10,
-              padding: "7px 16px", fontSize: "0.78rem",
+              padding: "9px 20px", fontSize: "0.875rem",
               color: isOverviewActive ? "var(--accent2)" : "var(--text)",
               background: isOverviewActive ? "rgba(201,0,43,0.1)" : "transparent",
               borderLeft: isOverviewActive ? "2px solid var(--accent)" : "2px solid transparent",
@@ -229,7 +230,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                           }}
                           style={{
                             display: "flex", alignItems: "center", justifyContent: "space-between",
-                            width: "101%", padding: "7px 16px", fontSize: "0.78rem",
+                            width: "101%", padding: "9px 20px", fontSize: "0.875rem",
                             color: pathname.startsWith("/dj-mc-communications") ? "var(--accent2)" : "var(--text)",
                             background: pathname.startsWith("/dj-mc-communications") ? "rgba(201,0,43,0.1)" : "transparent",
                             borderLeft: pathname.startsWith("/dj-mc-communications") ? "2px solid var(--accent)" : "2px solid transparent",
@@ -245,7 +246,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         <Link href={item.href} onClick={() => setMobileOpen(false)}
                           style={{
                             display: "flex", alignItems: "center", gap: 10,
-                            padding: "7px 16px", fontSize: "0.78rem",
+                            padding: "9px 20px", fontSize: "0.875rem",
                             color: active ? "var(--accent2)" : "var(--text)",
                             background: active ? "rgba(201,0,43,0.1)" : "transparent",
                             borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
@@ -261,7 +262,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         <a href="https://12b0afb612.abacusai.cloud/admin" target="_blank" rel="noopener noreferrer"
                           style={{
                             display: "flex", alignItems: "center", gap: 10,
-                            padding: "5px 16px 5px 36px", fontSize: "0.68rem",
+                            padding: "6px 20px 6px 45px", fontSize: "0.75rem",
                             color: "var(--muted)", textDecoration: "none", transition: "all 0.15s",
                           }}>
                           <span style={{ fontSize: "0.8rem" }}>⚙️</span>
@@ -279,7 +280,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                           {[
                             { href: "/dj-mc-communications/schedules", title: "Schedules", icon: "📅" },
                             { href: "/dj-mc-communications/promotional-materials", title: "Promotional Materials", icon: "📣" },
-                            { href: "/dj-mc-communications/stage-announcement-ideas", title: "Stage Announcement Ideas", icon: "🎙️" },
                             { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
                             { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
                             { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
@@ -287,7 +287,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
                               style={{
                                 display: "flex", alignItems: "center", gap: 10,
-                                padding: "5px 16px 5px 36px", fontSize: "0.68rem",
+                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
                                 color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
                                 background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
                                 textDecoration: "none", transition: "all 0.15s",
@@ -331,7 +331,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         )}
 
         {/* Footer */}
-        <div style={{ padding: "10px 16px", borderTop: "1px solid var(--border)", fontSize: "0.65rem", color: "var(--muted)", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+        <div style={{ padding: "16px 20px", borderTop: "1px solid var(--border)", fontSize: "0.7rem", color: "var(--muted)", display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
           {onLogout && (
             <button 
               onClick={onLogout}
@@ -345,9 +345,17 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
       {mobileOpen && (
         <div onClick={() => setMobileOpen(false)} className="mobile-overlay"
-          role="presentation"
-          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.55)", zIndex: 40, display: "none" }} />
+          style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 40, display: "none" }} />
       )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .mobile-menu-btn { display: block !important; }
+          .sidebar { transform: translateX(-100%); }
+          .sidebar.mobile-open { transform: translateX(0); }
+          .mobile-overlay { display: block !important; }
+        }
+      `}</style>
     </>
   );
 }
