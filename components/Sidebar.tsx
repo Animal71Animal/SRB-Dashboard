@@ -184,7 +184,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         </div>
 
         {/* Nav */}
-        <nav style={{ flex: 1, padding: "16px 0", overflowY: "auto" }}>
+        <nav style={{ flex: 1, minHeight: 0, padding: "16px 0", overflowY: "auto", overflowX: "hidden" }}>
           {/* Overview */}
           <Link href="/" onClick={() => setMobileOpen(false)}
             style={{
@@ -214,7 +214,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
               </button>
 
               <div style={{
-                maxHeight: expandedGroups[group] ? "2000px" : "0",
+                maxHeight: expandedGroups[group] ? "5000px" : "0",
                 overflow: "hidden", transition: "max-height 0.25s ease, opacity 0.2s",
                 opacity: expandedGroups[group] ? 1 : 0,
               }}>
@@ -273,7 +273,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                       {/* Sub-tabs for DJ/MC Communications */}
                       {item.href === "/dj-mc-communications" && (
                         <div style={{
-                          maxHeight: djMcExpanded ? "500px" : "0",
+                          maxHeight: djMcExpanded ? "2000px" : "0",
                           overflow: "hidden", transition: "max-height 0.2s ease",
                           display: "flex", flexDirection: "column"
                         }}>
