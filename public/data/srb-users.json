@@ -46,8 +46,8 @@
       "email": "stjkstr@gmail.com",
       "role": "DJ",
       "name": "Steven",
-      "password": "stjkstr@gmail.com",
-      "mustResetPassword": true
+      "password": "Steve2016!",
+      "mustResetPassword": false
     },
     {
       "email": "nola04@gmail.com",
