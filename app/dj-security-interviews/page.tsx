@@ -11,6 +11,7 @@ interface Interview {
   time: string;
   notes: string;
   venue?: string;
+  role?: string;     // "DJ" | "Security"
   status: string;
   createdAt: string;
 }
@@ -56,12 +57,25 @@ function generateDateOptions(): { value: string; label: string }[] {
 }
 
 const TIME_OPTIONS: { value: string; label: string }[] = [
+  { value: "13:00", label: "1:00 PM" },
+  { value: "13:30", label: "1:30 PM" },
+  { value: "14:00", label: "2:00 PM" },
+  { value: "14:30", label: "2:30 PM" },
+  { value: "15:00", label: "3:00 PM" },
+  { value: "15:30", label: "3:30 PM" },
+  { value: "16:00", label: "4:00 PM" },
+  { value: "16:30", label: "4:30 PM" },
+  { value: "17:00", label: "5:00 PM" },
+  { value: "17:30", label: "5:30 PM" },
+  { value: "18:00", label: "6:00 PM" },
+  { value: "18:30", label: "6:30 PM" },
+  { value: "19:00", label: "7:00 PM" },
+  { value: "19:30", label: "7:30 PM" },
   { value: "20:00", label: "8:00 PM" },
   { value: "20:30", label: "8:30 PM" },
   { value: "21:00", label: "9:00 PM" },
   { value: "21:30", label: "9:30 PM" },
   { value: "22:00", label: "10:00 PM" },
-  { value: "22:30", label: "10:30 PM" },
 ];
 
 const TIME_LABEL = new Map(TIME_OPTIONS.map((t) => [t.value, t.label]));
@@ -72,6 +86,11 @@ const STATUS_OPTIONS = [
   { value: "Not Hired", label: "Not Hired" },
 ];
 
+const ROLE_OPTIONS = [
+  { value: "DJ", label: "DJ" },
+  { value: "Security", label: "Security" },
+];
+
 const STATUS_COLOR: Record<string, string> = {
   "Hired": "#16a34a",
   "Not Hired": "#C9002B",
@@ -80,12 +99,13 @@ const STATUS_COLOR: Record<string, string> = {
 
 export default function DJSecurityInterviewsPage() {
   const [items, setItems] = useState<Interview[]>([]);
-  const [form, setForm] = useState<{ entertainerName: string; date: string; time: string; notes: string; venue: string; status: string }>({
+  const [form, setForm] = useState<{ entertainerName: string; date: string; time: string; notes: string; venue: string; role: string; status: string }>({
     entertainerName: "",
     date: "",
     time: "",
     notes: "",
     venue: "Torch 1",
+    role: "DJ",
     status: "Pending",
   });
   const [loading, setLoading] = useState(false);
@@ -119,7 +139,7 @@ export default function DJSecurityInterviewsPage() {
         setError(json.error || "Failed to log interview");
         return;
       }
-      setForm({ entertainerName: "", date: "", time: "", notes: "", venue: "Torch 1", status: "Pending" });
+      setForm({ entertainerName: "", date: "", time: "", notes: "", venue: "Torch 1", role: "DJ", status: "Pending" });
       await load();
     } finally {
       setLoading(false);
@@ -151,7 +171,7 @@ export default function DJSecurityInterviewsPage() {
         <div style={{ minWidth: 0 }}>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>🎧 DJ/Security Interviews</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-            Log interviews for DJs and security — Wednesdays, Sundays &amp; Mondays, 8:00 PM – 10:30 PM
+            Log interviews for DJs and security — Wednesdays, Sundays &amp; Mondays, 1:00 PM – 10:00 PM
           </p>
         </div>
         <div style={{ fontSize: "0.875rem", color: "var(--muted)" }}>
@@ -171,6 +191,18 @@ export default function DJSecurityInterviewsPage() {
               onChange={(e) => setForm((p) => ({ ...p, entertainerName: e.target.value }))}
               style={{ width: "100%", marginTop: 4 }}
             />
+          </div>
+          <div>
+            <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Role *</label>
+            <select
+              value={form.role}
+              onChange={(e) => setForm((p) => ({ ...p, role: e.target.value }))}
+              style={{ width: "100%", marginTop: 4 }}
+            >
+              {ROLE_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Venue *</label>
@@ -257,6 +289,7 @@ export default function DJSecurityInterviewsPage() {
           <thead>
             <tr>
               <th>Name</th>
+              <th>Role</th>
               <th>Venue</th>
               <th>Date</th>
               <th>Time</th>
@@ -268,7 +301,7 @@ export default function DJSecurityInterviewsPage() {
           <tbody>
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={7} style={{ color: "var(--muted)", textAlign: "center", padding: 32 }}>
+                <td colSpan={8} style={{ color: "var(--muted)", textAlign: "center", padding: 32 }}>
                   No interviews logged yet. Use the form above.
                 </td>
               </tr>
@@ -278,6 +311,19 @@ export default function DJSecurityInterviewsPage() {
               return (
                 <tr key={a.id} style={{ opacity: isPast ? 0.55 : 1 }}>
                   <td style={{ fontWeight: 600 }}>{a.entertainerName}</td>
+                  <td>
+                    <span style={{
+                      padding: "2px 8px",
+                      borderRadius: 999,
+                      fontSize: "0.75rem",
+                      fontWeight: 600,
+                      background: a.role === "DJ" ? "rgba(249,115,22,0.15)" : "rgba(201,0,43,0.15)",
+                      color: a.role === "DJ" ? "var(--accent)" : "var(--accent)",
+                      border: `1px solid ${a.role === "DJ" ? "#F97316" : "#C9002B"}`,
+                    }}>
+                      {a.role ?? "—"}
+                    </span>
+                  </td>
                   <td style={{ fontSize: "0.85rem", color: "var(--muted)" }}>{a.venue ?? "—"}</td>
                   <td>{formatDateLabel(a.date)}</td>
                   <td>{TIME_LABEL.get(a.time) ?? a.time}</td>

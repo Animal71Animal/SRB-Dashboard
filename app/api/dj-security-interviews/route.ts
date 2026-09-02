@@ -10,6 +10,7 @@ export interface Interview {
   time: string;
   notes: string;
   venue?: string;
+  role?: string;      // "DJ" | "Security"
   status: string;     // "Pending" | "Hired" | "Not Hired"
   createdAt: string;
 }
@@ -33,6 +34,7 @@ export async function POST(req: NextRequest) {
       time: body.time,
       notes: body.notes ?? "",
       venue: body.venue ?? "Combined",
+      role: body.role ?? "DJ",
       status: body.status ?? "Pending",
       createdAt: new Date().toISOString(),
     };
