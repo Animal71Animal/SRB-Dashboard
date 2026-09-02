@@ -30,11 +30,22 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     administrative: true, promotions: true, social: true, analytics: true, operations: true,
   });
   const [djMcExpanded, setDjMcExpanded] = useState(true);
+  const [analyticsExpanded, setAnalyticsExpanded] = useState(true);
 
   useEffect(() => {
     // Expand DJ/MC if current path is a sub-route
     if (pathname.startsWith("/dj-mc-communications/")) {
       setDjMcExpanded(true);
+    }
+    // Expand Analytics if on the hub or any sub-route
+    if (
+      pathname === "/analytics" ||
+      pathname.startsWith("/attendance") ||
+      pathname.startsWith("/campaign-analytics") ||
+      pathname.startsWith("/comp-codes") ||
+      pathname.startsWith("/staff-notes")
+    ) {
+      setAnalyticsExpanded(true);
     }
 
     const handleExpand = () => setDjMcExpanded(true);
@@ -222,25 +233,50 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
-                      {item.href === "/dj-mc-communications" ? (
-                        <button 
+                      {item.href === "/dj-mc-communications" || item.href === "/analytics" ? (
+                        <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setDjMcExpanded(!djMcExpanded);
+                            if (item.href === "/dj-mc-communications") {
+                              setDjMcExpanded(!djMcExpanded);
+                            } else {
+                              setAnalyticsExpanded(!analyticsExpanded);
+                            }
                           }}
                           style={{
                             display: "flex", alignItems: "center", justifyContent: "space-between",
                             width: "101%", padding: "9px 20px", fontSize: "0.875rem",
-                            color: pathname.startsWith("/dj-mc-communications") ? "var(--accent2)" : "var(--text)",
-                            background: pathname.startsWith("/dj-mc-communications") ? "rgba(201,0,43,0.1)" : "transparent",
-                            borderLeft: pathname.startsWith("/dj-mc-communications") ? "2px solid var(--accent)" : "2px solid transparent",
+                            color: (item.href === "/dj-mc-communications"
+                              ? pathname.startsWith("/dj-mc-communications")
+                              : pathname === "/analytics" ||
+                                pathname.startsWith("/attendance") ||
+                                pathname.startsWith("/campaign-analytics") ||
+                                pathname.startsWith("/comp-codes") ||
+                                pathname.startsWith("/staff-notes")
+                            ) ? "var(--accent2)" : "var(--text)",
+                            background: (item.href === "/dj-mc-communications"
+                              ? pathname.startsWith("/dj-mc-communications")
+                              : pathname === "/analytics" ||
+                                pathname.startsWith("/attendance") ||
+                                pathname.startsWith("/campaign-analytics") ||
+                                pathname.startsWith("/comp-codes") ||
+                                pathname.startsWith("/staff-notes")
+                            ) ? "rgba(201,0,43,0.1)" : "transparent",
+                            borderLeft: (item.href === "/dj-mc-communications"
+                              ? pathname.startsWith("/dj-mc-communications")
+                              : pathname === "/analytics" ||
+                                pathname.startsWith("/attendance") ||
+                                pathname.startsWith("/campaign-analytics") ||
+                                pathname.startsWith("/comp-codes") ||
+                                pathname.startsWith("/staff-notes")
+                            ) ? "2px solid var(--accent)" : "2px solid transparent",
                             textDecoration: "none", transition: "all 0.15s", border: "none", cursor: "pointer", textAlign: "left"
                           }}>
                           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                             <span style={{ fontSize: "1rem" }}>{item.icon}</span>
                             {item.title}
                           </div>
-                          <ChevronIcon expanded={djMcExpanded} />
+                          <ChevronIcon expanded={item.href === "/dj-mc-communications" ? djMcExpanded : analyticsExpanded} />
                         </button>
                       ) : (
                         <Link href={item.href} onClick={() => setMobileOpen(false)}
@@ -284,6 +320,34 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             { href: "/dj-mc-communications/messaging", title: "Messaging", icon: "💬" },
                             { href: "/dj-mc-communications/equipment-reports", title: "Equipment Reports", icon: "🛠️" },
                             { href: "/dj-mc-communications/passwords", title: "Passwords", icon: "🔑" },
+                          ].map(sub => (
+                            <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
+                                background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
+                                textDecoration: "none", transition: "all 0.15s",
+                              }}>
+                              <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
+                              {sub.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Sub-tabs for Analytics */}
+                      {item.href === "/analytics" && (
+                        <div style={{
+                          maxHeight: analyticsExpanded ? "2000px" : "0",
+                          overflow: "hidden", transition: "max-height 0.2s ease",
+                          display: "flex", flexDirection: "column"
+                        }}>
+                          {[
+                            { href: "/attendance", title: "Attendance Tracker", icon: "👥" },
+                            { href: "/campaign-analytics", title: "Campaign Analytics", icon: "📊" },
+                            { href: "/comp-codes", title: "Comp Codes", icon: "🎟️" },
+                            { href: "/staff-notes", title: "Staff Notes", icon: "📝" },
                           ].map(sub => (
                             <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
                               style={{

@@ -144,9 +144,6 @@ export default function OverviewPage() {
         Quick Access
       </h2>
       <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
-        {hasPermission(role, "special", "builder") && (
-          <ModuleCard href="/builder" icon="🛡️" title="Permissions" desc="Manage staff emails and role-based permissions." />
-        )}
         {modules.filter(m => hasPermission(role, "view", m.href)).map((m) => (
           <div key={m.href} onClick={() => {
             if (m.href === "/dj-mc-communications") {

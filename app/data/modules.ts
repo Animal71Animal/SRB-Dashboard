@@ -1,4 +1,4 @@
-export type ModuleGroup = "administrative" | "promotions" | "social" | "analytics" | "operations";
+export type ModuleGroup = "administrative" | "promotions" | "social" | "operations";
 
 export interface Module {
   href: string;
@@ -11,7 +11,8 @@ export interface Module {
 
 export const modules: Module[] = [
   // Administrative
-  { href: "/administrative", icon: "🔐", title: "Administrative", desc: "Comp Codes, Staff Notes & Permissions.", group: "administrative" },
+  { href: "/builder", icon: "🛡️", title: "Permissions", desc: "Manage staff emails and role-based permissions.", group: "administrative" },
+  { href: "/analytics", icon: "📊", title: "Analytics", desc: "Data, tracking & internal ops tools.", group: "administrative" },
   // Events & Promotions
   { href: "/events", icon: "📅", title: "Event Calendar", desc: "Upcoming Torch events by date.", group: "promotions" },
   { href: "/promotional-ideas", icon: "💡", title: "Promotional Ideas", desc: "Marketing strategies and promotional concepts.", group: "promotions" },
@@ -20,9 +21,6 @@ export const modules: Module[] = [
   { href: "/content-assets", icon: "🎨", title: "Content Assets", desc: "Flyer archive and asset links.", group: "promotions" },
   // Social & Influencers
   { href: "/influencers", icon: "⭐", title: "Influencers", desc: "Influencer database with stats.", group: "social" },
-  // Analytics
-  { href: "/attendance", icon: "👥", title: "Attendance Tracker", desc: "Nightly headcount log.", group: "analytics" },
-  { href: "/analytics", icon: "📊", title: "Campaign Analytics", desc: "Performance summaries.", group: "analytics" },
   // Operations
   { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
   { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
@@ -41,8 +39,7 @@ export const groupLabels: Record<ModuleGroup, string> = {
   administrative: "Administrative",
   promotions: "Events & Promotions",
   social: "Social & Influencers",
-  analytics: "Analytics",
   operations: "Operations",
 };
 
-export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "analytics", "operations"];
+export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations"];
