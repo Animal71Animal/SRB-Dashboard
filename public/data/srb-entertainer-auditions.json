@@ -1,5 +1,15 @@
 [
   {
+    "id": "aud-1788393032654",
+    "entertainerName": "Euphoria",
+    "date": "2026-09-02",
+    "time": "20:00",
+    "notes": "",
+    "venue": "Torch 2",
+    "status": "Pending",
+    "createdAt": "2026-09-02T23:50:32.654Z"
+  },
+  {
     "id": "aud-1788326479199",
     "entertainerName": "Hannah",
     "date": "2026-09-06",
