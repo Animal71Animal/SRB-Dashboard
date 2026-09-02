@@ -144,7 +144,11 @@ export default function OverviewPage() {
         Quick Access
       </h2>
       <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
-        {modules.filter(m => hasPermission(role, "view", m.href)).map((m) => (
+        {modules.filter(m => {
+          // /builder (Permissions) requires the "builder" special permission — SuperAdmin only
+          if (m.href === "/builder") return hasPermission(role, "special", "builder");
+          return hasPermission(role, "view", m.href);
+        }).map((m) => (
           <div key={m.href} onClick={() => {
             if (m.href === "/dj-mc-communications") {
               window.dispatchEvent(new CustomEvent("expand-dj-mc"));

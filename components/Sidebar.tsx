@@ -96,7 +96,11 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
   // Filter modules based on viewing permissions
   const allowedGroupedModules = groupOrder.reduce((acc, group) => {
-    acc[group] = modules.filter((m) => m.group === group && hasPermission(role, "view", m.href));
+    acc[group] = modules.filter((m) => {
+      // /builder (Permissions) requires the "builder" special permission — SuperAdmin only
+      if (m.href === "/builder") return m.group === group && hasPermission(role, "special", "builder");
+      return m.group === group && hasPermission(role, "view", m.href);
+    });
     return acc;
   }, {} as Record<ModuleGroup, typeof modules>);
 

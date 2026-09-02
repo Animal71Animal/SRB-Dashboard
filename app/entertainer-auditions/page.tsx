@@ -214,6 +214,7 @@ export default function EntertainerAuditionsPage() {
           <thead>
             <tr>
               <th>Entertainer</th>
+              <th>Venue</th>
               <th>Date</th>
               <th>Time</th>
               <th>Notes</th>
@@ -223,7 +224,7 @@ export default function EntertainerAuditionsPage() {
           <tbody>
             {sorted.length === 0 && (
               <tr>
-                <td colSpan={5} style={{ color: "var(--muted)", textAlign: "center", padding: 32 }}>
+                <td colSpan={6} style={{ color: "var(--muted)", textAlign: "center", padding: 32 }}>
                   No auditions logged yet. Use the form above.
                 </td>
               </tr>
@@ -233,6 +234,7 @@ export default function EntertainerAuditionsPage() {
               return (
                 <tr key={a.id} style={{ opacity: isPast ? 0.55 : 1 }}>
                   <td style={{ fontWeight: 600 }}>{a.entertainerName}</td>
+                  <td style={{ fontSize: "0.85rem", color: "var(--muted)" }}>{a.venue ?? "—"}</td>
                   <td>{formatDateLabel(a.date)}</td>
                   <td>{TIME_LABEL.get(a.time) ?? a.time}</td>
                   <td style={{ fontSize: "0.85rem", color: "var(--muted)" }}>{a.notes || "—"}</td>
