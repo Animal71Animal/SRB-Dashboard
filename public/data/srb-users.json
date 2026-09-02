@@ -62,6 +62,13 @@
       "name": "Star",
       "password": "KingTalxn0366!",
       "mustResetPassword": false
+    },
+    {
+      "email": "dj@torch.dj",
+      "role": "DJ",
+      "name": "DJ",
+      "password": "dj@torch.dj",
+      "mustResetPassword": false
     }
   ]
 }
