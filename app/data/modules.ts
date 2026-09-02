@@ -1,4 +1,4 @@
-export type ModuleGroup = "promotions" | "social" | "analytics" | "operations";
+export type ModuleGroup = "administrative" | "promotions" | "social" | "analytics" | "operations";
 
 export interface Module {
   href: string;
@@ -10,6 +10,8 @@ export interface Module {
 }
 
 export const modules: Module[] = [
+  // Administrative
+  { href: "/administrative", icon: "🔐", title: "Administrative", desc: "Comp Codes, Staff Notes & Permissions.", group: "administrative" },
   // Events & Promotions
   { href: "/events", icon: "📅", title: "Event Calendar", desc: "Upcoming Torch events by date.", group: "promotions" },
   { href: "/promotional-ideas", icon: "💡", title: "Promotional Ideas", desc: "Marketing strategies and promotional concepts.", group: "promotions" },
@@ -36,10 +38,11 @@ export const modules: Module[] = [
 ];
 
 export const groupLabels: Record<ModuleGroup, string> = {
+  administrative: "Administrative",
   promotions: "Events & Promotions",
   social: "Social & Influencers",
   analytics: "Analytics",
   operations: "Operations",
 };
 
-export const groupOrder: ModuleGroup[] = ["promotions", "social", "analytics", "operations"];
+export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "analytics", "operations"];

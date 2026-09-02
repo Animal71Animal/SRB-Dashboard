@@ -27,7 +27,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [role, setRole] = useState<Role>("Employee");
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
-    promotions: true, social: true, analytics: true, operations: true,
+    administrative: true, promotions: true, social: true, analytics: true, operations: true,
   });
   const [djMcExpanded, setDjMcExpanded] = useState(true);
 
