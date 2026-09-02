@@ -13,6 +13,7 @@ export const modules: Module[] = [
   // Administrative
   { href: "/builder", icon: "🛡️", title: "Permissions", desc: "Manage staff emails and role-based permissions.", group: "administrative" },
   { href: "/analytics", icon: "📊", title: "Analytics", desc: "Data, tracking & internal ops tools.", group: "administrative" },
+  { href: "/entertainer-auditions", icon: "🎤", title: "Entertainer Auditions", desc: "Log auditions for entertainers — Sundays & Mondays, 8 PM – 10:30 PM.", group: "administrative" },
   // Events & Promotions
   { href: "/events", icon: "📅", title: "Event Calendar", desc: "Upcoming Torch events by date.", group: "promotions" },
   { href: "/promotional-ideas", icon: "💡", title: "Promotional Ideas", desc: "Marketing strategies and promotional concepts.", group: "promotions" },
