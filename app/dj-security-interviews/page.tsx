@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 const CARD = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: "24px" };
 
-interface Audition {
+interface Interview {
   id: string;
   entertainerName: string;
   date: string;
@@ -35,7 +35,7 @@ function toISO(d: Date): string {
 }
 
 function generateDateOptions(): { value: string; label: string }[] {
-  // Sept 1, 2026 → Dec 31, 2026, Sundays and Mondays only, past dates excluded
+  // Sept 1, 2026 → Dec 31, 2026, Wednesdays, Sundays, and Mondays only, past dates excluded
   const start = new Date(2026, 8, 1);
   const end = new Date(2026, 11, 31);
   const today = new Date();
@@ -45,7 +45,8 @@ function generateDateOptions(): { value: string; label: string }[] {
   const cursor = new Date(start);
   while (cursor <= end) {
     const dow = cursor.getDay();
-    if ((dow === 0 || dow === 1) && cursor >= today) {
+    // Wed (3), Sun (0), Mon (1)
+    if ((dow === 0 || dow === 1 || dow === 3) && cursor >= today) {
       const iso = toISO(cursor);
       options.push({ value: iso, label: formatDateLabel(iso) });
     }
@@ -77,8 +78,8 @@ const STATUS_COLOR: Record<string, string> = {
   "Pending": "#a16207",
 };
 
-export default function EntertainerAuditionsPage() {
-  const [items, setItems] = useState<Audition[]>([]);
+export default function DJSecurityInterviewsPage() {
+  const [items, setItems] = useState<Interview[]>([]);
   const [form, setForm] = useState<{ entertainerName: string; date: string; time: string; notes: string; venue: string; status: string }>({
     entertainerName: "",
     date: "",
@@ -90,11 +91,10 @@ export default function EntertainerAuditionsPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Recompute date options on each render so past dates fall off as time passes
   const dateOptions = useMemo(() => generateDateOptions(), []);
 
   const load = () =>
-    fetch("/api/entertainer-auditions")
+    fetch("/api/dj-security-interviews")
       .then((r) => r.json())
       .then(setItems)
       .catch(() => {});
@@ -104,19 +104,19 @@ export default function EntertainerAuditionsPage() {
   const add = async () => {
     setError(null);
     if (!form.entertainerName.trim() || !form.date || !form.time) {
-      setError("Entertainer name, date, and time are all required.");
+      setError("Name, date, and time are all required.");
       return;
     }
     setLoading(true);
     try {
-      const res = await fetch("/api/entertainer-auditions", {
+      const res = await fetch("/api/dj-security-interviews", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
       const json = await res.json();
       if (!res.ok || !json.ok) {
-        setError(json.error || "Failed to log audition");
+        setError(json.error || "Failed to log interview");
         return;
       }
       setForm({ entertainerName: "", date: "", time: "", notes: "", venue: "Torch 1", status: "Pending" });
@@ -127,17 +127,17 @@ export default function EntertainerAuditionsPage() {
   };
 
   const del = async (id: string) => {
-    if (!confirm("Delete this audition?")) return;
-    await fetch(`/api/entertainer-auditions?id=${id}`, { method: "DELETE" });
+    if (!confirm("Delete this interview?")) return;
+    await fetch(`/api/dj-security-interviews?id=${id}`, { method: "DELETE" });
     await load();
   };
 
   const setStatus = async (id: string, status: string) => {
-    // Optimistic update — PATCH endpoint not yet wired (status changes local-only)
+    // Optimistic update
     setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status } : i)));
+    // Note: status changes are local-only for now (no PATCH). Keeps it simple.
   };
 
-  // Sort: upcoming first (by date asc), then past (by date desc)
   const sorted = useMemo(() => {
     const todayISO = toISO(new Date());
     const upcoming = items.filter((a) => a.date >= todayISO).sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
@@ -149,9 +149,9 @@ export default function EntertainerAuditionsPage() {
     <div>
       <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
         <div style={{ minWidth: 0 }}>
-          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>🎤 Entertainer Auditions</h1>
+          <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>🎧 DJ/Security Interviews</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-            Log auditions for entertainers — Sundays &amp; Mondays, 8:00 PM – 10:30 PM
+            Log interviews for DJs and security — Wednesdays, Sundays &amp; Mondays, 8:00 PM – 10:30 PM
           </p>
         </div>
         <div style={{ fontSize: "0.875rem", color: "var(--muted)" }}>
@@ -161,12 +161,12 @@ export default function EntertainerAuditionsPage() {
 
       {/* Add Form */}
       <div style={{ ...CARD, marginBottom: 24 }}>
-        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Log New Audition</h3>
+        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Log New Interview</h3>
         <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
           <div>
-            <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Entertainer Name *</label>
+            <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Name *</label>
             <input
-              placeholder="Stage name"
+              placeholder="Applicant name"
               value={form.entertainerName}
               onChange={(e) => setForm((p) => ({ ...p, entertainerName: e.target.value }))}
               style={{ width: "100%", marginTop: 4 }}
@@ -184,20 +184,20 @@ export default function EntertainerAuditionsPage() {
             </select>
           </div>
           <div>
-            <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Audition Date *</label>
+            <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Interview Date *</label>
             <select
               value={form.date}
               onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))}
               style={{ width: "100%", marginTop: 4 }}
             >
-              <option value="">Select a Sunday or Monday</option>
+              <option value="">Select a Wed, Sun, or Mon</option>
               {dateOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
             {dateOptions.length === 0 && (
               <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
-                No upcoming Sun/Mon dates in range.
+                No upcoming Wed/Sun/Mon dates in range.
               </div>
             )}
           </div>
@@ -246,17 +246,17 @@ export default function EntertainerAuditionsPage() {
           disabled={loading}
           style={{ marginTop: 16, background: "var(--accent)", color: "#fff", border: "none", borderRadius: 8, padding: "10px 24px", fontWeight: 600, cursor: loading ? "wait" : "pointer" }}
         >
-          {loading ? "Saving…" : "Log Audition"}
+          {loading ? "Saving…" : "Log Interview"}
         </button>
       </div>
 
-      {/* Existing Auditions */}
+      {/* Existing Interviews */}
       <div style={CARD} className="table-wrap">
-        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Logged Auditions</h3>
+        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Logged Interviews</h3>
         <table>
           <thead>
             <tr>
-              <th>Entertainer</th>
+              <th>Name</th>
               <th>Venue</th>
               <th>Date</th>
               <th>Time</th>
@@ -269,7 +269,7 @@ export default function EntertainerAuditionsPage() {
             {sorted.length === 0 && (
               <tr>
                 <td colSpan={7} style={{ color: "var(--muted)", textAlign: "center", padding: 32 }}>
-                  No auditions logged yet. Use the form above.
+                  No interviews logged yet. Use the form above.
                 </td>
               </tr>
             )}
