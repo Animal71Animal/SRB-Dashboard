@@ -66,11 +66,12 @@ const TIME_LABEL = new Map(TIME_OPTIONS.map((t) => [t.value, t.label]));
 
 export default function EntertainerAuditionsPage() {
   const [items, setItems] = useState<Audition[]>([]);
-  const [form, setForm] = useState<{ entertainerName: string; date: string; time: string; notes: string }>({
+  const [form, setForm] = useState<{ entertainerName: string; date: string; time: string; notes: string; venue: string }>({
     entertainerName: "",
     date: "",
     time: "",
     notes: "",
+    venue: "Torch 1",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,7 +105,7 @@ export default function EntertainerAuditionsPage() {
         setError(json.error || "Failed to log audition");
         return;
       }
-      setForm({ entertainerName: "", date: "", time: "", notes: "" });
+      setForm({ entertainerName: "", date: "", time: "", notes: "", venue: "Torch 1" });
       await load();
     } finally {
       setLoading(false);
@@ -151,6 +152,17 @@ export default function EntertainerAuditionsPage() {
               onChange={(e) => setForm((p) => ({ ...p, entertainerName: e.target.value }))}
               style={{ width: "100%", marginTop: 4 }}
             />
+          </div>
+          <div>
+            <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Venue *</label>
+            <select
+              value={form.venue}
+              onChange={(e) => setForm((p) => ({ ...p, venue: e.target.value }))}
+              style={{ width: "100%", marginTop: 4 }}
+            >
+              <option value="Torch 1">Torch 1</option>
+              <option value="Torch 2">Torch 2</option>
+            </select>
           </div>
           <div>
             <label style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Audition Date *</label>
