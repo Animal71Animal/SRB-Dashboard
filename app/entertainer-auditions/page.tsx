@@ -35,7 +35,7 @@ function toISO(d: Date): string {
 }
 
 function generateDateOptions(): { value: string; label: string }[] {
-  // Sept 1, 2026 → Dec 31, 2026, Sundays and Mondays only, past dates excluded
+  // Sept 1, 2026 → Dec 31, 2026, Sundays, Mondays, and Wednesdays only, past dates excluded
   const start = new Date(2026, 8, 1);
   const end = new Date(2026, 11, 31);
   const today = new Date();
@@ -45,7 +45,7 @@ function generateDateOptions(): { value: string; label: string }[] {
   const cursor = new Date(start);
   while (cursor <= end) {
     const dow = cursor.getDay();
-    if ((dow === 0 || dow === 1) && cursor >= today) {
+    if ((dow === 0 || dow === 1 || dow === 3) && cursor >= today) {
       const iso = toISO(cursor);
       options.push({ value: iso, label: formatDateLabel(iso) });
     }
@@ -151,7 +151,7 @@ export default function EntertainerAuditionsPage() {
         <div style={{ minWidth: 0 }}>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>🎤 Entertainer Auditions</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-            Log auditions for entertainers — Sundays &amp; Mondays, 8:00 PM – 10:30 PM
+            Log auditions for entertainers — Sundays, Mondays &amp; Wednesdays, 8:00 PM – 10:30 PM
           </p>
         </div>
         <div style={{ fontSize: "0.875rem", color: "var(--muted)" }}>
@@ -190,7 +190,7 @@ export default function EntertainerAuditionsPage() {
               onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))}
               style={{ width: "100%", marginTop: 4 }}
             >
-              <option value="">Select a Sunday or Monday</option>
+              <option value="">Select a Sunday, Monday, or Wednesday</option>
               {dateOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
