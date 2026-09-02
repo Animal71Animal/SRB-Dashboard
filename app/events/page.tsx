@@ -85,7 +85,10 @@ export default function EventsPage() {
   const [formType, setFormType] = useState<'oneOff' | 'series'>('oneOff');
   const [form, setForm] = useState<NewEventForm>(emptyOneOff as NewEventForm);
   
-  const [currentMonth, setCurrentMonth] = useState(new Date(2026, 7, 1));
+  const [currentMonth, setCurrentMonth] = useState(() => {
+    const today = new Date();
+    return new Date(today.getFullYear(), today.getMonth(), 1);
+  });
   const [selectedEventIds, setSelectedEventIds] = useState<{ type: 'oneOff' | 'series', id: string }[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editBuffer, setEditBuffer] = useState<any>(null);
@@ -452,6 +455,7 @@ export default function EventsPage() {
       <div style={{ ...CARD, marginBottom: 32 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
           <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer" }}>←</button>
+          <button onClick={() => { const t = new Date(); setCurrentMonth(new Date(t.getFullYear(), t.getMonth(), 1)); }} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", marginLeft: 4 }} title="Jump to current month">Today</button>
           <h2 style={{ fontSize: "1.25rem", fontWeight: 700, margin: 0 }}>{monthYearLabel}</h2>
           <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer" }}>→</button>
         </div>
