@@ -89,6 +89,13 @@ export default function EventsPage() {
     const today = new Date();
     return new Date(today.getFullYear(), today.getMonth(), 1);
   });
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
+
+  /** Today as YYYY-MM-DD in local time. Recomputed on each call (cheap). */
+  const todayISO = () => {
+    const t = new Date();
+    return `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+  };
   const [selectedEventIds, setSelectedEventIds] = useState<{ type: 'oneOff' | 'series', id: string }[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editBuffer, setEditBuffer] = useState<any>(null);
@@ -184,6 +191,7 @@ export default function EventsPage() {
   };
 
   const handleDayClick = (date: string) => {
+    setSelectedDay(date);
     const events = getEventsForDate(date);
     const combined = [
       ...events.series.map(s => ({ type: 'series' as const, id: s.id })),
@@ -455,7 +463,30 @@ export default function EventsPage() {
       <div style={{ ...CARD, marginBottom: 32 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 20 }}>
           <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1))} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer" }}>←</button>
-          <button onClick={() => { const t = new Date(); setCurrentMonth(new Date(t.getFullYear(), t.getMonth(), 1)); }} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", marginLeft: 4 }} title="Jump to current month">Today</button>
+          <button
+            onClick={() => {
+              const t = new Date();
+              const iso = todayISO();
+              setCurrentMonth(new Date(t.getFullYear(), t.getMonth(), 1));
+              // Toggle: if today is already selected, clear the filter; else select it.
+              setSelectedDay(prev => prev === iso ? null : iso);
+              const events = getEventsForDate(iso);
+              setSelectedEventIds(prev => {
+                if (prev.length === events.series.length + events.oneOffs.length && prev.every(ref => {
+                  const matched = (ref.type === 'series' ? events.series : events.oneOffs).find(x => x.id === ref.id);
+                  return !!matched;
+                })) return [];
+                return [
+                  ...events.series.map(s => ({ type: 'series' as const, id: s.id })),
+                  ...events.oneOffs.map(e => ({ type: 'oneOff' as const, id: e.id })),
+                ];
+              });
+            }}
+            style={{ background: selectedDay === todayISO() ? "var(--accent)" : "none", border: "1px solid var(--border)", color: selectedDay === todayISO() ? "#fff" : "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer", marginLeft: 4, fontWeight: selectedDay === todayISO() ? 700 : 400 }}
+            title="Filter to today only"
+          >
+            Today
+          </button>
           <h2 style={{ fontSize: "1.25rem", fontWeight: 700, margin: 0 }}>{monthYearLabel}</h2>
           <button onClick={() => setCurrentMonth(new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 1, 1))} style={{ background: "none", border: "1px solid var(--border)", color: "var(--text)", padding: "6px 12px", borderRadius: 8, cursor: "pointer" }}>→</button>
         </div>
@@ -483,9 +514,10 @@ export default function EventsPage() {
           {calendarDays.map((d, i) => {
             if (!d) return <div key={i} style={{ background: "var(--card)", minHeight: 100 }} />;
             const events = getEventsForDate(d.date);
+            const isSelected = d.date === selectedDay;
             return (
-              <div key={i} onClick={() => handleDayClick(d.date)} style={{ background: "var(--card)", padding: 8, minHeight: 110, border: "0.5px solid var(--border)", cursor: "pointer" }}>
-                <span className="cal-day-num" style={{ fontSize: "0.9rem", fontWeight: 600, opacity: 0.6 }}>{d.day}</span>
+              <div key={i} onClick={() => handleDayClick(d.date)} style={{ background: "var(--card)", padding: 8, minHeight: 110, border: isSelected ? "2px solid var(--accent)" : "0.5px solid var(--border)", cursor: "pointer", boxShadow: isSelected ? "0 0 0 2px var(--accent)" : undefined }}>
+                <span className="cal-day-num" style={{ fontSize: "0.9rem", fontWeight: isSelected ? 700 : 600, opacity: isSelected ? 1 : 0.6, color: isSelected ? "var(--accent)" : undefined }}>{d.day}</span>
                 <div style={{ marginTop: 4, display: "flex", flexDirection: "column", gap: 4 }}>
                   {events.series.map(s => {
                     const bg = s.venue === "torch1" ? "#fb923c" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#dc2626" : "var(--border)";
@@ -504,18 +536,24 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {selectedEventIds.length > 0 && (role === "Admin" || role === "Admin" || role === "Manager") && (
+      {selectedDay && (
         <div style={{ marginBottom: 40 }}>
            <div className="toc-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", margin: 0 }}>Selected Day Events</h2>
-             <button onClick={() => setSelectedEventIds([])} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Close ✕</button>
+             <h2 style={{ fontSize: "1.1rem", fontWeight: 700, textTransform: "uppercase", color: "var(--accent)", margin: 0 }}>
+               Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+             </h2>
+             <button onClick={() => { setSelectedDay(null); setSelectedEventIds([]); }} style={{ background: "none", border: "none", color: "var(--muted)", cursor: "pointer" }}>Show full calendar ✕</button>
            </div>
-           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-             {selectedEventIds.map(ref => {
-               const e = ref.type === 'oneOff' ? data.oneOffs.find(x => x.id === ref.id) : data.series.find(x => x.id === ref.id);
-               return e ? renderEventForm(e, ref.type, true) : null;
-             })}
-           </div>
+           {selectedEventIds.length === 0 ? (
+             <div style={{ ...CARD, color: "var(--muted)", textAlign: "center" }}>No confirmed events scheduled for this day.</div>
+           ) : (
+             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+               {selectedEventIds.map(ref => {
+                 const e = ref.type === 'oneOff' ? data.oneOffs.find(x => x.id === ref.id) : data.series.find(x => x.id === ref.id);
+                 return e ? renderEventForm(e, ref.type, true) : null;
+               })}
+             </div>
+           )}
         </div>
       )}
 
