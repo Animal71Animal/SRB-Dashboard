@@ -138,11 +138,17 @@ export default function EntertainerAuditionsPage() {
   };
 
   // Sort: upcoming first (by date asc), then past (by date desc)
+  // Pure chronological order: oldest → newest (top to bottom).
+  // Sorts by date first, then time, then createdAt as a tiebreaker so two
+  // auditions logged for the same slot still have a stable order.
   const sorted = useMemo(() => {
-    const todayISO = toISO(new Date());
-    const upcoming = items.filter((a) => a.date >= todayISO).sort((a, b) => a.date.localeCompare(b.date) || a.time.localeCompare(b.time));
-    const past = items.filter((a) => a.date < todayISO).sort((a, b) => b.date.localeCompare(a.date) || b.time.localeCompare(a.time));
-    return [...upcoming, ...past];
+    return [...items].sort((a, b) => {
+      const d = a.date.localeCompare(b.date);
+      if (d !== 0) return d;
+      const t = a.time.localeCompare(b.time);
+      if (t !== 0) return t;
+      return (a.createdAt || "").localeCompare(b.createdAt || "");
+    });
   }, [items]);
 
   return (
