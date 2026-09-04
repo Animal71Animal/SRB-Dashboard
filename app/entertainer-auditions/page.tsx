@@ -133,8 +133,24 @@ export default function EntertainerAuditionsPage() {
   };
 
   const setStatus = async (id: string, status: string) => {
-    // Optimistic update — PATCH endpoint not yet wired (status changes local-only)
-    setItems((prev) => prev.map((i) => (i.id === id ? { ...i, status } : i)));
+    const prevItems = items;
+    // Optimistic UI — flip locally, revert on server failure
+    setItems((p) => p.map((i) => (i.id === id ? { ...i, status } : i)));
+    try {
+      const res = await fetch("/api/entertainer-auditions", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id, status }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.ok) {
+        setItems(prevItems);
+        setError(json.error || "Failed to update status");
+      }
+    } catch {
+      setItems(prevItems);
+      setError("Network error — status change reverted");
+    }
   };
 
   // Sort: upcoming first (by date asc), then past (by date desc)

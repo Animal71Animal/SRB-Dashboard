@@ -44,6 +44,29 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json();
+    if (!body.id || !body.status) {
+      return NextResponse.json({ ok: false, error: "id and status are required" }, { status: 400 });
+    }
+    const allowed = ["Pending", "Hired", "Not Hired"];
+    if (!allowed.includes(body.status)) {
+      return NextResponse.json({ ok: false, error: `status must be one of ${allowed.join(", ")}` }, { status: 400 });
+    }
+    const { data, sha } = await safeRead<Audition[]>(FILE, []);
+    const idx = data.findIndex((c) => c.id === body.id);
+    if (idx === -1) {
+      return NextResponse.json({ ok: false, error: "Audition not found" }, { status: 404 });
+    }
+    const updated = data.map((c) => (c.id === body.id ? { ...c, status: body.status } : c));
+    await safeWrite(FILE, updated, sha, `fix(auditions): set ${updated[idx].entertainerName} → ${body.status}`);
+    return NextResponse.json({ ok: true, item: updated[idx] });
+  } catch (err) {
+    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 });
+  }
+}
+
 export async function DELETE(req: NextRequest) {
   try {
     const id = new URL(req.url).searchParams.get("id");
