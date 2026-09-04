@@ -1,4 +1,4 @@
-export type ModuleGroup = "administrative" | "promotions" | "social" | "operations";
+export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc";
 
 export interface Module {
   href: string;
@@ -26,13 +26,16 @@ export const modules: Module[] = [
   // Operations
   { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
   { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
-  { href: "/dj-mc-communications", icon: "💬", title: "DJ/MC Communications", desc: "Internal messaging for DJs and MCs.", group: "operations", children: [
-    { href: "/dj-mc-communications/schedules", icon: "📅", title: "Schedules", desc: "View upcoming shift rotations.", group: "operations" },
-    { href: "/dj-mc-communications/promotional-materials", icon: "📣", title: "Promotional Materials", desc: "Standardized marketing feeds.", group: "operations" },
-    { href: "/dj-mc-communications/stage-announcement-ideas", icon: "🎙️", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcements.", group: "operations" },
-    { href: "/dj-mc-communications/messaging", icon: "💬", title: "Messaging", desc: "Internal board for staff updates.", group: "operations" },
-    { href: "/dj-mc-communications/equipment-reports", icon: "🛠️", title: "Equipment Reports", desc: "Maintenance logs.", group: "operations" },
-    { href: "/dj-mc-communications/passwords", icon: "🔑", title: "Passwords", desc: "Credential Vault.", group: "operations" },
+  // DJ/MC Communications — promoted to its own top-level group so DJs/MCs see
+  // it as a standalone tab rather than buried under Operations. Sub-tabs are
+  // still hardcoded in components/Sidebar.tsx (keyed off item.href).
+  { href: "/dj-mc-communications", icon: "💬", title: "DJ/MC Communications", desc: "Internal messaging for DJs and MCs.", group: "djmc", children: [
+    { href: "/dj-mc-communications/schedules", icon: "📅", title: "Schedules", desc: "View upcoming shift rotations.", group: "djmc" },
+    { href: "/dj-mc-communications/promotional-materials", icon: "📣", title: "Promotional Materials", desc: "Standardized marketing feeds.", group: "djmc" },
+    { href: "/dj-mc-communications/stage-announcement-ideas", icon: "🎙️", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcements.", group: "djmc" },
+    { href: "/dj-mc-communications/messaging", icon: "💬", title: "Messaging", desc: "Internal board for staff updates.", group: "djmc" },
+    { href: "/dj-mc-communications/equipment-reports", icon: "🛠️", title: "Equipment Reports", desc: "Maintenance logs.", group: "djmc" },
+    { href: "/dj-mc-communications/passwords", icon: "🔑", title: "Passwords", desc: "Credential Vault.", group: "djmc" },
   ] },
   { href: "/logged-hours", icon: "⏱️", title: "ANiMAL's Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
 ];
@@ -42,6 +45,7 @@ export const groupLabels: Record<ModuleGroup, string> = {
   promotions: "Events & Promotions",
   social: "Social & Influencers",
   operations: "Operations",
+  djmc: "DJ/MC Communications",
 };
 
-export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations"];
+export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc"];
