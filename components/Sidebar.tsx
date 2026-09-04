@@ -26,11 +26,16 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [role, setRole] = useState<Role>("Employee");
+  // All groups start collapsed so any user/role on a fresh page load sees a clean slate.
+  // The pathname effect below auto-expands DJ/MC + Analytics only when the user
+  // actually navigates into those sub-routes. localStorage is intentionally NOT used
+  // to restore prior-session state — every new instance must look the same regardless
+  // of who was here before.
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
-    administrative: true, promotions: true, social: true, analytics: true, operations: true,
+    administrative: false, promotions: false, social: false, analytics: false, operations: false,
   });
-  const [djMcExpanded, setDjMcExpanded] = useState(true);
-  const [analyticsExpanded, setAnalyticsExpanded] = useState(true);
+  const [djMcExpanded, setDjMcExpanded] = useState(false);
+  const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
 
   useEffect(() => {
     // Expand DJ/MC if current path is a sub-route
@@ -125,12 +130,9 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
   const isSuper = hasPermission(actualRole, "special", "role-preview");
 
-  useEffect(() => {
-    const saved = typeof window !== "undefined" ? localStorage.getItem("torch-sidebar-groups") : null;
-    if (saved) {
-      try { setExpandedGroups((prev) => ({ ...prev, ...JSON.parse(saved) })); } catch {}
-    }
-  }, []);
+  // localStorage hydration intentionally omitted — see note above useState.
+  // Sidebar expansion is per-session only; a new browser instance always starts
+  // fully collapsed regardless of role or prior user.
 
   useEffect(() => {
     if (typeof window !== "undefined") {
