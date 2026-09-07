@@ -71,6 +71,15 @@ export default function MessagingPage() {
   // Only Admin (Eric) can delete
   const canDelete = role === "SuperAdmin";
 
+  // Per-sender bubble colors (name match is case-insensitive)
+  const SENDER_COLORS: Record<string, { bg: string; border: string; name: string }> = {
+    animal:  { bg: "bg-purple-900/50", border: "border-purple-500/70", name: "text-purple-300" },
+    steven:  { bg: "bg-blue-900/50",   border: "border-blue-500/70",   name: "text-blue-300"   },
+  };
+  const DEFAULT_COLOR = { bg: "bg-zinc-900/80", border: "border-zinc-800", name: "text-gray-400" };
+  const colorFor = (sender: string) =>
+    SENDER_COLORS[sender.trim().toLowerCase()] || DEFAULT_COLOR;
+
   return (
     <div className="relative min-h-screen p-4 md:p-8 text-white">
       <AnimatedBackground />
@@ -89,12 +98,13 @@ export default function MessagingPage() {
           ) : (
             messages.map((msg) => {
               const isMe = msg.sender.toLowerCase() === email.toLowerCase();
+              const c = colorFor(msg.sender);
               return (
                 <div key={msg.id} className={`flex flex-col ${isMe ? 'items-end' : 'items-start'}`}>
-                  <div className={`max-w-[85%] p-3 rounded-lg ${isMe ? 'bg-red-900/40 border border-red-800/50' : 'bg-zinc-900/80 border border-zinc-800'}`}>
-                    <div className="text-[0.65rem] text-gray-400 mb-1 flex justify-between gap-4">
-                      <span>{msg.sender}</span>
-                      <span>{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                  <div className={`max-w-[85%] p-3 rounded-lg border ${c.bg} ${c.border}`}>
+                    <div className={`text-[0.65rem] mb-1 flex justify-between gap-4`}>
+                      <span className={`font-bold ${c.name}`}>{msg.sender}</span>
+                      <span className="text-gray-500">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
                     </div>
                     <div className="text-sm break-words">{msg.text}</div>
                   </div>
