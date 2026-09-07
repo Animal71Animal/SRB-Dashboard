@@ -75,6 +75,7 @@ export default function MessagingPage() {
   const SENDER_COLORS: Record<string, { bg: string; border: string; name: string }> = {
     animal:  { bg: "bg-purple-900/50", border: "border-purple-500/70", name: "text-purple-300" },
     steven:  { bg: "bg-blue-900/50",   border: "border-blue-500/70",   name: "text-blue-300"   },
+    nico:    { bg: "bg-red-900/50",    border: "border-red-500/70",    name: "text-red-300"    },
   };
   const DEFAULT_COLOR = { bg: "bg-zinc-900/80", border: "border-zinc-800", name: "text-gray-400" };
   const colorFor = (sender: string) =>
