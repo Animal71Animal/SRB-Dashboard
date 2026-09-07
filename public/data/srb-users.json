@@ -29,13 +29,6 @@
       "mustResetPassword": true
     },
     {
-      "email": "christopherdouthit23@gmail.com",
-      "role": "DJ",
-      "name": "Stylez",
-      "password": "Operations12@",
-      "mustResetPassword": false
-    },
-    {
       "email": "meganpilote@gmail.com",
       "role": "Admin",
       "name": "Megan",
