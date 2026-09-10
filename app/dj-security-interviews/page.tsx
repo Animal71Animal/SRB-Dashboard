@@ -36,7 +36,7 @@ function toISO(d: Date): string {
 }
 
 function generateDateOptions(): { value: string; label: string }[] {
-  // Sept 1, 2026 → Dec 31, 2026, Wednesdays, Sundays, and Mondays only, past dates excluded
+  // Sept 1, 2026 → Dec 31, 2026, Mon–Fri only, past dates excluded
   const start = new Date(2026, 8, 1);
   const end = new Date(2026, 11, 31);
   const today = new Date();
@@ -46,8 +46,8 @@ function generateDateOptions(): { value: string; label: string }[] {
   const cursor = new Date(start);
   while (cursor <= end) {
     const dow = cursor.getDay();
-    // Wed (3), Sun (0), Mon (1)
-    if ((dow === 0 || dow === 1 || dow === 3) && cursor >= today) {
+    // Mon (1) – Fri (5)
+    if (dow >= 1 && dow <= 5 && cursor >= today) {
       const iso = toISO(cursor);
       options.push({ value: iso, label: formatDateLabel(iso) });
     }
@@ -171,7 +171,7 @@ export default function DJSecurityInterviewsPage() {
         <div style={{ minWidth: 0 }}>
           <h1 style={{ fontSize: "1.5rem", fontWeight: 700, margin: 0 }}>🎧 DJ/Security Interviews</h1>
           <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-            Log interviews for DJs and security — Wednesdays, Sundays &amp; Mondays, 1:00 PM – 10:00 PM
+            Log interviews for DJs and security — Mondays through Fridays, 1:00 PM – 10:00 PM
           </p>
         </div>
         <div style={{ fontSize: "0.875rem", color: "var(--muted)" }}>
@@ -222,14 +222,14 @@ export default function DJSecurityInterviewsPage() {
               onChange={(e) => setForm((p) => ({ ...p, date: e.target.value }))}
               style={{ width: "100%", marginTop: 4 }}
             >
-              <option value="">Select a Wed, Sun, or Mon</option>
+              <option value="">Select a weekday</option>
               {dateOptions.map((opt) => (
                 <option key={opt.value} value={opt.value}>{opt.label}</option>
               ))}
             </select>
             {dateOptions.length === 0 && (
               <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
-                No upcoming Wed/Sun/Mon dates in range.
+                No upcoming weekdays in range.
               </div>
             )}
           </div>
