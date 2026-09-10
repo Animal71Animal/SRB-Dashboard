@@ -1,5 +1,14 @@
 [
   {
+    "id": "asset-1789029962773",
+    "name": "Hiring Entertainers",
+    "type": "Flyer",
+    "dateCreated": "2026-09-09",
+    "description": "",
+    "link": "https://drive.google.com/file/d/16CvOqKgXcF7mSWe2x8OMZfPQgwxVD8z-/view?usp=sharing",
+    "venue": "torch1"
+  },
+  {
     "id": "asset-1787418913081",
     "name": "Torch TV",
     "type": "Flyer",
