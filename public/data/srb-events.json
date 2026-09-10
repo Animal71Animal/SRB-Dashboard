@@ -671,12 +671,6 @@
       "costuming": "",
       "flyerImage": "",
       "dates": [
-        "2026-10-02",
-        "2026-10-03",
-        "2026-10-09",
-        "2026-10-10",
-        "2026-10-16",
-        "2026-10-17",
         "2026-10-23",
         "2026-10-24",
         "2026-10-30",
@@ -803,7 +797,7 @@
         "2027-12-25",
         "2027-12-31"
       ],
-      "startDate": "2026-10-02",
+      "startDate": "2026-10-23",
       "_format_featured_entertainer": "One entertainer per weekend · Both Friday & Saturday · After Midnight Showtime · 1–2 rehearsal sessions with Animal · Fully themed, immersive show experience",
       "venue": "both"
     },
