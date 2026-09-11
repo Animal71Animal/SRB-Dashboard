@@ -39,7 +39,12 @@
       "id": "1788817105045",
       "sender": "Steven",
       "text": "Take these clubs into the fucking stratosphere. ",
-      "timestamp": "2026-09-07T21:38:25.045Z"
+      "timestamp": "2026-09-07T21:38:25.045Z",
+      "reactions": {
+        "heart": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1788818898047",
