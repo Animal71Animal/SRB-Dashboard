@@ -35,15 +35,12 @@ export default function MessagingPage() {
     return () => clearInterval(interval);
   }, []);
 
+  // Auto-scroll: on initial load or when new messages arrive, snap to bottom
   useEffect(() => {
     if (!scrollRef.current) return;
     const el = scrollRef.current;
-    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
-    isNearBottomRef.current = isNearBottom;
-
-    // Only auto-scroll if user is near bottom AND new messages arrived
     const newCount = messages.length;
-    if (isNearBottom && newCount > prevMsgCountRef.current) {
+    if (newCount > prevMsgCountRef.current || prevMsgCountRef.current === 0) {
       el.scrollTop = el.scrollHeight;
     }
     prevMsgCountRef.current = newCount;
@@ -195,8 +192,8 @@ export default function MessagingPage() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
-              rows={1}
-              className="flex-1 bg-black border border-zinc-800 rounded px-4 py-2 text-sm focus:border-red-700 outline-none transition-colors resize-none min-h-[2.5rem] max-h-[10rem] leading-relaxed"
+              rows={5}
+              className="flex-1 bg-black border border-zinc-800 rounded px-4 py-2 text-sm focus:border-red-700 outline-none transition-colors resize-none min-h-[7.5rem] max-h-[12rem] leading-relaxed"
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();
