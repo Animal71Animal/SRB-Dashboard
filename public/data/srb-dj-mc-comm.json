@@ -50,7 +50,12 @@
       "id": "1788818898047",
       "sender": "Steven",
       "text": "No worries, we'll hold it down boss. 🙏",
-      "timestamp": "2026-09-07T22:08:18.047Z"
+      "timestamp": "2026-09-07T22:08:18.047Z",
+      "reactions": {
+        "heart": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1788819256029",
