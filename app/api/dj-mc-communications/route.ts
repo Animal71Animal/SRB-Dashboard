@@ -3,10 +3,27 @@ import { safeRead, writeToGitHub } from '@/lib/github';
 
 const FILE_PATH = 'public/data/srb-dj-mc-comm.json';
 
+const TTL_DAYS = 5;
+
+function pruneOld(messages: any[]): any[] {
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - TTL_DAYS);
+  cutoff.setHours(0, 0, 0, 0);
+  return messages.filter((m: any) => {
+    const ts = m.timestamp ? new Date(m.timestamp) : null;
+    return ts && ts >= cutoff;
+  });
+}
+
 export async function GET() {
   try {
-    const { data } = await safeRead(FILE_PATH, { messages: [] });
-    return NextResponse.json(data);
+    const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
+    const pruned = pruneOld(data.messages || []);
+    // If pruning dropped messages, persist the cleaned list
+    if (pruned.length < (data.messages || []).length) {
+      await writeToGitHub(FILE_PATH, { messages: pruned }, sha, `chat: auto-prune messages older than ${TTL_DAYS} days`);
+    }
+    return NextResponse.json({ messages: pruned });
   } catch (e) {
     return NextResponse.json({ messages: [] });
   }
@@ -17,15 +34,19 @@ export async function POST(req: Request) {
     const body = await req.json();
     const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
     
+    const now = new Date();
     const newMessage = {
       id: Date.now().toString(),
       sender: body.sender,
       text: body.text,
-      timestamp: new Date().toISOString()
+      timestamp: now.toISOString(),
+      date: now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Denver' }),
+      time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'America/Denver' })
     };
     
-    // @ts-ignore
-    const updatedMessages = [...(data.messages || []), newMessage].slice(-100);
+    const all = [...(data.messages || []), newMessage];
+    const pruned = pruneOld(all);
+    const updatedMessages = pruned.slice(-100);
     const updatedData = { messages: updatedMessages };
     
     await writeToGitHub(FILE_PATH, updatedData, sha, `chat: new message from ${body.sender}`);

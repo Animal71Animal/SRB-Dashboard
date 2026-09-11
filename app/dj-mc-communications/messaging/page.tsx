@@ -106,7 +106,20 @@ export default function MessagingPage() {
                   <div className={`max-w-[85%] p-3 rounded-lg border ${c.bg} ${c.border}`}>
                     <div className={`text-[0.65rem] mb-1 flex justify-between gap-4`}>
                       <span className={`font-bold ${c.name}`}>{msg.sender}</span>
-                      <span className="text-gray-500">{new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                      <span className="text-gray-500">
+                        {msg.date && msg.time
+                          ? `${msg.date} • ${msg.time}`
+                          : new Date(msg.timestamp).toLocaleString('en-US', {
+                              month: 'short',
+                              day: 'numeric',
+                              year: 'numeric',
+                              hour: '2-digit',
+                              minute: '2-digit',
+                              hour12: true,
+                              timeZone: 'America/Denver'
+                            }).replace(',', ' •')
+                        }
+                      </span>
                     </div>
                     <div className="text-sm break-words">{msg.text}</div>
                   </div>
