@@ -12,6 +12,8 @@ export default function MessagingPage() {
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isNearBottomRef = useRef(true);
+  const prevMsgCountRef = useRef(0);
 
   useEffect(() => {
     const currentEmail = sessionStorage.getItem("srb-session-email") || "";
@@ -34,9 +36,17 @@ export default function MessagingPage() {
   }, []);
 
   useEffect(() => {
-    if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    if (!scrollRef.current) return;
+    const el = scrollRef.current;
+    const isNearBottom = el.scrollHeight - el.scrollTop - el.clientHeight < 100;
+    isNearBottomRef.current = isNearBottom;
+
+    // Only auto-scroll if user is near bottom AND new messages arrived
+    const newCount = messages.length;
+    if (isNearBottom && newCount > prevMsgCountRef.current) {
+      el.scrollTop = el.scrollHeight;
     }
+    prevMsgCountRef.current = newCount;
   }, [messages]);
 
   const fetchMessages = async () => {
