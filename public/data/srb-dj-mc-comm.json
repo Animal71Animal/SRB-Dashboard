@@ -77,6 +77,9 @@
       "reactions": {
         "thumbsup": [
           "ANIMAL"
+        ],
+        "eyes": [
+          "ANIMAL"
         ]
       }
     },
