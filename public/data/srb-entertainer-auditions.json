@@ -1,15 +1,5 @@
 [
   {
-    "id": "aud-1789091739216",
-    "entertainerName": "Wisteria",
-    "date": "2026-09-13",
-    "time": "20:00",
-    "notes": "Unattractive Nosering",
-    "venue": "Torch 2",
-    "status": "Pending",
-    "createdAt": "2026-09-11T01:55:39.216Z"
-  },
-  {
     "id": "aud-1788393032654",
     "entertainerName": "Euphoria",
     "date": "2026-09-02",
