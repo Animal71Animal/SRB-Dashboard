@@ -81,6 +81,25 @@ export default function MessagingPage() {
   // Only Admin (Eric) can delete
   const canDelete = role === "SuperAdmin";
 
+  // Available reactions
+  const REACTIONS = [
+    { emoji: "❤️", label: "heart" },
+    { emoji: "👍", label: "thumbsup" },
+    { emoji: "🔥", label: "fire" },
+    { emoji: "😂", label: "laugh" },
+    { emoji: "👀", label: "eyes" },
+  ];
+
+  const handleReaction = async (msgId: string, reaction: string) => {
+    const user = userName || email;
+    await fetch("/api/dj-mc-communications", {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id: msgId, user, reaction }),
+    });
+    fetchMessages();
+  };
+
   // Per-sender bubble colors (name match is case-insensitive)
   const SENDER_COLORS: Record<string, { bg: string; border: string; name: string }> = {
     animal:  { bg: "bg-purple-900/50", border: "border-purple-500/70", name: "text-purple-300" },
@@ -133,14 +152,36 @@ export default function MessagingPage() {
                     </div>
                     <div className="text-sm break-words">{msg.text}</div>
                   </div>
-                  {canDelete && (
-                    <button 
-                      onClick={() => handleDelete(msg.id)}
-                      className="text-[0.6rem] text-gray-600 hover:text-red-500 mt-1 transition-colors"
-                    >
-                      Delete
-                    </button>
-                  )}
+                  {/* Reactions row */}
+                  <div className="flex items-center gap-1 mt-1">
+                    {REACTIONS.map((r) => {
+                      const count = (msg.reactions?.[r.label] || []).length;
+                      const hasReacted = (msg.reactions?.[r.label] || []).includes(userName || email);
+                      return (
+                        <button
+                          key={r.label}
+                          onClick={() => handleReaction(msg.id, r.label)}
+                          className={`flex items-center gap-0.5 px-1.5 py-0.5 rounded text-xs transition-colors ${
+                            hasReacted
+                              ? 'bg-red-900/40 text-red-300 border border-red-800/50'
+                              : 'bg-black/40 text-gray-500 border border-zinc-800 hover:bg-zinc-800/60 hover:text-gray-300'
+                          }`}
+                          title={r.label}
+                        >
+                          <span>{r.emoji}</span>
+                          {count > 0 && <span className="text-[0.65rem]">{count}</span>}
+                        </button>
+                      );
+                    })}
+                    {canDelete && (
+                      <button 
+                        onClick={() => handleDelete(msg.id)}
+                        className="text-[0.6rem] text-gray-600 hover:text-red-500 ml-2 transition-colors"
+                      >
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
               );
             })

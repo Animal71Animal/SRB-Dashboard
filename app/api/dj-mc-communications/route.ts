@@ -76,3 +76,33 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ ok: false }, { status: 500 });
   }
 }
+
+// PATCH /api/dj-mc-communications — toggle a reaction on a message
+export async function PATCH(req: Request) {
+  try {
+    const body = await req.json();
+    const { id, user, reaction } = body;
+    const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
+
+    const updatedMessages = (data.messages || []).map((m: any) => {
+      if (m.id !== id) return m;
+      const reactions = m.reactions || {};
+      const users = reactions[reaction] || [];
+      const idx = users.indexOf(user);
+      if (idx >= 0) {
+        users.splice(idx, 1); // remove
+        if (users.length === 0) delete reactions[reaction];
+      } else {
+        users.push(user); // add
+        reactions[reaction] = users;
+      }
+      return { ...m, reactions };
+    });
+
+    await writeToGitHub(FILE_PATH, { messages: updatedMessages }, sha, `chat: reaction ${reaction} by ${user}`);
+    return NextResponse.json({ ok: true });
+  } catch (e) {
+    console.error('[messaging api] PATCH failed:', e);
+    return NextResponse.json({ ok: false, error: "Failed to update reaction" }, { status: 500 });
+  }
+}
