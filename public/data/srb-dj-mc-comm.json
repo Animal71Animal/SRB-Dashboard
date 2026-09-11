@@ -73,7 +73,12 @@
       "id": "1788823318040",
       "sender": "Star",
       "text": "Much easier to read on Computer, phone screen was a nightmare ",
-      "timestamp": "2026-09-07T23:21:58.040Z"
+      "timestamp": "2026-09-07T23:21:58.040Z",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1788823396949",
