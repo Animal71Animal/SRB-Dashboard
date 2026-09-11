@@ -191,12 +191,18 @@ export default function MessagingPage() {
         {/* Input Area */}
         <div className="bg-zinc-900/90 border-t border-red-900/30 p-4 rounded-b-xl">
           <form onSubmit={handleSend} className="flex gap-3">
-            <input 
-              type="text" 
+            <textarea
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 bg-black border border-zinc-800 rounded px-4 py-2 text-sm focus:border-red-700 outline-none transition-colors"
+              rows={1}
+              className="flex-1 bg-black border border-zinc-800 rounded px-4 py-2 text-sm focus:border-red-700 outline-none transition-colors resize-none min-h-[2.5rem] max-h-[10rem] leading-relaxed"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend(e);
+                }
+              }}
             />
             <button 
               type="submit" 
