@@ -3,6 +3,7 @@ import "./globals.css";
 import RootLayoutWrapper from "@/components/RootLayoutWrapper";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import VenueSwitcher from "@/components/VenueSwitcher";
+import PanicWatcher from "@/components/PanicWatcher";
 
 export const metadata: Metadata = {
   title: "The Torch Operations Center",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body style={{ display: "flex", minHeight: "100vh" }}>
         <AnimatedBackground />
+        <PanicWatcher />
         <RootLayoutWrapper />
         <VenueSwitcher />
         <main
