@@ -1,5 +1,5 @@
 export const metadata = {
-  title: "Director Admin Panel",
+  title: "Ignite App",
 };
 
 export default function DirectorAdminPage() {
@@ -16,7 +16,7 @@ export default function DirectorAdminPage() {
             lineHeight: 1.1,
           }}
         >
-          Director Admin Panel
+          Ignite App
         </h1>
         <div style={{ color: "#451a03", fontSize: "0.9rem", fontWeight: 500, marginTop: 6 }}>
           Ignite — booth, review queue, feed &amp; more
@@ -35,7 +35,7 @@ export default function DirectorAdminPage() {
       >
         <iframe
           src="https://ignite.abacusai.cloud"
-          title="Ignite Director Admin Panel"
+          title="Ignite App"
           allow="clipboard-write; fullscreen; web-share"
           style={{ width: "100%", height: "82vh", border: 0, display: "block" }}
         />
