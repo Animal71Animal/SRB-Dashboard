@@ -104,6 +104,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     acc[group] = modules.filter((m) => {
       // /builder (Permissions) requires the "builder" special permission — SuperAdmin only
       if (m.href === "/builder") return m.group === group && hasPermission(role, "special", "builder");
+      // /director-admin requires the "director-admin" special permission — Admin & SuperAdmin only
+      if (m.href === "/director-admin") return m.group === group && hasPermission(role, "special", "director-admin");
       return m.group === group && hasPermission(role, "view", m.href);
     });
     return acc;

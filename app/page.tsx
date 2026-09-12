@@ -147,6 +147,8 @@ export default function OverviewPage() {
         {modules.filter(m => {
           // /builder (Permissions) requires the "builder" special permission — SuperAdmin only
           if (m.href === "/builder") return hasPermission(role, "special", "builder");
+          // /director-admin requires the "director-admin" special permission — Admin & SuperAdmin only
+          if (m.href === "/director-admin") return hasPermission(role, "special", "director-admin");
           return hasPermission(role, "view", m.href);
         }).map((m) => (
           <div key={m.href} onClick={() => {

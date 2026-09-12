@@ -16,12 +16,12 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
   SuperAdmin: {
     view: ["*"],
     edit: ["*"],
-    special: ["admin-console", "builder", "role-preview"]
+    special: ["admin-console", "builder", "role-preview", "director-admin"]
   },
   Admin: {
     view: ["*"],
     edit: ["*"],
-    special: ["admin-console"]
+    special: ["admin-console", "director-admin"]
   },
   Manager: {
     view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling"],
