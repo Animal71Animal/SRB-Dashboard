@@ -43,13 +43,6 @@
       "mustResetPassword": false
     },
     {
-      "email": "nola04@gmail.com",
-      "role": "Admin",
-      "name": "Dave",
-      "password": "nola04@gmail.com",
-      "mustResetPassword": true
-    },
-    {
       "email": "talonreeves3@gmail.com",
       "role": "DJ",
       "name": "Star",
