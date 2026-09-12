@@ -1,4 +1,4 @@
-export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc";
+export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc" | "ignite";
 
 export interface Module {
   href: string;
@@ -15,7 +15,6 @@ export const modules: Module[] = [
   { href: "/analytics", icon: "📊", title: "Analytics", desc: "Data, tracking & internal ops tools.", group: "administrative" },
   { href: "/entertainer-auditions", icon: "🎤", title: "Entertainer Auditions", desc: "Log auditions for entertainers — Sundays & Mondays, 8 PM – 10:30 PM.", group: "administrative" },
   { href: "/dj-security-interviews", icon: "🎧", title: "DJ/Security Interviews", desc: "Log interviews for DJs and security — Wed/Sun/Mon, 8 PM – 10:30 PM.", group: "administrative" },
-  { href: "/director-admin", icon: "🔥", title: "Ignite App", desc: "Ignite — booth, review queue, feed & more.", group: "administrative" },
   // Events & Promotions
   { href: "/events", icon: "📅", title: "Event Calendar", desc: "Upcoming Torch events by date.", group: "promotions" },
   { href: "/promotional-ideas", icon: "💡", title: "Promotional Ideas", desc: "Marketing strategies and promotional concepts.", group: "promotions" },
@@ -38,6 +37,10 @@ export const modules: Module[] = [
     { href: "/dj-mc-communications/equipment-reports", icon: "🛠️", title: "Equipment Reports", desc: "Maintenance logs.", group: "djmc" },
     { href: "/dj-mc-communications/passwords", icon: "🔑", title: "Passwords", desc: "Credential Vault.", group: "djmc" },
   ] },
+  // Ignite App — standalone top-level tab (own group, no sub-tabs) rendered
+  // directly below DJ/MC Communications in the sidebar. Access stays gated by the
+  // "director-admin" special permission (Admin & SuperAdmin) in lib/auth/roles.ts.
+  { href: "/director-admin", icon: "🔥", title: "Ignite App", desc: "Ignite — booth, review queue, feed & more.", group: "ignite" },
   { href: "/logged-hours", icon: "⏱️", title: "ANiMAL's Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
 ];
 
@@ -47,6 +50,9 @@ export const groupLabels: Record<ModuleGroup, string> = {
   social: "Social & Influencers",
   operations: "Operations",
   djmc: "DJ/MC Communications",
+  ignite: "Ignite App",
 };
 
-export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc"];
+// "ignite" sits immediately after "djmc" so the standalone Ignite App tab
+// renders directly below the DJ/MC Communications tab in the sidebar.
+export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc", "ignite"];

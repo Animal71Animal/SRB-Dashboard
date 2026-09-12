@@ -32,7 +32,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   // to restore prior-session state — every new instance must look the same regardless
   // of who was here before.
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
-    administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false,
+    administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false, ignite: false,
   });
   const [djMcExpanded, setDjMcExpanded] = useState(false);
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
@@ -219,7 +219,30 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           </Link>
 
           {/* Groups */}
-          {visibleGroups.map((group) => (
+          {visibleGroups.map((group) => {
+            // Ignite App: standalone top-level tab — a plain clickable link with
+            // no accordion header and no sub-tabs. Rendered in its own group so it
+            // sits directly below DJ/MC Communications (see groupOrder in modules.ts).
+            if (group === "ignite") {
+              const item = allowedGroupedModules[group]?.[0];
+              if (!item) return null;
+              const active = pathname === item.href;
+              return (
+                <Link key={group} href={item.href} onClick={() => setMobileOpen(false)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 10,
+                    padding: "9px 20px", fontSize: "0.875rem", marginTop: 16,
+                    color: active ? "var(--accent2)" : "var(--text)",
+                    background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                    borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                    textDecoration: "none", transition: "all 0.15s",
+                  }}>
+                  <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                  {item.title}
+                </Link>
+              );
+            }
+            return (
             <div key={group} style={{ marginTop: 16 }}>
               <button onClick={() => toggleGroup(group)}
                 style={{
@@ -376,7 +399,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                 })}
               </div>
             </div>
-          ))}
+            );
+          })}
         </nav>
 
         {/* Role Preview - Admin Only Tool */}
