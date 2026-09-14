@@ -38,7 +38,8 @@ export default function TVRoutingPage() {
       if (exists) {
         return prev.filter(r => !(r.sourceId === srcId && r.outputId === outId));
       }
-      return [...prev, { sourceId: srcId, outputId: outId }];
+      // Each output may have only one input; replace its current route.
+      return [...prev.filter(r => r.outputId !== outId), { sourceId: srcId, outputId: outId }];
     });
   };
 
@@ -52,7 +53,7 @@ export default function TVRoutingPage() {
       <div className="toc-header" style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: "clamp(1.25rem, 5vw, 1.5rem)", fontWeight: 700, margin: 0 }}>📡 TV Routing</h1>
         <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-          4×4 matrix — tap any cell to route. One source can feed multiple outputs.
+          4×4 matrix — tap any cell to route. Each output can receive one input at a time.
         </p>
       </div>
 
