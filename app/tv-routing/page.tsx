@@ -2,12 +2,9 @@
 
 import { useState } from "react";
 
-interface Channel {
-  id: string;
-  name: string;
-  source: string;
-  output: string | null;
-  color: string;
+interface Route {
+  sourceId: string;
+  outputId: string;
 }
 
 const SOURCES = [
@@ -25,17 +22,29 @@ const OUTPUTS = [
 ];
 
 export default function TVRoutingPage() {
-  const [channels, setChannels] = useState<Channel[]>([
-    { id: "ch-1", name: "Channel 1", source: "src-1", output: "out-1", color: "#8b5cf6" },
-    { id: "ch-2", name: "Channel 2", source: "src-2", output: "out-2", color: "#3b82f6" },
-    { id: "ch-3", name: "Channel 3", source: "src-3", output: "out-3", color: "#10b981" },
-    { id: "ch-4", name: "Channel 4", source: "src-4", output: "out-4", color: "#f59e0b" },
+  const [routes, setRoutes] = useState<Route[]>([
+    { sourceId: "src-1", outputId: "out-1" },
+    { sourceId: "src-2", outputId: "out-2" },
+    { sourceId: "src-3", outputId: "out-3" },
+    { sourceId: "src-4", outputId: "out-4" },
   ]);
 
-  const setOutput = (chId: string, outId: string | null) => {
-    setChannels(prev => prev.map(ch =>
-      ch.id === chId ? { ...ch, output: outId } : ch
-    ));
+  const isActive = (srcId: string, outId: string) =>
+    routes.some(r => r.sourceId === srcId && r.outputId === outId);
+
+  const toggle = (srcId: string, outId: string) => {
+    setRoutes(prev => {
+      const exists = prev.some(r => r.sourceId === srcId && r.outputId === outId);
+      if (exists) {
+        return prev.filter(r => !(r.sourceId === srcId && r.outputId === outId));
+      }
+      return [...prev, { sourceId: srcId, outputId: outId }];
+    });
+  };
+
+  const activeSourceForOutput = (outId: string) => {
+    const r = routes.find(route => route.outputId === outId);
+    return r ? SOURCES.find(s => s.id === r.sourceId) : null;
   };
 
   return (
@@ -43,17 +52,52 @@ export default function TVRoutingPage() {
       <div className="toc-header" style={{ marginBottom: 24 }}>
         <h1 style={{ fontSize: "clamp(1.25rem, 5vw, 1.5rem)", fontWeight: 700, margin: 0 }}>📡 TV Routing</h1>
         <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-          4×4 matrix — tap any cell to route
+          4×4 matrix — tap any cell to route. One source can feed multiple outputs.
         </p>
       </div>
 
-      {/* Input / Output Reference — stacked on mobile, side-by-side on desktop */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, marginBottom: 20 }}>
+      {/* Output Status Bar — shows what's on each screen right now */}
+      <div style={{
+        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
+        padding: "14px 16px", marginBottom: 16
+      }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+          {OUTPUTS.map(out => {
+            const src = activeSourceForOutput(out.id);
+            return (
+              <div key={out.id} style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "8px 10px", borderRadius: 8,
+                background: src ? `${src.color}15` : "transparent",
+                border: src ? `1px solid ${src.color}40` : "1px dashed var(--border)",
+              }}>
+                <div style={{
+                  width: 10, height: 10, borderRadius: "50%",
+                  background: src ? src.color : "var(--border)",
+                  boxShadow: src ? `0 0 6px ${src.color}60` : "none",
+                  flexShrink: 0
+                }} />
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: "0.75rem", fontWeight: 600, color: out.color, lineHeight: 1.2 }}>
+                    {out.label}
+                  </div>
+                  <div style={{ fontSize: "0.7rem", color: src ? src.color : "var(--muted)", lineHeight: 1.2, marginTop: 2 }}>
+                    {src ? src.label : "No signal"}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Input / Output Reference */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, marginBottom: 16 }}>
         <div style={{
           background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-          padding: "16px 20px"
+          padding: "14px 16px"
         }}>
-          <h3 style={{ margin: "0 0 12px", fontSize: "0.9rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Inputs</h3>
+          <h3 style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Inputs</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {SOURCES.map((src, i) => (
               <div key={src.id} style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -74,9 +118,9 @@ export default function TVRoutingPage() {
 
         <div style={{
           background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-          padding: "16px 20px"
+          padding: "14px 16px"
         }}>
-          <h3 style={{ margin: "0 0 12px", fontSize: "0.9rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Outputs</h3>
+          <h3 style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Outputs</h3>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
             {OUTPUTS.map((out, i) => (
               <div key={out.id} style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -96,20 +140,20 @@ export default function TVRoutingPage() {
         </div>
       </div>
 
-      {/* Matrix — full-width scrollable on mobile */}
+      {/* Matrix — 1:N routing, any source to any output */}
       <div style={{
         background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-        padding: "16px 12px", overflowX: "auto"
+        padding: "14px 10px", overflowX: "auto"
       }}>
-        <h3 style={{ margin: "0 0 12px 4px", fontSize: "0.9rem" }}>Live Routing Matrix</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(72px, 1fr))", gap: 6, minWidth: 360 }}>
+        <h3 style={{ margin: "0 0 10px 4px", fontSize: "0.9rem" }}>Live Routing Matrix</h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(68px, 1fr))", gap: 5, minWidth: 340 }}>
           {/* Header row */}
-          <div style={{ fontWeight: 700, fontSize: "0.65rem", color: "var(--muted)", textTransform: "uppercase", padding: "6px 2px" }}>Src \ Out</div>
+          <div style={{ fontWeight: 700, fontSize: "0.6rem", color: "var(--muted)", textTransform: "uppercase", padding: "4px 2px" }}>Src \ Out</div>
           {OUTPUTS.map(out => (
             <div key={out.id} style={{
-              fontWeight: 700, fontSize: "0.7rem", padding: "6px 2px",
+              fontWeight: 700, fontSize: "0.65rem", padding: "4px 2px",
               textAlign: "center", borderBottom: `2px solid ${out.color}`, color: out.color,
-              lineHeight: 1.2, minHeight: 36, display: "flex", alignItems: "center", justifyContent: "center"
+              lineHeight: 1.2, minHeight: 32, display: "flex", alignItems: "center", justifyContent: "center"
             }}>
               {out.label}
             </div>
@@ -119,32 +163,29 @@ export default function TVRoutingPage() {
           {SOURCES.map(src => (
             <>
               <div key={`row-${src.id}`} style={{
-                fontWeight: 600, fontSize: "0.75rem", padding: "8px 2px",
-                display: "flex", alignItems: "center", gap: 6,
+                fontWeight: 600, fontSize: "0.7rem", padding: "6px 2px",
+                display: "flex", alignItems: "center", gap: 4,
                 borderRight: `2px solid ${src.color}`, color: src.color,
                 lineHeight: 1.2
               }}>
                 {src.label}
               </div>
               {OUTPUTS.map(out => {
-                const active = channels.some(ch => ch.source === src.id && ch.output === out.id);
+                const active = isActive(src.id, out.id);
                 return (
                   <div key={`cell-${src.id}-${out.id}`} style={{
-                    padding: 8, display: "flex", alignItems: "center", justifyContent: "center",
-                    background: active ? `${src.color}25` : "transparent",
+                    padding: 6, display: "flex", alignItems: "center", justifyContent: "center",
+                    background: active ? `${src.color}30` : "transparent",
                     border: active ? `2px solid ${src.color}` : "1px dashed var(--border)",
                     borderRadius: 6, cursor: "pointer", transition: "all 0.15s",
-                    minHeight: 40,
+                    minHeight: 36,
                   }}
-                    onClick={() => {
-                      const ch = channels.find(c => c.source === src.id);
-                      if (ch) setOutput(ch.id, active ? null : out.id);
-                    }}
+                    onClick={() => toggle(src.id, out.id)}
                   >
                     {active ? (
-                      <span style={{ fontSize: "1rem" }}>🔗</span>
+                      <span style={{ fontSize: "0.9rem" }}>🔗</span>
                     ) : (
-                      <span style={{ fontSize: "1rem", opacity: 0.3 }}>○</span>
+                      <span style={{ fontSize: "0.9rem", opacity: 0.3 }}>○</span>
                     )}
                   </div>
                 );
@@ -152,8 +193,8 @@ export default function TVRoutingPage() {
             </>
           ))}
         </div>
-        <div style={{ marginTop: 10, fontSize: "0.7rem", color: "var(--muted)", paddingLeft: 4 }}>
-          Tap cell to toggle. 🔗 = on, ○ = off.
+        <div style={{ marginTop: 8, fontSize: "0.7rem", color: "var(--muted)", paddingLeft: 4 }}>
+          Tap cell to toggle. One source can feed multiple outputs. 🔗 = on, ○ = off.
         </div>
       </div>
     </div>
