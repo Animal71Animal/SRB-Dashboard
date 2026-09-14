@@ -12,7 +12,12 @@ export interface Module {
 export const modules: Module[] = [
   // Administrative
   { href: "/builder", icon: "🛡️", title: "Permissions", desc: "Manage staff emails and role-based permissions.", group: "administrative" },
-  { href: "/analytics", icon: "📊", title: "Analytics", desc: "Data, tracking & internal ops tools.", group: "administrative" },
+  { href: "/analytics", icon: "📊", title: "Analytics", desc: "Data, tracking & internal ops tools.", group: "administrative", children: [
+    { href: "/attendance", icon: "👥", title: "Attendance Tracker", desc: "Track staff attendance.", group: "administrative" },
+    { href: "/campaign-analytics", icon: "📊", title: "Campaign Analytics", desc: "Campaign performance metrics.", group: "administrative" },
+    { href: "/comp-codes", icon: "🎟️", title: "Comp Codes", desc: "Complimentary entry codes.", group: "administrative" },
+    { href: "/staff-notes", icon: "📝", title: "Staff Notes", desc: "Internal staff notes.", group: "administrative" },
+  ]},
   { href: "/entertainer-auditions", icon: "🎤", title: "Entertainer Auditions", desc: "Log auditions for entertainers — Sundays & Mondays, 8 PM – 10:30 PM.", group: "administrative" },
   { href: "/dj-security-interviews", icon: "🎧", title: "DJ/Security Interviews", desc: "Log interviews for DJs and security — Wed/Sun/Mon, 8 PM – 10:30 PM.", group: "administrative" },
   // Events & Promotions
@@ -22,13 +27,17 @@ export const modules: Module[] = [
   { href: "/feature-shows", icon: "🎭", title: "Feature Shows", desc: "Themed experiences and special-event portals for The Torch.", group: "promotions" },
   { href: "/content-assets", icon: "🎨", title: "Content Assets", desc: "Flyer archive and asset links.", group: "promotions" },
   // Social & Influencers
-  { href: "/influencers", icon: "⭐", title: "Influencers", desc: "Influencer database with stats.", group: "social" },
+  { href: "/influencers", icon: "⭐", title: "Influencers", desc: "Influencer database with stats.", group: "social", children: [
+    { href: "/influencers/master-list", icon: "📋", title: "Master List", desc: "Full influencer roster.", group: "social" },
+    { href: "/influencers/outreach-templates", icon: "📧", title: "Outreach Templates", desc: "DM and email templates.", group: "social" },
+    { href: "/influencers/tracking-dashboard", icon: "📈", title: "Tracking Dashboard", desc: "Partnership progress tracker.", group: "social" },
+    { href: "/influencers/weekly-report", icon: "📄", title: "Weekly Report", desc: "Weekly influencer summary.", group: "social" },
+  ]},
   // Operations
   { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
   { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
   // DJ/MC Communications — promoted to its own top-level group so DJs/MCs see
-  // it as a standalone tab rather than buried under Operations. Sub-tabs are
-  // still hardcoded in components/Sidebar.tsx (keyed off item.href).
+  // it as a standalone tab rather than buried under Operations.
   { href: "/dj-mc-communications/messaging", icon: "💬", title: "Messaging", desc: "Internal board for staff updates.", group: "djmc" },
   { href: "/dj-mc-communications/schedules", icon: "📅", title: "Schedules", desc: "View upcoming shift rotations.", group: "djmc" },
   { href: "/dj-mc-communications/promotional-materials", icon: "📣", title: "Promotional Materials", desc: "Standardized marketing feeds.", group: "djmc" },

@@ -6,6 +6,34 @@ import { useVenue } from "@/components/VenueSwitcher";
 import { modules } from "./data/modules";
 import { type Role, hasPermission, resolveClientRole } from "@/lib/auth/roles";
 
+function SubModuleCard({ href, icon, title, desc }: { href: string; icon: string; title: string; desc: string }) {
+  return (
+    <Link href={href} style={{ textDecoration: "none" }}>
+      <div style={{
+        background: "var(--card)",
+        border: "1px solid var(--border)",
+        borderRadius: 8,
+        padding: "12px 16px",
+        cursor: "pointer",
+        transition: "border-color 0.15s, background 0.15s",
+        minHeight: 80,
+      }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--accent)";
+          (e.currentTarget as HTMLDivElement).style.background = "rgba(201,0,43,0.07)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)";
+          (e.currentTarget as HTMLDivElement).style.background = "var(--card)";
+        }}>
+        <div style={{ fontSize: "1.2rem", marginBottom: 4 }}>{icon}</div>
+        <div style={{ fontSize: "0.8rem", fontWeight: 600, marginBottom: 2 }}>{title}</div>
+        <div style={{ fontSize: "0.7rem", color: "var(--muted)" }}>{desc}</div>
+      </div>
+    </Link>
+  );
+}
+
 const CARD = {
   background: "var(--card)",
   border: "1px solid var(--border)",
@@ -139,7 +167,7 @@ export default function OverviewPage() {
         </div>
       )}
 
-      {/* Module Grid */}
+      {/* Module Grid — only top-level tabs that appear in sidebar */}
       <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
         Quick Access
       </h2>
@@ -150,15 +178,25 @@ export default function OverviewPage() {
           // /director-admin requires the "director-admin" special permission — Admin & SuperAdmin only
           if (m.href === "/director-admin") return hasPermission(role, "special", "director-admin");
           return hasPermission(role, "view", m.href);
-        }).map((m) => (
-          <div key={m.href} onClick={() => {
-            if (m.href === "/dj-mc-communications") {
-              window.dispatchEvent(new CustomEvent("expand-dj-mc"));
-            }
-          }}>
-            <ModuleCard href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
-          </div>
-        ))}
+        }).map((m) => {
+          const [expanded, setExpanded] = useState(false);
+          const hasChildren = m.children && m.children.length > 0;
+          const childModules = m.children?.filter(c => hasPermission(role, "view", c.href)) || [];
+          return (
+            <div key={m.href}>
+              <div onClick={() => hasChildren ? setExpanded(!expanded) : undefined} style={{ cursor: hasChildren ? "pointer" : "default" }}>
+                <ModuleCard href={hasChildren ? "#" : m.href} icon={m.icon} title={m.title} desc={m.desc} />
+              </div>
+              {expanded && childModules.length > 0 && (
+                <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12, marginTop: 12 }}>
+                  {childModules.map(c => (
+                    <SubModuleCard key={c.href} href={c.href} icon={c.icon} title={c.title} desc={c.desc} />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );
