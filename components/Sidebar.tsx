@@ -327,8 +327,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                 })}
               </div>
             </div>
-            );
-          })}
+          ))}
         </nav>
 
         {/* Role Preview - Admin Only Tool */}
