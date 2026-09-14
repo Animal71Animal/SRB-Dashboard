@@ -11,17 +11,17 @@ interface Channel {
 }
 
 const SOURCES = [
-  { id: "src-1", label: "🎵 DJ Booth", color: "#8b5cf6" },
-  { id: "src-2", label: "📺 Cable TV", color: "#3b82f6" },
-  { id: "src-3", label: "🎬 Media Player", color: "#10b981" },
-  { id: "src-4", label: "📹 Security Cam", color: "#f59e0b" },
+  { id: "src-1", label: "DirecTV 1", color: "#8b5cf6" },
+  { id: "src-2", label: "DirecTV 2", color: "#3b82f6" },
+  { id: "src-3", label: "Music Videos", color: "#10b981" },
+  { id: "src-4", label: "TorchTV", color: "#f59e0b" },
 ];
 
 const OUTPUTS = [
-  { id: "out-1", label: "Main Bar TV", color: "#ef4444" },
-  { id: "out-2", label: "VIP Lounge TV", color: "#ec4899" },
-  { id: "out-3", label: "Stage Monitor", color: "#f97316" },
-  { id: "out-4", label: "Lobby Display", color: "#06b6d4" },
+  { id: "out-1", label: "Main Bar L", color: "#ef4444" },
+  { id: "out-2", label: "Main Bar R", color: "#ec4899" },
+  { id: "out-3", label: "DJ Booth", color: "#f97316" },
+  { id: "out-4", label: "Far Room", color: "#06b6d4" },
 ];
 
 export default function TVRoutingPage() {
