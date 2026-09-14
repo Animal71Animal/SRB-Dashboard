@@ -15,10 +15,10 @@ const SOURCES = [
 ];
 
 const OUTPUTS = [
-  { id: "out-1", label: "A", color: "#ef4444" },
-  { id: "out-2", label: "B", color: "#ec4899" },
-  { id: "out-3", label: "C", color: "#f97316" },
-  { id: "out-4", label: "D", color: "#06b6d4" },
+  { id: "out-1", label: "Main Bar L", color: "#ef4444" },
+  { id: "out-2", label: "Main Bar R", color: "#ec4899" },
+  { id: "out-3", label: "DJ Booth", color: "#f97316" },
+  { id: "out-4", label: "Pool Table", color: "#06b6d4" },
 ];
 
 export default function TVRoutingPage() {
@@ -129,7 +129,7 @@ export default function TVRoutingPage() {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "0.7rem", fontWeight: 700, color: "#fff", flexShrink: 0
                 }}>
-                  {i + 1}
+                  {String.fromCharCode(65 + i)}
                 </div>
                 <div style={{ fontWeight: 600, fontSize: "0.85rem", color: out.color, lineHeight: 1.2 }}>
                   {out.label}
