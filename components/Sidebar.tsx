@@ -32,7 +32,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   // restore prior-session state — every new instance must look the same regardless
   // of who was here before.
   const [expandedGroups, setExpandedGroups] = useState<Record<ModuleGroup, boolean>>({
-    administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false,
+    administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false, tvrouting: false,
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
 

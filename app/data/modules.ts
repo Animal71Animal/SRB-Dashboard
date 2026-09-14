@@ -1,4 +1,4 @@
-export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc";
+export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc" | "tvrouting";
 
 export interface Module {
   href: string;
@@ -10,6 +10,9 @@ export interface Module {
 }
 
 export const groupModules: Record<ModuleGroup, Module[]> = {
+  tvrouting: [
+    { href: "/tv-routing", icon: "📡", title: "TV Routing", desc: "Manage TV signal routing and source switching.", group: "tvrouting" },
+  ],
   administrative: [
     { href: "/builder", icon: "🛡️", title: "Permissions", desc: "Manage staff emails and role-based permissions.", group: "administrative" },
     { href: "/analytics", icon: "📊", title: "Analytics", desc: "Data, tracking & internal ops tools.", group: "administrative" },
@@ -65,6 +68,7 @@ export const modules: Module[] = [
   ...groupModules.social,
   ...groupModules.operations,
   ...groupModules.djmc,
+  ...groupModules.tvrouting,
 ];
 
 export const groupLabels: Record<ModuleGroup, string> = {
@@ -73,7 +77,7 @@ export const groupLabels: Record<ModuleGroup, string> = {
   social: "Social & Influencers",
   operations: "Operations",
   djmc: "DJ/MC Communications",
-
+  tvrouting: "TV Routing",
 };
 
-export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc"];
+export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc", "tvrouting"];
