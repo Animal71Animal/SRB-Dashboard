@@ -179,15 +179,12 @@ export default function OverviewPage() {
           if (m.href === "/director-admin") return hasPermission(role, "special", "director-admin");
           return hasPermission(role, "view", m.href);
         }).map((m) => {
-          const [expanded, setExpanded] = useState(false);
           const hasChildren = m.children && m.children.length > 0;
           const childModules = m.children?.filter(c => hasPermission(role, "view", c.href)) || [];
           return (
             <div key={m.href}>
-              <div onClick={() => hasChildren ? setExpanded(!expanded) : undefined} style={{ cursor: hasChildren ? "pointer" : "default" }}>
-                <ModuleCard href={hasChildren ? "#" : m.href} icon={m.icon} title={m.title} desc={m.desc} />
-              </div>
-              {expanded && childModules.length > 0 && (
+              <ModuleCard href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
+              {hasChildren && childModules.length > 0 && (
                 <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12, marginTop: 12 }}>
                   {childModules.map(c => (
                     <SubModuleCard key={c.href} href={c.href} icon={c.icon} title={c.title} desc={c.desc} />
