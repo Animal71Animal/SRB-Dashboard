@@ -1,4 +1,4 @@
-export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc" | "ignite";
+export type ModuleGroup = "administrative" | "promotions" | "social" | "operations" | "djmc";
 
 export interface Module {
   href: string;
@@ -38,9 +38,7 @@ export const groupModules: Record<ModuleGroup, Module[]> = {
     { href: "/dj-mc-communications/stage-announcement-ideas", icon: "🎙️", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcements.", group: "djmc" },
     { href: "/dj-mc-communications/equipment-reports", icon: "🛠️", title: "Equipment Reports", desc: "Maintenance logs.", group: "djmc" },
     { href: "/dj-mc-communications/passwords", icon: "🔑", title: "Passwords", desc: "Credential Vault.", group: "djmc" },
-  ],
-  ignite: [
-    { href: "/director-admin", icon: "🔥", title: "Ignite App", desc: "Ignite — booth, review queue, feed & more.", group: "ignite" },
+    { href: "/director-admin", icon: "🔥", title: "Ignite App", desc: "Ignite — booth, review queue, feed & more.", group: "djmc" },
   ],
 };
 
@@ -67,7 +65,6 @@ export const modules: Module[] = [
   ...groupModules.social,
   ...groupModules.operations,
   ...groupModules.djmc,
-  ...groupModules.ignite,
 ];
 
 export const groupLabels: Record<ModuleGroup, string> = {
@@ -76,9 +73,7 @@ export const groupLabels: Record<ModuleGroup, string> = {
   social: "Social & Influencers",
   operations: "Operations",
   djmc: "DJ/MC Communications",
-  ignite: "Ignite App",
+
 };
 
-// "ignite" sits immediately after "djmc" so the standalone Ignite App tab
-// renders directly below the DJ/MC Communications tab in the sidebar.
-export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc", "ignite"];
+export const groupOrder: ModuleGroup[] = ["administrative", "promotions", "social", "operations", "djmc"];
