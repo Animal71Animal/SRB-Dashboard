@@ -3,8 +3,50 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useVenue } from "@/components/VenueSwitcher";
-import { modules } from "./data/modules";
+import { groupModules, groupLabels, groupOrder, type ModuleGroup, subTabs } from "./data/modules";
 import { type Role, hasPermission, resolveClientRole } from "@/lib/auth/roles";
+
+const CARD = {
+  background: "var(--card)",
+  border: "1px solid var(--border)",
+  borderRadius: 12,
+  padding: "20px 24px",
+};
+
+function KpiCard({ label, value, icon }: { label: string; value: string | number; icon: string }) {
+  return (
+    <div style={{ ...CARD, display: "flex", alignItems: "center", gap: 16 }}>
+      <div style={{ fontSize: "2rem" }}>{icon}</div>
+      <div>
+        <div style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--accent2)", lineHeight: 1 }}>{value}</div>
+        <div style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: 4 }}>{label}</div>
+      </div>
+    </div>
+  );
+}
+
+function ModuleCard({ href, icon, title, desc, onClick }: { href: string; icon: string; title: string; desc: string; onClick?: () => void }) {
+  return (
+    <Link href={href} style={{ textDecoration: "none" }} onClick={onClick}>
+      <div style={{
+        ...CARD, cursor: "pointer", transition: "border-color 0.15s, background 0.15s",
+        minHeight: 100,
+      }}
+        onMouseEnter={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--accent)";
+          (e.currentTarget as HTMLDivElement).style.background = "rgba(201,0,43,0.07)";
+        }}
+        onMouseLeave={(e) => {
+          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)";
+          (e.currentTarget as HTMLDivElement).style.background = "var(--card)";
+        }}>
+        <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>{icon}</div>
+        <div style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: 4 }}>{title}</div>
+        <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>{desc}</div>
+      </div>
+    </Link>
+  );
+}
 
 function SubModuleCard({ href, icon, title, desc }: { href: string; icon: string; title: string; desc: string }) {
   return (
@@ -34,48 +76,6 @@ function SubModuleCard({ href, icon, title, desc }: { href: string; icon: string
   );
 }
 
-const CARD = {
-  background: "var(--card)",
-  border: "1px solid var(--border)",
-  borderRadius: 12,
-  padding: "20px 24px",
-};
-
-function KpiCard({ label, value, icon }: { label: string; value: string | number; icon: string }) {
-  return (
-    <div style={{ ...CARD, display: "flex", alignItems: "center", gap: 16 }}>
-      <div style={{ fontSize: "2rem" }}>{icon}</div>
-      <div>
-        <div style={{ fontSize: "1.75rem", fontWeight: 700, color: "var(--accent2)", lineHeight: 1 }}>{value}</div>
-        <div style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: 4 }}>{label}</div>
-      </div>
-    </div>
-  );
-}
-
-function ModuleCard({ href, icon, title, desc }: { href: string; icon: string; title: string; desc: string }) {
-  return (
-    <Link href={href} style={{ textDecoration: "none" }}>
-      <div style={{
-        ...CARD, cursor: "pointer", transition: "border-color 0.15s, background 0.15s",
-        minHeight: 100,
-      }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--accent)";
-          (e.currentTarget as HTMLDivElement).style.background = "rgba(201,0,43,0.07)";
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLDivElement).style.borderColor = "var(--border)";
-          (e.currentTarget as HTMLDivElement).style.background = "var(--card)";
-        }}>
-        <div style={{ fontSize: "1.5rem", marginBottom: 8 }}>{icon}</div>
-        <div style={{ fontSize: "0.9rem", fontWeight: 600, marginBottom: 4 }}>{title}</div>
-        <div style={{ fontSize: "0.8rem", color: "var(--muted)" }}>{desc}</div>
-      </div>
-    </Link>
-  );
-}
-
 export default function OverviewPage() {
   const [role, setRole] = useState<Role>("Employee");
   const [events, setEvents] = useState<any[]>([]);
@@ -83,6 +83,7 @@ export default function OverviewPage() {
   const [influencers, setInfluencers] = useState<any[]>([]);
   const [socialPosts, setSocialPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [activeGroup, setActiveGroup] = useState<ModuleGroup | null>(null);
   const venue = useVenue();
 
   useEffect(() => {
@@ -113,7 +114,6 @@ export default function OverviewPage() {
       fetch(`/api/influencers${v}`).then((r) => r.json()).catch(() => []),
       fetch(`/api/social-calendar${v}`).then((r) => r.json()).catch(() => []),
     ]).then(([eventsData, campaignsData, influencersData, socialData]) => {
-      // Flatten events
       const oneOffs = (eventsData?.oneOffs ?? []).map((e: any) => ({ ...e, _kind: "oneoff" }));
       const seriesDates = (eventsData?.series ?? []).flatMap((s: any) =>
         (s.dates ?? []).map((date: string) => ({ id: s.id, date, name: s.name, theme: s.theme, status: s.status, _kind: "series" }))
@@ -135,6 +135,25 @@ export default function OverviewPage() {
 
   const now = new Date();
   const dateStr = now.toLocaleDateString("en-US", { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+
+  // Pick the representative module for each group (first one with view permission)
+  const visibleGroups = groupOrder.map(g => {
+    const items = groupModules[g].filter(m => {
+      if (m.href === "/builder") return hasPermission(role, "special", "builder");
+      if (m.href === "/director-admin") return hasPermission(role, "special", "director-admin");
+      return hasPermission(role, "view", m.href);
+    });
+    return { group: g, items, label: groupLabels[g], first: items[0] };
+  }).filter(g => g.items.length > 0 && g.first);
+
+  // When a group is active, show its sub-tabs (modules in that group + any registered subTabs)
+  const activeGroupData = activeGroup ? visibleGroups.find(g => g.group === activeGroup) : null;
+  const activeSubTabs = activeGroupData ? [
+    ...activeGroupData.items,
+    ...(Object.entries(subTabs).flatMap(([parentHref, tabs]) =>
+      activeGroupData.items.some(i => i.href === parentHref) ? tabs : []
+    )),
+  ].filter(m => hasPermission(role, "view", m.href)) : [];
 
   return (
     <div>
@@ -167,33 +186,47 @@ export default function OverviewPage() {
         </div>
       )}
 
-      {/* Module Grid — only top-level tabs that appear in sidebar */}
+      {/* Breadcrumb / back button when inside a group */}
+      {activeGroup && (
+        <div style={{ marginBottom: 16 }}>
+          <button
+            onClick={() => setActiveGroup(null)}
+            style={{
+              background: "none", border: "none", color: "var(--accent)", cursor: "pointer",
+              fontSize: "0.875rem", fontWeight: 600, padding: 0,
+            }}
+          >
+            ← Back to Quick Access
+          </button>
+        </div>
+      )}
+
       <h2 style={{ fontSize: "1rem", fontWeight: 600, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 16 }}>
-        Quick Access
+        {activeGroup ? groupLabels[activeGroup] : "Quick Access"}
       </h2>
+
       <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16 }}>
-        {modules.filter(m => {
-          // /builder (Permissions) requires the "builder" special permission — SuperAdmin only
-          if (m.href === "/builder") return hasPermission(role, "special", "builder");
-          // /director-admin requires the "director-admin" special permission — Admin & SuperAdmin only
-          if (m.href === "/director-admin") return hasPermission(role, "special", "director-admin");
-          return hasPermission(role, "view", m.href);
-        }).map((m) => {
-          const hasChildren = m.children && m.children.length > 0;
-          const childModules = m.children?.filter(c => hasPermission(role, "view", c.href)) || [];
-          return (
-            <div key={m.href}>
-              <ModuleCard href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
-              {hasChildren && childModules.length > 0 && (
-                <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12, marginTop: 12 }}>
-                  {childModules.map(c => (
-                    <SubModuleCard key={c.href} href={c.href} icon={c.icon} title={c.title} desc={c.desc} />
-                  ))}
-                </div>
-              )}
-            </div>
-          );
-        })}
+        {activeGroup ? (
+          // Show all modules + sub-tabs within the selected group
+          activeSubTabs.map((m) => (
+            <SubModuleCard key={m.href} href={m.href} icon={m.icon} title={m.title} desc={m.desc} />
+          ))
+        ) : (
+          // Show 5 group cards (Administrative, Events & Promotions, Social & Influencers, Operations, DJ/MC Communications)
+          visibleGroups.map((g) => (
+            <ModuleCard
+              key={g.group}
+              href={g.first!.href}
+              icon={g.first!.icon}
+              title={g.label}
+              desc={`${g.items.length} module${g.items.length !== 1 ? "s" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                setActiveGroup(g.group);
+              }}
+            />
+          ))
+        )}
       </div>
     </div>
   );
