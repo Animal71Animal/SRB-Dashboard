@@ -210,7 +210,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           </Link>
 
           {/* Groups */}
-          {visibleGroups.map((group) => {
+          {visibleGroups.map((group) => (
             <div key={group} style={{ marginTop: 16 }}>
               <button onClick={() => toggleGroup(group)}
                 style={{
