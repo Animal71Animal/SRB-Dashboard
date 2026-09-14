@@ -15,10 +15,10 @@ const SOURCES = [
 ];
 
 const OUTPUTS = [
-  { id: "out-1", label: "Main Bar L", color: "#ef4444" },
-  { id: "out-2", label: "Main Bar R", color: "#ec4899" },
-  { id: "out-3", label: "DJ Booth", color: "#f97316" },
-  { id: "out-4", label: "Pool Table", color: "#06b6d4" },
+  { id: "out-1", label: "A", color: "#ef4444" },
+  { id: "out-2", label: "B", color: "#ec4899" },
+  { id: "out-3", label: "C", color: "#f97316" },
+  { id: "out-4", label: "D", color: "#06b6d4" },
 ];
 
 export default function TVRoutingPage() {
