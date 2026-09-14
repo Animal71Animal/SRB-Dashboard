@@ -115,83 +115,88 @@ export default function TVRoutingPage() {
         </div>
       </div>
 
-      {/* Channel Controls */}
+      {/* Quick Presets */}
       <div style={{
         background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
         padding: 24, marginBottom: 24
       }}>
-        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Channel Controls</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
-          {channels.map(ch => (
-            <div key={ch.id} style={{
-              border: `2px solid ${ch.color}`, borderRadius: 10, padding: 16,
-              background: `${ch.color}10`
-            }}>
-              <div style={{ fontWeight: 700, fontSize: "0.9rem", marginBottom: 12, color: ch.color }}>
-                {ch.name}
-              </div>
-              <div style={{ marginBottom: 8 }}>
-                <label style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase" }}>Source</label>
-                <select
-                  value={ch.source}
-                  onChange={(e) => setSource(ch.id, e.target.value)}
-                  style={{ width: "100%", marginTop: 4, background: "var(--bg)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 6, padding: "6px 8px" }}
-                >
-                  {SOURCES.map(s => (
-                    <option key={s.id} value={s.id}>{s.label}</option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase" }}>Output</label>
-                <select
-                  value={ch.output || ""}
-                  onChange={(e) => setOutput(ch.id, e.target.value || null)}
-                  style={{ width: "100%", marginTop: 4, background: "var(--bg)", color: "var(--text)", border: "1px solid var(--border)", borderRadius: 6, padding: "6px 8px" }}
-                >
-                  <option value="">— Unassigned —</option>
-                  {OUTPUTS.map(o => (
-                    <option key={o.id} value={o.id}>{o.label}</option>
-                  ))}
-                </select>
-              </div>
-              <div style={{ marginTop: 8, fontSize: "0.75rem", color: "var(--muted)" }}>
-                {getSourceLabel(ch.source)} → {getOutputLabel(ch.output)}
-              </div>
-            </div>
+        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Quick Presets</h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
+          {[
+            { name: "All Sports", routes: [{s:"src-1",o:"out-1"},{s:"src-1",o:"out-2"},{s:"src-1",o:"out-3"},{s:"src-1",o:"out-4"}] },
+            { name: "Split Games", routes: [{s:"src-1",o:"out-1"},{s:"src-2",o:"out-2"},{s:"src-1",o:"out-3"},{s:"src-2",o:"out-4"}] },
+            { name: "Music Video Mode", routes: [{s:"src-3",o:"out-1"},{s:"src-3",o:"out-2"},{s:"src-3",o:"out-3"},{s:"src-3",o:"out-4"}] },
+            { name: "TorchTV Everywhere", routes: [{s:"src-4",o:"out-1"},{s:"src-4",o:"out-2"},{s:"src-4",o:"out-3"},{s:"src-4",o:"out-4"}] },
+            { name: "DJ Booth Only", routes: [{s:"src-3",o:"out-3"}] },
+            { name: "Clear All", routes: [] },
+          ].map(preset => (
+            <button
+              key={preset.name}
+              onClick={() => {
+                // Clear all first
+                setChannels(prev => prev.map(ch => ({ ...ch, output: null })));
+                // Apply preset routes
+                preset.routes.forEach(r => {
+                  const ch = channels.find(c => c.source === r.s);
+                  if (ch) setOutput(ch.id, r.o);
+                });
+              }}
+              style={{
+                background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8,
+                padding: "12px 16px", cursor: "pointer", color: "var(--text)",
+                fontSize: "0.85rem", fontWeight: 600, textAlign: "left",
+                transition: "border-color 0.15s, background 0.15s",
+              }}
+              onMouseEnter={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--accent)";
+                (e.currentTarget as HTMLButtonElement).style.background = "rgba(201,0,43,0.07)";
+              }}
+              onMouseLeave={(e) => {
+                (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)";
+                (e.currentTarget as HTMLButtonElement).style.background = "var(--bg)";
+              }}
+            >
+              {preset.name}
+            </button>
           ))}
         </div>
       </div>
 
-      {/* Output Status */}
+      {/* Active Routing Summary */}
       <div style={{
         background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
         padding: 24
       }}>
-        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Output Status</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
-          {OUTPUTS.map(out => {
-            const activeCh = channels.find(ch => ch.output === out.id);
-            return (
-              <div key={out.id} style={{
-                border: `2px solid ${activeCh ? activeCh.color : "var(--border)"}`,
-                borderRadius: 8, padding: 12,
-                background: activeCh ? `${activeCh.color}10` : "transparent"
-              }}>
-                <div style={{ fontWeight: 600, fontSize: "0.85rem", color: out.color }}>
-                  {out.label}
+        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Active Routing</h3>
+        {channels.filter(ch => ch.output).length === 0 ? (
+          <p style={{ color: "var(--muted)", fontSize: "0.875rem" }}>No active routes — click the matrix or a preset above.</p>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
+            {channels.filter(ch => ch.output).map(ch => {
+              const out = OUTPUTS.find(o => o.id === ch.output);
+              const src = SOURCES.find(s => s.id === ch.source);
+              return (
+                <div key={ch.id} style={{
+                  border: `2px solid ${ch.color}`, borderRadius: 8, padding: 12,
+                  background: `${ch.color}10`, display: "flex", alignItems: "center", gap: 12
+                }}>
+                  <div style={{
+                    width: 12, height: 12, borderRadius: "50%", background: ch.color,
+                    boxShadow: `0 0 8px ${ch.color}80`
+                  }} />
+                  <div>
+                    <div style={{ fontWeight: 600, fontSize: "0.85rem", color: ch.color }}>
+                      {src?.label}
+                    </div>
+                    <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
+                      → {out?.label}
+                    </div>
+                  </div>
                 </div>
-                <div style={{ fontSize: "0.8rem", color: "var(--muted)", marginTop: 4 }}>
-                  {activeCh ? (
-                    <span style={{ color: activeCh.color }}>● {getSourceLabel(activeCh.source)}</span>
-                  ) : (
-                    <span>○ No signal</span>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </div>
     </div>
   );
