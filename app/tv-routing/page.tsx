@@ -115,88 +115,63 @@ export default function TVRoutingPage() {
         </div>
       </div>
 
-      {/* Quick Presets */}
-      <div style={{
-        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-        padding: 24, marginBottom: 24
-      }}>
-        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Quick Presets</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 12 }}>
-          {[
-            { name: "All Sports", routes: [{s:"src-1",o:"out-1"},{s:"src-1",o:"out-2"},{s:"src-1",o:"out-3"},{s:"src-1",o:"out-4"}] },
-            { name: "Split Games", routes: [{s:"src-1",o:"out-1"},{s:"src-2",o:"out-2"},{s:"src-1",o:"out-3"},{s:"src-2",o:"out-4"}] },
-            { name: "Music Video Mode", routes: [{s:"src-3",o:"out-1"},{s:"src-3",o:"out-2"},{s:"src-3",o:"out-3"},{s:"src-3",o:"out-4"}] },
-            { name: "TorchTV Everywhere", routes: [{s:"src-4",o:"out-1"},{s:"src-4",o:"out-2"},{s:"src-4",o:"out-3"},{s:"src-4",o:"out-4"}] },
-            { name: "DJ Booth Only", routes: [{s:"src-3",o:"out-3"}] },
-            { name: "Clear All", routes: [] },
-          ].map(preset => (
-            <button
-              key={preset.name}
-              onClick={() => {
-                // Clear all first
-                setChannels(prev => prev.map(ch => ({ ...ch, output: null })));
-                // Apply preset routes
-                preset.routes.forEach(r => {
-                  const ch = channels.find(c => c.source === r.s);
-                  if (ch) setOutput(ch.id, r.o);
-                });
-              }}
-              style={{
-                background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 8,
-                padding: "12px 16px", cursor: "pointer", color: "var(--text)",
-                fontSize: "0.85rem", fontWeight: 600, textAlign: "left",
-                transition: "border-color 0.15s, background 0.15s",
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--accent)";
-                (e.currentTarget as HTMLButtonElement).style.background = "rgba(201,0,43,0.07)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)";
-                (e.currentTarget as HTMLButtonElement).style.background = "var(--bg)";
-              }}
-            >
-              {preset.name}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Active Routing Summary */}
-      <div style={{
-        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-        padding: 24
-      }}>
-        <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Active Routing</h3>
-        {channels.filter(ch => ch.output).length === 0 ? (
-          <p style={{ color: "var(--muted)", fontSize: "0.875rem" }}>No active routes — click the matrix or a preset above.</p>
-        ) : (
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
-            {channels.filter(ch => ch.output).map(ch => {
-              const out = OUTPUTS.find(o => o.id === ch.output);
-              const src = SOURCES.find(s => s.id === ch.source);
-              return (
-                <div key={ch.id} style={{
-                  border: `2px solid ${ch.color}`, borderRadius: 8, padding: 12,
-                  background: `${ch.color}10`, display: "flex", alignItems: "center", gap: 12
+      {/* Input / Output Reference */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: 16 }}>
+        <div style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
+          padding: 24
+        }}>
+          <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Inputs (Sources)</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {SOURCES.map((src, i) => (
+              <div key={src.id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: src.color,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "0.75rem", fontWeight: 700, color: "#fff", flexShrink: 0
                 }}>
-                  <div style={{
-                    width: 12, height: 12, borderRadius: "50%", background: ch.color,
-                    boxShadow: `0 0 8px ${ch.color}80`
-                  }} />
-                  <div>
-                    <div style={{ fontWeight: 600, fontSize: "0.85rem", color: ch.color }}>
-                      {src?.label}
-                    </div>
-                    <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
-                      → {out?.label}
-                    </div>
+                  {i + 1}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: "0.9rem", color: src.color }}>
+                    {src.label}
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
+                    Input {i + 1}
                   </div>
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
-        )}
+        </div>
+
+        <div style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
+          padding: 24
+        }}>
+          <h3 style={{ margin: "0 0 16px", fontSize: "1rem" }}>Outputs (Displays)</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+            {OUTPUTS.map((out, i) => (
+              <div key={out.id} style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{
+                  width: 28, height: 28, borderRadius: "50%", background: out.color,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: "0.75rem", fontWeight: 700, color: "#fff", flexShrink: 0
+                }}>
+                  {i + 1}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 600, fontSize: "0.9rem", color: out.color }}>
+                    {out.label}
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
+                    Output {i + 1}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
