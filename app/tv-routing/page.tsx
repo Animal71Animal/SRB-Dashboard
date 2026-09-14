@@ -14,7 +14,7 @@ const SOURCES = [
   { id: "src-1", label: "DirecTV 1", color: "#8b5cf6" },
   { id: "src-2", label: "DirecTV 2", color: "#3b82f6" },
   { id: "src-3", label: "Music Videos", color: "#10b981" },
-  { id: "src-4", label: "TorchTV", color: "#f59e0b" },
+  { id: "src-4", label: "TorchTV/Rotation", color: "#f59e0b" },
 ];
 
 const OUTPUTS = [
