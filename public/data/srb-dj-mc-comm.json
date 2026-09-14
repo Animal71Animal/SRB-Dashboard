@@ -29,6 +29,9 @@
       "reactions": {
         "laugh": [
           "ANIMAL"
+        ],
+        "thumbsup": [
+          "ANIMAL"
         ]
       }
     },
