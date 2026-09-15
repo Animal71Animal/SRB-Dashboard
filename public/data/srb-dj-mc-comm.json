@@ -305,7 +305,12 @@
       "text": "Sounds good.",
       "timestamp": "2026-09-15T23:01:41.912Z",
       "date": "Sep 15, 2026",
-      "time": "05:01 PM"
+      "time": "05:01 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1789513353449",
