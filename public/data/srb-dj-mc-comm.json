@@ -190,7 +190,12 @@
       "text": "yeah i talked to Joanna, i guess she fixed it by the time Zara got over there.. That's good. I felt bad sending her away. Tell her I talked to Joanna and got it worked out...",
       "timestamp": "2026-09-15T04:45:19.925Z",
       "date": "Sep 14, 2026",
-      "time": "10:45 PM"
+      "time": "10:45 PM",
+      "reactions": {
+        "thumbsup": [
+          "Star"
+        ]
+      }
     },
     {
       "id": "1789447614600",
