@@ -405,7 +405,6 @@ export default function InfluencersPage() {
       {/* Sub-page links (existing influencer resources) */}
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 20 }}>
         {[
-          { href: "/influencers/master-list", icon: "📋", title: "Master List" },
           { href: "/influencers/outreach-templates", icon: "📧", title: "Outreach Templates" },
           { href: "/influencers/tracking-dashboard", icon: "📈", title: "Tracking Dashboard" },
           { href: "/influencers/weekly-report", icon: "📄", title: "Weekly Report" },
