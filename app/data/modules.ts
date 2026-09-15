@@ -27,7 +27,7 @@ export const groupModules: Record<ModuleGroup, Module[]> = {
     { href: "/content-assets", icon: "🎨", title: "Content Assets", desc: "Flyer archive and asset links.", group: "promotions" },
   ],
   social: [
-    { href: "/influencers", icon: "⭐", title: "Influencers", desc: "Influencer database with stats.", group: "social" },
+    { href: "/influencers", icon: "📣", title: "Influencers", desc: "Top 10 Boise influencers + outreach tracker.", group: "social" },
   ],
   operations: [
     { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },

@@ -29,12 +29,12 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
     special: ["admin-console", "director-admin"]
   },
   DJ: {
-    view: ["/events", "/torchtv", "/torch-radio", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing"],
+    view: ["/events", "/torchtv", "/torch-radio", "/influencers", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing"],
     edit: ["/torchtv"],
     special: ["admin-console", "director-admin"]
   },
   Employee: {
-    view: ["/events", "/torchtv", "/tv-routing"],
+    view: ["/events", "/torchtv", "/influencers", "/tv-routing"],
     edit: [],
     special: ["admin-console", "director-admin"]
   },
