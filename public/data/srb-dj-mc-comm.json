@@ -258,7 +258,12 @@
       "text": "if the alarm goes off on the comp in the booth it will always say 'who' needs help in the on screen message. If it says 'Animal' or 'DJs' need help, that is me telling you to check the messages",
       "timestamp": "2026-09-15T22:58:46.442Z",
       "date": "Sep 15, 2026",
-      "time": "04:58 PM"
+      "time": "04:58 PM",
+      "reactions": {
+        "thumbsup": [
+          "Star"
+        ]
+      }
     },
     {
       "id": "1789513195854",
