@@ -113,7 +113,12 @@
       "text": "I just forgot to update roll call",
       "timestamp": "2026-09-15T02:20:18.188Z",
       "date": "Sep 14, 2026",
-      "time": "08:20 PM"
+      "time": "08:20 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     }
   ]
 }
