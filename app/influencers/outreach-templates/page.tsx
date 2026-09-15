@@ -13,7 +13,7 @@ const templates = [
 
 Saw your post about [specific thing they posted about] — love the vibe you bring to [Boise party scene / downtown / etc.].
 
-We're launching something new Saturdays at The Torch starting June 6th — think high-energy late-night party with amazing music, food, and entertainment. Our whole angle is creating a space where everyone feels welcome.
+We're launching something new Saturdays at The Torch starting November 12th — think high-energy late-night party with amazing music, food, and entertainment. Our whole angle is creating a space where everyone feels welcome.
 
 **We'd love to have you + a couple friends as our guest.** Free admission, plus a feature on our new podcast if you're interested.
 
@@ -34,7 +34,7 @@ Hi [Name],
 
 [Personalized intro about them + reference to their content]
 
-We're launching a new Saturday late-night experience at The Torch (Boise) starting June 6th. The vibe: high-energy music, entertainment, and food — a genuine party destination for people looking for something to do when everywhere else closes.
+We're launching a new Saturday late-night experience at The Torch (Boise) starting November 12th. The vibe: high-energy music, entertainment, and food — a genuine party destination for people looking for something to do when everywhere else closes.
 
 **We think you'd be perfect to experience it firsthand and possibly help spread the word.**
 
@@ -46,7 +46,7 @@ We're launching a new Saturday late-night experience at The Torch (Boise) starti
 **What we're asking:**
 Just show up, experience it, and share with your community if you genuinely vibe with it. No forced posts required.
 
-Interested? Reply with your availability for June 6th or let's chat about timing.
+Interested? Reply with your availability for November 12th or let's chat about timing.
 
 Looking forward,
 [Your name]
@@ -57,7 +57,7 @@ Looking forward,
     name: "TikTok/IG Comment Template",
     icon: "💬",
     category: "Comment",
-    content: `Love this energy! 🔥 We're launching something similar Saturdays at The Torch starting June 6th — high-energy late-night parties with amazing music and food. Would love to have you check it out + bring friends. DM us? We'd hook you up.`,
+    content: `Love this energy! 🔥 We're launching something similar Saturdays at The Torch starting November 12th — high-energy late-night parties with amazing music and food. Would love to have you check it out + bring friends. DM us? We'd hook you up.`,
   },
   {
     id: "followup-1",
@@ -75,7 +75,7 @@ If you're curious about the late-night event we're launching, let me know. Would
     name: "Second Follow-Up (2 weeks before)",
     icon: "📅",
     category: "Follow-Up",
-    content: `[Name] — last reminder! We're launching June 6th and would love to have you at the first one. Still have spots reserved for you + your crew.
+    content: `[Name] — last reminder! We're launching November 12th and would love to have you at the first one. Still have spots reserved for you + your crew.
 
 Let me know if you're in, or feel free to just show up that Saturday.
 
@@ -115,19 +115,19 @@ export default function OutreachTemplatesPage() {
         <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
           <div style={{ padding: 12, background: "rgba(155,93,229,0.1)", borderRadius: 8 }}>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Initial Outreach</div>
-            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text)" }}>May 15-22</div>
+            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "var(--text)" }}>September 21</div>
           </div>
           <div style={{ padding: 12, background: "rgba(245,158,11,0.1)", borderRadius: 8 }}>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>First Follow-Up</div>
-            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#f59e0b" }}>May 18-25</div>
+            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#f59e0b" }}>September 24-26</div>
           </div>
           <div style={{ padding: 12, background: "rgba(0,200,124,0.1)", borderRadius: 8 }}>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Second Follow-Up</div>
-            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#00c87c" }}>May 27 - June 2</div>
+            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#00c87c" }}>October 29 - November 5</div>
           </div>
           <div style={{ padding: 12, background: "rgba(201,168,76,0.1)", borderRadius: 8 }}>
             <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Event Launch</div>
-            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#e8d5b0" }}>June 6</div>
+            <div style={{ fontSize: "0.9rem", fontWeight: 600, color: "#e8d5b0" }}>November 12</div>
           </div>
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function OutreachTemplatesPage() {
           <li>Lead with vibe, not strip club — Frame as "party venue" and "entertainment"</li>
           <li>Keep it short — 3-4 sentences max for DM</li>
           <li>Use their tone — If they're casual, be casual. If professional, be professional</li>
-          <li>Add urgency (softly) — "Starting June 6th" creates a deadline</li>
+          <li>Add urgency (softly) — "Starting November 12th" creates a deadline</li>
         </ul>
       </div>
 
