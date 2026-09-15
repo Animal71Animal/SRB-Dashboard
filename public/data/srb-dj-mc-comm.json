@@ -206,7 +206,12 @@
       "text": "Also, Jayden is heading your way. She doesn't know if she is clocking in there yet, apperantly she's going there for Mark Harris. good dude, going through some shit. but if she does, i did put in the transfer request on the tablet",
       "timestamp": "2026-09-15T04:49:09.734Z",
       "date": "Sep 14, 2026",
-      "time": "10:49 PM"
+      "time": "10:49 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     }
   ]
 }
