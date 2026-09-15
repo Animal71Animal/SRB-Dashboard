@@ -1,3 +1,5 @@
+import IgniteFrame from "@/components/IgniteFrame";
+
 export const metadata = {
   title: "Ignite App",
 };
@@ -33,12 +35,7 @@ export default function DirectorAdminPage() {
           background: "var(--card)",
         }}
       >
-        <iframe
-          src="https://ignite.abacusai.cloud"
-          title="Ignite App"
-          allow="clipboard-write; fullscreen; web-share"
-          style={{ width: "100%", height: "82vh", border: 0, display: "block" }}
-        />
+        <IgniteFrame />
       </div>
 
       {/* Helper */}
