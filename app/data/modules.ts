@@ -56,7 +56,7 @@ export const subTabs: Record<string, Module[]> = {
   "/influencers": [
     { href: "/influencers/master-list", icon: "📋", title: "Master List", desc: "Full influencer roster.", group: "social" },
     { href: "/influencers/outreach-templates", icon: "📧", title: "Outreach Templates", desc: "DM and email templates.", group: "social" },
-    { href: "/influencers/tracking-dashboard", icon: "📈", title: "Tracking Dashboard", desc: "Partnership progress tracker.", group: "social" },
+    { href: "/influencers/tracking-dashboard", icon: "📈", title: "Tracking Dashboard", desc: "Outreach pipeline, response rates, reach, and follow-up tracking.", group: "social" },
     { href: "/influencers/weekly-report", icon: "📄", title: "Weekly Report", desc: "Weekly influencer summary.", group: "social" },
   ],
 };

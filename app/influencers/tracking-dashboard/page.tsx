@@ -22,7 +22,7 @@ const INFLUENCERS: Influencer[] = [
 ];
 const STATUSES: Status[] = ["Not Contacted", "DM Sent", "Replied", "Call / Meeting Scheduled", "Deal Closed", "Declined", "On Hold"];
 const COLLABS: CollabType[] = ["None", "Post", "Story / Reel", "Event Coverage", "Giveaway", "Paid Partnership", "VIP Night"];
-const KEY = "influencer-outreach-tracking";
+const KEY = "srb-influencer-outreach";
 const COLORS: Record<Status, string> = { "Not Contacted": "#9a8a8a", "DM Sent": "#3b82f6", Replied: "#eab308", "Call / Meeting Scheduled": "#9b5de5", "Deal Closed": "#22c55e", Declined: "#ef4444", "On Hold": "#f59e0b" };
 const empty = (): Tracking => ({ status: "Not Contacted", dateContacted: "", lastContact: "", collabType: "None", notes: "" });
 
