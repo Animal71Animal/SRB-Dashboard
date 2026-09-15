@@ -279,7 +279,12 @@
       "text": "today? no one so far",
       "timestamp": "2026-09-15T23:00:11.827Z",
       "date": "Sep 15, 2026",
-      "time": "05:00 PM"
+      "time": "05:00 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1789513264525",
