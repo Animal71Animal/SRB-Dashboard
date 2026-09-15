@@ -1,146 +1,60 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
+import { useEffect, useMemo, useState } from "react";
 
-interface LaunchMetrics {
-  influencerSourced: number;
-  streetTeam: number;
-  walkins: number;
-  repeatCustomers: number;
-  totalNew: number;
-  coverCharges: number;
-  foodSales: number;
-  dancerRoomSales: number;
-}
+type Status = "Not Contacted" | "DM Sent" | "Replied" | "Call / Meeting Scheduled" | "Deal Closed" | "Declined" | "On Hold";
+type CollabType = "None" | "Post" | "Story / Reel" | "Event Coverage" | "Giveaway" | "Paid Partnership" | "VIP Night";
+type Influencer = { rank: number; name: string; handle: string; platform: string; followers: number; niche: string; fit: string };
+type Tracking = { status: Status; dateContacted: string; lastContact: string; collabType: CollabType; notes: string };
 
-interface OutreachMetrics {
-  identified: number;
-  sent: number;
-  responses: number;
-  committed: number;
-}
+const INFLUENCERS: Influencer[] = [
+  { rank: 1, name: "Caitlin Montoya", handle: "@boisesocialite", platform: "Instagram + TikTok", followers: 19000, niche: "Cocktails / Nightlife / Date Nights", fit: "⭐⭐⭐⭐⭐" },
+  { rank: 2, name: "Lauren", handle: "@treasurevalley_treatsandeats", platform: "Instagram", followers: 38000, niche: "Food / Bars / Local Businesses", fit: "⭐⭐⭐⭐" },
+  { rank: 3, name: "Heather Sharpe", handle: "@thatboisegirl", platform: "Instagram", followers: 19000, niche: "Food / Bars / Local Events", fit: "⭐⭐⭐⭐" },
+  { rank: 4, name: "Melissa Tureaud", handle: "@blissfulinboise", platform: "Instagram", followers: 17700, niche: "Events / Food / Giveaways", fit: "⭐⭐⭐⭐" },
+  { rank: 5, name: "(City Account)", handle: "@thisisboise", platform: "Instagram", followers: 122000, niche: "City Guide / Nightlife / Eats & Drinks", fit: "⭐⭐⭐" },
+  { rank: 6, name: "(City Account)", handle: "@totallyboise", platform: "Instagram", followers: 61300, niche: "Culture / Events / Community", fit: "⭐⭐⭐" },
+  { rank: 7, name: "Taylor Humby", handle: "@humbyart", platform: "Instagram", followers: 143000, niche: "Entertainment / Art", fit: "⭐⭐⭐ ⚡" },
+  { rank: 8, name: "Kali", handle: "@tater_rater_boise", platform: "Instagram", followers: 12500, niche: "Food / Local Hidden Gems", fit: "⭐⭐⭐" },
+  { rank: 9, name: "Shane & Natalie Plummer", handle: "@theboisebubble", platform: "Instagram + Podcast", followers: 12800, niche: "Entertainment / Podcast / Lifestyle", fit: "⭐⭐" },
+  { rank: 10, name: "Tyler G", handle: "@tastefullytyler", platform: "Instagram", followers: 8900, niche: "Food / Dining", fit: "⭐⭐" },
+];
+const STATUSES: Status[] = ["Not Contacted", "DM Sent", "Replied", "Call / Meeting Scheduled", "Deal Closed", "Declined", "On Hold"];
+const COLLABS: CollabType[] = ["None", "Post", "Story / Reel", "Event Coverage", "Giveaway", "Paid Partnership", "VIP Night"];
+const KEY = "influencer-outreach-tracking";
+const COLORS: Record<Status, string> = { "Not Contacted": "#9a8a8a", "DM Sent": "#3b82f6", Replied: "#eab308", "Call / Meeting Scheduled": "#9b5de5", "Deal Closed": "#22c55e", Declined: "#ef4444", "On Hold": "#f59e0b" };
+const empty = (): Tracking => ({ status: "Not Contacted", dateContacted: "", lastContact: "", collabType: "None", notes: "" });
 
 export default function TrackingDashboardPage() {
-  const [outreach, setOutreach] = useState<OutreachMetrics>({ identified: 0, sent: 0, responses: 0, committed: 0 });
-  const [launch, setLaunch] = useState<LaunchMetrics>({ influencerSourced: 0, streetTeam: 0, walkins: 0, repeatCustomers: 0, totalNew: 0, coverCharges: 0, foodSales: 0, dancerRoomSales: 0 });
+  const [tracking, setTracking] = useState<Record<string, Tracking>>({});
+  const [filter, setFilter] = useState<Status | "All">("All");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); try { const v = localStorage.getItem(KEY); if (v) setTracking(JSON.parse(v)); } catch {} }, []);
+  useEffect(() => { if (mounted) localStorage.setItem(KEY, JSON.stringify(tracking)); }, [tracking, mounted]);
+  const get = (handle: string) => tracking[handle] || empty();
+  const counts = useMemo(() => STATUSES.reduce((a, s) => ({ ...a, [s]: INFLUENCERS.filter(i => get(i.handle).status === s).length }), {} as Record<Status, number>), [tracking]);
+  const filtered = filter === "All" ? INFLUENCERS : INFLUENCERS.filter(i => get(i.handle).status === filter);
+  const contacted = INFLUENCERS.filter(i => get(i.handle).status !== "Not Contacted").length;
+  const active = INFLUENCERS.filter(i => ["DM Sent", "Replied", "Call / Meeting Scheduled"].includes(get(i.handle).status)).length;
+  const committed = counts["Call / Meeting Scheduled"] + counts["Deal Closed"];
+  const totalReach = INFLUENCERS.reduce((n, i) => n + i.followers, 0);
+  const update = (handle: string, patch: Partial<Tracking>) => setTracking(p => ({ ...p, [handle]: { ...get(handle), ...patch } }));
+  const card: React.CSSProperties = { background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18 };
+  const badge = (status: Status) => ({ display: "inline-block", color: COLORS[status], background: `${COLORS[status]}20`, border: `1px solid ${COLORS[status]}`, borderRadius: 999, padding: "3px 9px", fontSize: ".72rem", fontWeight: 700 });
 
-  const updateOutreach = (field: keyof OutreachMetrics, value: number) => {
-    setOutreach({ ...outreach, [field]: value });
-  };
-
-  const updateLaunch = (field: keyof LaunchMetrics, value: number) => {
-    setLaunch({ ...launch, [field]: value });
-  };
-
-  const totalRevenue = launch.coverCharges + launch.foodSales + launch.dancerRoomSales;
-  const responseRate = outreach.sent > 0 ? Math.round((outreach.responses / outreach.sent) * 100) : 0;
-
-  return (
-    <div>
-      {/* Header */}
-      <div style={{ marginBottom: 28 }}>
-        <div className="toc-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <h1 style={{ fontSize: "clamp(1.25rem, 4.5vw, 1.8rem)", fontWeight: 700, margin: 0, background: "linear-gradient(135deg, #9b5de5, #c77dff)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
-            📊 Tracking Dashboard
-          </h1>
-          <Link href="/influencers" style={{ fontSize: "0.85rem", color: "var(--muted)", textDecoration: "none" }}>← Back</Link>
-        </div>
-        <p style={{ color: "var(--muted)", marginTop: 6, fontSize: "0.9rem" }}>
-          Live metrics from May 15 through June onwards
-        </p>
-      </div>
-
-      {/* Outreach Metrics */}
-      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
-        <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 16px", color: "var(--text)" }}>📬 Outreach Metrics</h2>
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12 }}>
-          {([
-            ["Identified", "identified", "target: 20-30"],
-            ["Sent", "sent", ""],
-            ["Responses", "responses", "75%+ target"],
-            ["Committed", "committed", "50%+ target"],
-          ] as [string, keyof OutreachMetrics, string][]).map(([label, field, note]) => (
-            <div key={field} style={{ background: "rgba(155,93,229,0.08)", border: "1px solid rgba(155,93,229,0.2)", borderRadius: 10, padding: 16, textAlign: "center" }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 8 }}>{label}</div>
-              <input
-                type="number"
-                value={outreach[field]}
-                onChange={(e) => updateOutreach(field, parseInt(e.target.value) || 0)}
-                style={{ width: "80px", padding: "8px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1.2rem", fontWeight: 700, textAlign: "center" }}
-              />
-              {note && <div style={{ fontSize: "0.65rem", color: "var(--muted)", marginTop: 4 }}>{note}</div>}
-            </div>
-          ))}
-        </div>
-        <div style={{ marginTop: 16, textAlign: "center" }}>
-          <span style={{ fontSize: "1.5rem", fontWeight: 700, color: responseRate >= 75 ? "#00c87c" : "#f59e0b" }}>{responseRate}%</span>
-          <span style={{ fontSize: "0.9rem", color: "var(--muted)", marginLeft: 8 }}>Response Rate</span>
-        </div>
-      </div>
-
-      {/* Launch Night Attribution */}
-      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24, marginBottom: 24 }}>
-        <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 16px", color: "var(--text)" }}>🎉 June 6 Launch Night Attribution</h2>
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: 12, marginBottom: 20 }}>
-          {([
-            ["Influencer Sourced", "influencerSourced", "#"],
-            ["Street Team", "streetTeam", "#"],
-            ["Walk-ins", "walkins", "#"],
-            ["Repeat Customers", "repeatCustomers", "#"],
-          ] as [string, keyof LaunchMetrics, string][]).map(([label, field, unit]) => (
-            <div key={field} style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", borderRadius: 10, padding: 16, textAlign: "center" }}>
-              <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 8 }}>{label}</div>
-              <input
-                type="number"
-                value={launch[field]}
-                onChange={(e) => updateLaunch(field, parseInt(e.target.value) || 0)}
-                style={{ width: "80px", padding: "8px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1.2rem", fontWeight: 700, textAlign: "center" }}
-              />
-              <div style={{ fontSize: "0.65rem", color: "var(--muted)", marginTop: 4 }}>target: 50-100 total</div>
-            </div>
-          ))}
-        </div>
-
-        <h3 style={{ fontSize: "0.9rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>Revenue</h3>
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))", gap: 12, marginBottom: 16 }}>
-          <div>
-            <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Cover Charges</div>
-            <input type="number" value={launch.coverCharges} onChange={(e) => updateLaunch("coverCharges", parseInt(e.target.value) || 0)} placeholder="$0" style={{ width: "100%", padding: "8px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
-          </div>
-          <div>
-            <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Food Sales</div>
-            <input type="number" value={launch.foodSales} onChange={(e) => updateLaunch("foodSales", parseInt(e.target.value) || 0)} placeholder="$0" style={{ width: "100%", padding: "8px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
-          </div>
-          <div>
-            <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Dancer Room</div>
-            <input type="number" value={launch.dancerRoomSales} onChange={(e) => updateLaunch("dancerRoomSales", parseInt(e.target.value) || 0)} placeholder="$0" style={{ width: "100%", padding: "8px", background: "var(--bg)", border: "1px solid var(--border)", borderRadius: 6, color: "var(--text)", fontSize: "1rem" }} />
-          </div>
-        </div>
-        <div style={{ textAlign: "center", padding: 16, background: "rgba(201,168,76,0.1)", borderRadius: 10 }}>
-          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginBottom: 4 }}>Total Revenue</div>
-          <div style={{ fontSize: "2rem", fontWeight: 700, color: "#e8d5b0" }}>${totalRevenue.toLocaleString()}</div>
-        </div>
-      </div>
-
-      {/* Long-Term Targets */}
-      <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 24 }}>
-        <h2 style={{ fontSize: "1.1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>🎯 Long-Term Targets</h2>
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
-          <div style={{ padding: 12, background: "rgba(0,200,124,0.08)", borderRadius: 8 }}>
-            <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>By July 6</div>
-            <div style={{ fontSize: "0.85rem", color: "var(--text)", marginTop: 4 }}>Repeat rate from June 6 newcomers, Week-of revenue trend, Podcast listenership</div>
-          </div>
-          <div style={{ padding: 12, background: "rgba(245,158,11,0.08)", borderRadius: 8 }}>
-            <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>By August 6</div>
-            <div style={{ fontSize: "0.85rem", color: "var(--text)", marginTop: 4 }}>Month-over-month growth, New market penetration, Guest DJ relationships</div>
-          </div>
-          <div style={{ padding: 12, background: "rgba(155,93,229,0.08)", borderRadius: 8 }}>
-            <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>By September 6</div>
-            <div style={{ fontSize: "0.85rem", color: "var(--text)", marginTop: 4 }}>Expand to other nights?, Influencer ROI confirmed, Pivot or double down</div>
-          </div>
-        </div>
-      </div>
+  return <div>
+    <div className="toc-header" style={{ display: "flex", justifyContent: "space-between", alignItems: "start", marginBottom: 24 }}>
+      <div><h1 style={{ margin: 0, fontSize: "clamp(1.3rem, 4.5vw, 1.8rem)", fontWeight: 800 }}>📊 Influencer Outreach Dashboard</h1><p style={{ color: "var(--muted)", margin: "6px 0 0", fontSize: ".9rem" }}>Live summary of the new Boise influencer list and outreach pipeline.</p></div>
+      <Link href="/influencers" style={{ color: "var(--muted)", textDecoration: "none", fontSize: ".85rem" }}>← Tracker</Link>
     </div>
-  );
+
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(150px,1fr))", gap: 12, marginBottom: 20 }}>
+      {[ ["Influencers", INFLUENCERS.length, "#e8a020"], ["Contacted", contacted, "#3b82f6"], ["Active Pipeline", active, "#9b5de5"], ["Meetings / Closed", committed, "#22c55e"], ["Total Reach", totalReach.toLocaleString(), "#f59e0b"] ].map(([label, value, color]) => <div key={String(label)} style={card}><div style={{ color: "var(--muted)", fontSize: ".75rem" }}>{label}</div><div style={{ color: String(color), fontSize: "1.7rem", fontWeight: 800, marginTop: 6 }}>{value}</div></div>)}
+    </div>
+
+    <div style={{ ...card, marginBottom: 20 }}><h2 style={{ margin: "0 0 14px", fontSize: "1rem" }}>Pipeline by Status</h2><div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>{["All", ...STATUSES].map(s => <button key={s} onClick={() => setFilter(s as Status | "All")} style={{ border: `1px solid ${s === "All" ? "var(--accent2)" : COLORS[s as Status]}`, color: filter === s ? "#111" : s === "All" ? "var(--accent2)" : COLORS[s as Status], background: filter === s ? s === "All" ? "var(--accent2)" : COLORS[s as Status] : "transparent", borderRadius: 999, padding: "6px 12px", cursor: "pointer", fontSize: ".75rem", fontWeight: 700 }}>{s}{s !== "All" ? ` (${mounted ? counts[s as Status] : 0})` : ""}</button>)}</div></div>
+
+    <div style={{ ...card, overflowX: "auto" }}><h2 style={{ margin: "0 0 14px", fontSize: "1rem" }}>{filter === "All" ? "All Influencers" : filter}</h2><table style={{ width: "100%", minWidth: 900, borderCollapse: "collapse" }}><thead><tr>{["Influencer", "Reach", "Fit", "Status", "Collab", "Last Contact", "Notes"].map(h => <th key={h} style={{ textAlign: "left", padding: "9px 10px", color: "var(--accent2)", fontSize: ".7rem", textTransform: "uppercase", borderBottom: "1px solid var(--border)" }}>{h}</th>)}</tr></thead><tbody>{filtered.map(i => { const t = get(i.handle); return <tr key={i.handle}><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}><a href={`https://instagram.com/${i.handle.slice(1)}`} target="_blank" rel="noreferrer" style={{ color: "#ff8c1a", fontWeight: 700 }}>{i.name}</a><div style={{ color: "var(--muted)", fontSize: ".75rem" }}>{i.handle} · {i.niche}</div></td><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}>{i.followers.toLocaleString()}</td><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}>{i.fit}</td><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}><select value={t.status} onChange={e => update(i.handle, { status: e.target.value as Status })} style={{ ...badge(t.status), cursor: "pointer" }}>{STATUSES.map(s => <option key={s}>{s}</option>)}</select></td><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}><select value={t.collabType} onChange={e => update(i.handle, { collabType: e.target.value as CollabType })} style={{ width: 135 }}><option value="None">None</option>{COLLABS.slice(1).map(c => <option key={c}>{c}</option>)}</select></td><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}><input type="date" value={t.lastContact} onChange={e => update(i.handle, { lastContact: e.target.value })} /></td><td style={{ padding: "10px", borderBottom: "1px solid var(--border)" }}><input placeholder="Add note" value={t.notes} onChange={e => update(i.handle, { notes: e.target.value })} style={{ minWidth: 160 }} /></td></tr> })}</tbody></table></div>
+  </div>;
 }
