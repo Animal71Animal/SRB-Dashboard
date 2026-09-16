@@ -677,7 +677,12 @@
       "text": "I'm sure bob will tell you guys tommorrow, but i belive the dancer Cleo will no longer be able to work here. she's been causing hella issues since she got here tonight",
       "timestamp": "2026-09-16T05:50:04.392Z",
       "date": "Sep 15, 2026",
-      "time": "11:50 PM"
+      "time": "11:50 PM",
+      "reactions": {
+        "thumbsup": [
+          "DJ"
+        ]
+      }
     }
   ]
 }
