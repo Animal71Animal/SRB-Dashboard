@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789441681432",
-      "sender": "Star",
-      "text": "she's going to pay it",
-      "timestamp": "2026-09-15T03:08:01.432Z",
-      "date": "Sep 14, 2026",
-      "time": "09:08 PM"
-    },
-    {
       "id": "1789441710196",
       "sender": "ANIMAL",
       "text": "cool",
@@ -878,6 +870,14 @@
       "sender": "Star",
       "text": "no sir",
       "timestamp": "2026-09-17T23:14:07.508Z",
+      "date": "Sep 17, 2026",
+      "time": "05:14 PM"
+    },
+    {
+      "id": "1789686895089",
+      "sender": "ANIMAL",
+      "text": "ok everyone go to a different screen like tv routing.. ",
+      "timestamp": "2026-09-17T23:14:55.089Z",
       "date": "Sep 17, 2026",
       "time": "05:14 PM"
     }
