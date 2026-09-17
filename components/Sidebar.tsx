@@ -35,7 +35,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false, tvrouting: false,
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
-  const [unreadMessages, setUnreadMessages] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [lastMsgId, setLastMsgId] = useState<string | null>(null);
 
@@ -79,17 +78,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           }
         }
         setLastMsgId(latestMsg.id);
-
-        if (pathname !== "/dj-mc-communications/messaging") {
-          const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
-          const recent = msgs.filter((m: any) => {
-            const ts = m.timestamp ? new Date(m.timestamp) : null;
-            return ts && ts > oneDayAgo;
-          });
-          setUnreadMessages(recent.length);
-        } else {
-          setUnreadMessages(0);
-        }
       } catch (e) {
         console.error("Failed to poll messages:", e);
       }
@@ -332,17 +320,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             <span style={{ fontSize: "1rem" }}>{item.icon}</span>
                             {item.title}
                           </Link>
-                          {item.href === "/dj-mc-communications/messaging" && unreadMessages > 0 && (
-                            <div style={{
-                              position: "absolute", right: 20, top: 12,
-                              background: "var(--accent)", color: "#fff",
-                              fontSize: "0.65rem", fontWeight: 700,
-                              borderRadius: 10, padding: "1px 6px",
-                              border: "1px solid rgba(255,255,255,0.3)"
-                            }}>
-                              {unreadMessages}
-                            </div>
-                          )}
                         </div>
                       )}
 
