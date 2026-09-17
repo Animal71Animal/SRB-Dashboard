@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789439788140",
-      "sender": "ANIMAL",
-      "text": "yeah, just make em wait a few minutes, message me who it is and we'll go from there",
-      "timestamp": "2026-09-15T02:36:28.140Z",
-      "date": "Sep 14, 2026",
-      "time": "08:36 PM"
-    },
-    {
       "id": "1789440883283",
       "sender": "Star",
       "text": "heard",
@@ -880,6 +872,14 @@
       "timestamp": "2026-09-17T23:12:54.580Z",
       "date": "Sep 17, 2026",
       "time": "05:12 PM"
+    },
+    {
+      "id": "1789686786064",
+      "sender": "Steven",
+      "text": "I am now at the computer.",
+      "timestamp": "2026-09-17T23:13:06.064Z",
+      "date": "Sep 17, 2026",
+      "time": "05:13 PM"
     }
   ]
 }
