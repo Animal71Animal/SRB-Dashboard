@@ -1,5 +1,14 @@
 [
   {
+    "id": "hrs-1789637619834",
+    "date": "2026-09-16",
+    "clockIn": "2026-09-16T00:00:00.000Z",
+    "clockOut": "2026-09-16T09:00:00.000Z",
+    "hours": 9,
+    "note": "setting up computer, working on marketing",
+    "mode": "manual"
+  },
+  {
     "id": "hrs-1789445760125",
     "date": "2026-09-14",
     "clockIn": "2026-09-14T19:15:00.000Z",
