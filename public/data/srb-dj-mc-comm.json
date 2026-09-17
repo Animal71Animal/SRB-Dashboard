@@ -1,20 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789436592242",
-      "sender": "ANIMAL",
-      "text": "If you have any dancers try to check in without paying house fees, tell them to wait because you need to check with me whether they can work or not. I'm gonna let them but let's have them sweat it out a little bit so they think about it next time",
-      "timestamp": "2026-09-15T01:43:12.242Z",
-      "date": "Sep 14, 2026",
-      "time": "07:43 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL",
-          "Star"
-        ]
-      }
-    },
-    {
       "id": "1789438818188",
       "sender": "Star",
       "text": "I just forgot to update roll call",
@@ -889,6 +875,14 @@
       "sender": "Star",
       "text": "what am i looking for exactly?",
       "timestamp": "2026-09-17T23:11:03.015Z",
+      "date": "Sep 17, 2026",
+      "time": "05:11 PM"
+    },
+    {
+      "id": "1789686709736",
+      "sender": "ANIMAL",
+      "text": "Test",
+      "timestamp": "2026-09-17T23:11:49.736Z",
       "date": "Sep 17, 2026",
       "time": "05:11 PM"
     }
