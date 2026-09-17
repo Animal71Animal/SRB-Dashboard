@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789283338830",
-      "sender": "Star",
-      "text": "not sure what happened but DjPro i guess needs an update, but the problem it stopped the music and just straight up closed the app, now it's not on the computer. i'm using vitrualdj right now as best to my ability but there was that interruption",
-      "timestamp": "2026-09-13T07:08:58.830Z",
-      "date": "Sep 13, 2026",
-      "time": "01:08 AM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1789297054103",
       "sender": "ANIMAL",
       "text": "ok thx for the heads up.. i'll have to take a look tomorrow. Im just waiting on a couple of new harddrives and then I have to copy mine over to the new ones for each club which will take a couple days or so. Then we can be on VDJ on the regular...≥",
@@ -891,6 +878,14 @@
       "timestamp": "2026-09-17T22:46:25.070Z",
       "date": "Sep 17, 2026",
       "time": "04:46 PM"
+    },
+    {
+      "id": "1789686078916",
+      "sender": "ANIMAL",
+      "text": "are you getting an alert? ",
+      "timestamp": "2026-09-17T23:01:18.916Z",
+      "date": "Sep 17, 2026",
+      "time": "05:01 PM"
     }
   ]
 }
