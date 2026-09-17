@@ -35,18 +35,39 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false, tvrouting: false,
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
+  const [unreadMessages, setUnreadMessages] = useState(0);
 
   useEffect(() => {
-    // Expand Analytics if on the hub or any sub-route
-    if (
-      pathname === "/analytics" ||
-      pathname.startsWith("/attendance") ||
-      pathname.startsWith("/campaign-analytics") ||
-      pathname.startsWith("/comp-codes") ||
-      pathname.startsWith("/staff-notes")
-    ) {
-      setAnalyticsExpanded(true);
-    }
+    const checkMessages = async () => {
+      try {
+        const currentEmail = sessionStorage.getItem("srb-session-email");
+        if (!currentEmail) return;
+
+        const res = await fetch("/api/dj-mc-communications");
+        const data = await res.json();
+        const msgs = data.messages || [];
+        
+        // we only count a message as "unread" if it's newer than the last time they opened the tab.
+        // For now, a simpler version: count messages from the last 24 hours 
+        // unless the user is currently on the messaging page.
+        if (pathname !== "/dj-mc-communications/messaging") {
+          const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+          const recent = msgs.filter((m: any) => {
+            const ts = m.timestamp ? new Date(m.timestamp) : null;
+            return ts && ts > oneDayAgo;
+          });
+          setUnreadMessages(recent.length);
+        } else {
+          setUnreadMessages(0);
+        }
+      } catch (e) {
+        console.error("Failed to poll messages:", e);
+      }
+    };
+
+    checkMessages();
+    const interval = setInterval(checkMessages, 30000); // Poll every 30s
+    return () => clearInterval(interval);
   }, [pathname]);
 
   useEffect(() => {
@@ -268,18 +289,31 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                           <ChevronIcon expanded={analyticsExpanded} />
                         </button>
                       ) : (
-                        <Link href={item.href} onClick={() => setMobileOpen(false)}
-                          style={{
-                            display: "flex", alignItems: "center", gap: 10,
-                            padding: "9px 20px", fontSize: "0.875rem",
-                            color: active ? "var(--accent2)" : "var(--text)",
-                            background: active ? "rgba(201,0,43,0.1)" : "transparent",
-                            borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                            textDecoration: "none", transition: "all 0.15s",
-                          }}>
-                          <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                          {item.title}
-                        </Link>
+                        <div style={{ position: "relative" }}>
+                          <Link href={item.href} onClick={() => setMobileOpen(false)}
+                            style={{
+                              display: "flex", alignItems: "center", gap: 10,
+                              padding: "9px 20px", fontSize: "0.875rem",
+                              color: active ? "var(--accent2)" : "var(--text)",
+                              background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                              borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                              textDecoration: "none", transition: "all 0.15s",
+                            }}>
+                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                            {item.title}
+                          </Link>
+                          {item.href === "/dj-mc-communications/messaging" && unreadMessages > 0 && (
+                            <div style={{
+                              position: "absolute", right: 20, top: 12,
+                              background: "var(--accent)", color: "#fff",
+                              fontSize: "0.65rem", fontWeight: 700,
+                              borderRadius: 10, padding: "1px 6px",
+                              border: "1px solid rgba(255,255,255,0.3)"
+                            }}>
+                              {unreadMessages}
+                            </div>
+                          )}
+                        </div>
                       )}
 
                       {/* Admin Console Sub-tab */}
