@@ -57,7 +57,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
             lastMsgId !== null && 
             latestMsg.id !== lastMsgId) {
           setShowAlert(true);
-          setTimeout(() => setShowAlert(false), 4000);
+          setTimeout(() => setShowAlert(false), 12000);
         }
         setLastMsgId(latestMsg.id);
 
