@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789259695496",
-      "sender": "ANIMAL",
-      "text": "wait until the look you get when you send them home! :-)",
-      "timestamp": "2026-09-13T00:34:55.496Z",
-      "date": "Sep 12, 2026",
-      "time": "06:34 PM",
-      "reactions": {
-        "laugh": [
-          "Steven"
-        ]
-      }
-    },
-    {
       "id": "1789283338830",
       "sender": "Star",
       "text": "not sure what happened but DjPro i guess needs an update, but the problem it stopped the music and just straight up closed the app, now it's not on the computer. i'm using vitrualdj right now as best to my ability but there was that interruption",
@@ -896,6 +883,14 @@
       "timestamp": "2026-09-17T22:45:52.691Z",
       "date": "Sep 17, 2026",
       "time": "04:45 PM"
+    },
+    {
+      "id": "1789685185070",
+      "sender": "ANIMAL",
+      "text": "ignite.abacusai.cloud",
+      "timestamp": "2026-09-17T22:46:25.070Z",
+      "date": "Sep 17, 2026",
+      "time": "04:46 PM"
     }
   ]
 }
