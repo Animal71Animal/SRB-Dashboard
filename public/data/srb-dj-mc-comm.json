@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789436438110",
-      "sender": "ANIMAL",
-      "text": "Everything good Star?",
-      "timestamp": "2026-09-15T01:40:38.110Z",
-      "date": "Sep 14, 2026",
-      "time": "07:40 PM"
-    },
-    {
       "id": "1789436482497",
       "sender": "ANIMAL",
       "text": "You don't have any dancers?!?!",
@@ -884,6 +876,14 @@
       "sender": "ANIMAL",
       "text": "Checking if the purple alert is showing up",
       "timestamp": "2026-09-17T23:10:00.810Z",
+      "date": "Sep 17, 2026",
+      "time": "05:10 PM"
+    },
+    {
+      "id": "1789686627909",
+      "sender": "ANIMAL",
+      "text": "Test",
+      "timestamp": "2026-09-17T23:10:27.909Z",
       "date": "Sep 17, 2026",
       "time": "05:10 PM"
     }
