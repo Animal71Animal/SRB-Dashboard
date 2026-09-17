@@ -102,10 +102,20 @@ export default function OverviewPage() {
     Notification.requestPermission().then((permission) => {
       setNotifPermission(permission);
       if (permission === "granted") {
-        new Notification("SRB Test Notification", {
-          body: "Verification works! system alerts are fully configured.",
-          icon: "/images/torch-logo.png"
-        });
+        try {
+          const notif = new Notification("SRB Test Notification", {
+            body: "Verification works! system alerts are fully configured.",
+            icon: "/images/torch-logo.png"
+          });
+          
+          notif.onerror = (e) => {
+            console.error("Notification trigger onerror:", e);
+            alert("Notification threw an error. This is usually caused by Operating System absolute blocks (Mac Do Not Disturb / Focus Mode, Windows Focus Assist, or Chrome system permission disabled).");
+          };
+        } catch (err) {
+          console.error("Notification constructor threw directly:", err);
+          alert("A standard browser API block was hit. If you're on a mobile device (iPhone/Android browser), native Web Notifications are restricted unless added as a PWA (Home Screen shortcut). On desktop, ensure system notifications are globally enabled.");
+        }
       } else {
         alert(`Notification permission was: ${permission}. Check your browser settings to allow them.`);
       }
