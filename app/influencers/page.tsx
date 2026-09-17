@@ -192,6 +192,10 @@ export default function InfluencersPage() {
   }, [filter, tracking]);
 
   const editingInf = editHandle ? INFLUENCERS.find((i) => i.handle === editHandle) : null;
+  const contacted = INFLUENCERS.filter((i) => getTrack(i.handle).status !== "Not Contacted").length;
+  const activePipeline = INFLUENCERS.filter((i) => ["DM Sent", "Replied", "Call / Meeting Scheduled"].includes(getTrack(i.handle).status)).length;
+  const meetingsClosed = counts["Call / Meeting Scheduled"] + counts["Deal Closed"];
+  const totalReach = INFLUENCERS.reduce((sum, i) => sum + i.followers, 0);
 
   const th: React.CSSProperties = {
     textAlign: "left",
@@ -234,7 +238,23 @@ export default function InfluencersPage() {
         </p>
       </div>
 
-      {/* Summary bar */}
+      {/* Dashboard overview */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(145px, 1fr))", gap: 12, marginBottom: 20 }}>
+        {[
+          ["Influencers", INFLUENCERS.length, "#e8a020"],
+          ["Contacted", contacted, "#3b82f6"],
+          ["Active Pipeline", activePipeline, "#9b5de5"],
+          ["Meetings / Closed", meetingsClosed, "#22c55e"],
+          ["Total Reach", fmtFollowers(totalReach), "#f59e0b"],
+        ].map(([label, value, color]) => (
+          <div key={String(label)} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18 }}>
+            <div style={{ color: "var(--muted)", fontSize: "0.75rem" }}>{label}</div>
+            <div style={{ color: String(color), fontSize: "1.7rem", fontWeight: 800, marginTop: 6 }}>{mounted ? value : "–"}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Status summary */}
       <div
         style={{
           display: "flex",
@@ -406,7 +426,6 @@ export default function InfluencersPage() {
       <div style={{ display: "flex", flexWrap: "wrap", gap: 12, marginTop: 20 }}>
         {[
           { href: "/influencers/outreach-templates", icon: "📧", title: "Outreach Templates" },
-          { href: "/influencers/tracking-dashboard", icon: "📈", title: "Tracking Dashboard" },
           { href: "/influencers/weekly-report", icon: "📄", title: "Weekly Report" },
         ].map((l) => (
           <Link
