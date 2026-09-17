@@ -36,6 +36,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
   const [unreadMessages, setUnreadMessages] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
+  const [lastMsgId, setLastMsgId] = useState<string | null>(null);
 
   useEffect(() => {
     const checkMessages = async () => {
@@ -47,9 +49,18 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         const data = await res.json();
         const msgs = data.messages || [];
         
-        // we only count a message as "unread" if it's newer than the last time they opened the tab.
-        // For now, a simpler version: count messages from the last 24 hours 
-        // unless the user is currently on the messaging page.
+        if (msgs.length === 0) return;
+        const latestMsg = msgs[msgs.length - 1];
+        
+        // Alert if a brand new message arrived and we aren't on the page
+        if (pathname !== "/dj-mc-communications/messaging" && 
+            lastMsgId !== null && 
+            latestMsg.id !== lastMsgId) {
+          setShowAlert(true);
+          setTimeout(() => setShowAlert(false), 4000);
+        }
+        setLastMsgId(latestMsg.id);
+
         if (pathname !== "/dj-mc-communications/messaging") {
           const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
           const recent = msgs.filter((m: any) => {
@@ -66,9 +77,9 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     };
 
     checkMessages();
-    const interval = setInterval(checkMessages, 30000); // Poll every 30s
+    const interval = setInterval(checkMessages, 10000); // Poll every 10s for alerts
     return () => clearInterval(interval);
-  }, [pathname]);
+  }, [pathname, lastMsgId]);
 
   useEffect(() => {
     // Check role by matching current email
@@ -406,7 +417,31 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 40, display: "none" }} />
       )}
 
+      {showAlert && (
+        <div style={{
+          position: "fixed", inset: 0, zIndex: 200, pointerEvents: "none",
+          animation: "purple-pulse 2s infinite ease-in-out",
+          border: "12px solid rgba(147, 51, 234, 0.3)",
+          display: "flex", justifyContent: "center", alignItems: "center"
+        }}>
+          <div style={{
+            background: "rgba(0,0,0,0.8)", color: "#fff", padding: "12px 24px",
+            borderRadius: 30, fontSize: "0.9rem", fontWeight: 600,
+            border: "1px solid rgba(147, 51, 234, 0.5)",
+            boxShadow: "0 0 20px rgba(147, 51, 234, 0.6)"
+          }}>
+            💬 New Message on the Board
+          </div>
+        </div>
+      )}
+
       <style>{`
+        @keyframes purple-pulse {
+          0% { background-color: rgba(147, 51, 234, 0); }
+          50% { background-color: rgba(147, 51, 234, 0.4); }
+          100% { background-color: rgba(147, 51, 234, 0); }
+        }
+
         @media (max-width: 768px) {
           .mobile-menu-btn { display: block !important; }
           .sidebar { transform: translateX(-100%); }
