@@ -797,19 +797,6 @@
       "time": "05:10 PM"
     },
     {
-      "id": "1789686627909",
-      "sender": "ANIMAL",
-      "text": "Test",
-      "timestamp": "2026-09-17T23:10:27.909Z",
-      "date": "Sep 17, 2026",
-      "time": "05:10 PM",
-      "reactions": {
-        "thumbsup": [
-          "Star"
-        ]
-      }
-    },
-    {
       "id": "1789686774580",
       "sender": "ANIMAL",
       "text": "the screen should go purple like the alarm does except not as in your face and it goes away by itself",
