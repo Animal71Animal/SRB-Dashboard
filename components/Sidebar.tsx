@@ -40,6 +40,18 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [lastMsgId, setLastMsgId] = useState<string | null>(null);
 
   useEffect(() => {
+    const requestPermission = async () => {
+      if ("Notification" in window) {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          console.log("Notifications granted");
+        }
+      }
+    };
+    requestPermission();
+  }, []);
+
+  useEffect(() => {
     const checkMessages = async () => {
       try {
         const currentEmail = sessionStorage.getItem("srb-session-email");
@@ -57,6 +69,14 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
             latestMsg.id !== lastMsgId) {
           setShowAlert(true);
           setTimeout(() => setShowAlert(false), 12000);
+          
+          // browser notification
+          if ("Notification" in window && Notification.permission === "granted") {
+            new Notification("SRB Messaging Board", {
+              body: `${latestMsg.sender}: ${latestMsg.text.slice(0, 50)}...`,
+              icon: "/images/torch-logo.png"
+            });
+          }
         }
         setLastMsgId(latestMsg.id);
 
