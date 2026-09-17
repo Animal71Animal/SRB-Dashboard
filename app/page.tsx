@@ -105,8 +105,13 @@ export default function OverviewPage() {
         try {
           const notif = new Notification("SRB Test Notification", {
             body: "Verification works! system alerts are fully configured.",
-            icon: "/images/torch-logo.png"
+            icon: "/images/torch-logo.png",
+            requireInteraction: true
           });
+          
+          notif.onclick = () => {
+            window.focus();
+          };
           
           notif.onerror = (e) => {
             console.error("Notification trigger onerror:", e);

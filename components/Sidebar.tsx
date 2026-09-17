@@ -35,7 +35,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     administrative: false, promotions: false, social: false, analytics: false, operations: false, djmc: false, tvrouting: false,
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
   const [lastMsgId, setLastMsgId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -66,15 +65,18 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         // Alert if a brand new message arrived
         if (lastMsgId !== null && 
             latestMsg.id !== lastMsgId) {
-          setShowAlert(true);
-          setTimeout(() => setShowAlert(false), 5000);
-          
-          // browser notification
+          // browser notification only (the purple flashing panel has been removed)
           if ("Notification" in window && Notification.permission === "granted") {
-            new Notification("SRB Messaging Board", {
-              body: `${latestMsg.sender}: ${latestMsg.text.slice(0, 50)}...`,
-              icon: "/images/torch-logo.png"
+            const notif = new Notification("SRB Messaging Board", {
+              body: `${latestMsg.sender}: ${latestMsg.text.slice(0, 70)}...`,
+              icon: "/images/torch-logo.png",
+              requireInteraction: true // This keeps the system notification open until clicked!
             });
+            
+            // clicking the notification can optionallly focus/bring the browser tab back
+            notif.onclick = () => {
+              window.focus();
+            };
           }
         }
         setLastMsgId(latestMsg.id);
@@ -413,35 +415,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
           style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.5)", zIndex: 40, display: "none" }} />
       )}
 
-      {showAlert && (
-        <div style={{
-          position: "fixed", inset: 0, zIndex: 200, pointerEvents: "auto",
-          animation: "purple-pulse 2s infinite ease-in-out",
-          border: "12px solid rgba(147, 51, 234, 0.3)",
-          display: "flex", justifyContent: "center", alignItems: "center"
-        }}>
-          <button 
-            onClick={() => setShowAlert(false)}
-            style={{
-              background: "rgba(0,0,0,0.9)", color: "#fff", padding: "12px 24px",
-              borderRadius: 30, fontSize: "0.9rem", fontWeight: 600,
-              border: "1px solid rgba(147, 51, 234, 0.5)",
-              boxShadow: "0 0 20px rgba(147, 51, 234, 0.6)",
-              cursor: "pointer", pointerEvents: "auto", outline: "none"
-            }}
-          >
-            💬 New Message on the Board (Click to Dismiss)
-          </button>
-        </div>
-      )}
-
       <style>{`
-        @keyframes purple-pulse {
-          0% { background-color: rgba(147, 51, 234, 0); }
-          50% { background-color: rgba(147, 51, 234, 0.4); }
-          100% { background-color: rgba(147, 51, 234, 0); }
-        }
-
         @media (max-width: 768px) {
           .mobile-menu-btn { display: block !important; }
           .sidebar { transform: translateX(-100%); }
