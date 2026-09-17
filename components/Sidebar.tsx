@@ -67,7 +67,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         if (lastMsgId !== null && 
             latestMsg.id !== lastMsgId) {
           setShowAlert(true);
-          setTimeout(() => setShowAlert(false), 12000);
+          setTimeout(() => setShowAlert(false), 5000);
           
           // browser notification
           if ("Notification" in window && Notification.permission === "granted") {
@@ -415,19 +415,23 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
 
       {showAlert && (
         <div style={{
-          position: "fixed", inset: 0, zIndex: 200, pointerEvents: "none",
+          position: "fixed", inset: 0, zIndex: 200, pointerEvents: "auto",
           animation: "purple-pulse 2s infinite ease-in-out",
           border: "12px solid rgba(147, 51, 234, 0.3)",
           display: "flex", justifyContent: "center", alignItems: "center"
         }}>
-          <div style={{
-            background: "rgba(0,0,0,0.8)", color: "#fff", padding: "12px 24px",
-            borderRadius: 30, fontSize: "0.9rem", fontWeight: 600,
-            border: "1px solid rgba(147, 51, 234, 0.5)",
-            boxShadow: "0 0 20px rgba(147, 51, 234, 0.6)"
-          }}>
-            💬 New Message on the Board
-          </div>
+          <button 
+            onClick={() => setShowAlert(false)}
+            style={{
+              background: "rgba(0,0,0,0.9)", color: "#fff", padding: "12px 24px",
+              borderRadius: 30, fontSize: "0.9rem", fontWeight: 600,
+              border: "1px solid rgba(147, 51, 234, 0.5)",
+              boxShadow: "0 0 20px rgba(147, 51, 234, 0.6)",
+              cursor: "pointer", pointerEvents: "auto", outline: "none"
+            }}
+          >
+            💬 New Message on the Board (Click to Dismiss)
+          </button>
         </div>
       )}
 
