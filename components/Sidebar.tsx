@@ -52,9 +52,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
         if (msgs.length === 0) return;
         const latestMsg = msgs[msgs.length - 1];
         
-        // Alert if a brand new message arrived and we aren't on the page
-        if (pathname !== "/dj-mc-communications/messaging" && 
-            lastMsgId !== null && 
+        // Alert if a brand new message arrived
+        if (lastMsgId !== null && 
             latestMsg.id !== lastMsgId) {
           setShowAlert(true);
           setTimeout(() => setShowAlert(false), 12000);
