@@ -55,6 +55,13 @@
       "name": "DJ",
       "password": "dj@torch.dj",
       "mustResetPassword": false
+    },
+    {
+      "email": "support@buildplatform.com",
+      "role": "Admin",
+      "name": "Thayne",
+      "password": "password123",
+      "mustResetPassword": true
     }
   ]
 }
