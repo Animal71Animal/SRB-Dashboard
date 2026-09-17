@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789441345469",
-      "sender": "Star",
-      "text": "Emmalee",
-      "timestamp": "2026-09-15T03:02:25.469Z",
-      "date": "Sep 14, 2026",
-      "time": "09:02 PM"
-    },
-    {
       "id": "1789441486791",
       "sender": "ANIMAL",
       "text": "make her wait another 5 min or so, say you heard back from me and tell her im gonna give her a pass this time but i am not gonna be able to let her work next time... it's not up to me",
@@ -878,6 +870,14 @@
       "sender": "Star",
       "text": "it did't go purple on my side, but i think i heard the alarm? unless it's just imprinted in my brain at this point",
       "timestamp": "2026-09-17T23:13:47.956Z",
+      "date": "Sep 17, 2026",
+      "time": "05:13 PM"
+    },
+    {
+      "id": "1789686829495",
+      "sender": "ANIMAL",
+      "text": "anyone seeing it",
+      "timestamp": "2026-09-17T23:13:49.495Z",
       "date": "Sep 17, 2026",
       "time": "05:13 PM"
     }
