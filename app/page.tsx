@@ -84,7 +84,33 @@ export default function OverviewPage() {
   const [socialPosts, setSocialPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeGroup, setActiveGroup] = useState<ModuleGroup | null>(null);
+  const [notifPermission, setNotifPermission] = useState<string>("default");
   const venue = useVenue();
+
+  useEffect(() => {
+    if ("Notification" in window) {
+      setNotifPermission(Notification.permission);
+    }
+  }, []);
+
+  const triggerTestNotification = () => {
+    if (!("Notification" in window)) {
+      alert("This browser does not support desktop notifications.");
+      return;
+    }
+    
+    Notification.requestPermission().then((permission) => {
+      setNotifPermission(permission);
+      if (permission === "granted") {
+        new Notification("SRB Test Notification", {
+          body: "Verification works! system alerts are fully configured.",
+          icon: "/images/torch-logo.png"
+        });
+      } else {
+        alert(`Notification permission was: ${permission}. Check your browser settings to allow them.`);
+      }
+    });
+  };
 
   useEffect(() => {
     const checkRole = async () => {
@@ -174,9 +200,35 @@ export default function OverviewPage() {
           <KpiCard label="Upcoming Events This Week" value={thisWeekEvents} icon="📅" />
           <KpiCard label="Active Promo Campaigns" value={activeCampaigns} icon="📢" />
           <KpiCard label="Influencer Partners" value={activeInfluencers} icon="⭐" />
-          <KpiCard label="Social Posts Scheduled" value={scheduledPosts} icon="📱" />
+          <KpiCard label="Social Posts Scheduled" value={socialPosts.filter(p => p.status === "Scheduled").length} icon="📱" />
         </div>
       )}
+
+      {/* Notification Debug Card */}
+      <div style={{
+        ...CARD,
+        background: "rgba(147, 51, 234, 0.05)",
+        border: "1px solid rgba(147, 51, 234, 0.2)",
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+        gap: 16, marginBottom: 40
+      }}>
+        <div>
+          <div style={{ fontWeight: 650, color: "rgba(147, 51, 234, 0.82)" }}>🚀 Notification Debugger</div>
+          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
+            Permission state: <strong style={{ textTransform: "uppercase" }}>{notifPermission}</strong>
+          </div>
+        </div>
+        <button 
+          onClick={triggerTestNotification}
+          style={{
+            background: "rgb(126, 34, 206)", color: "#fff", border: "none",
+            borderRadius: 6, padding: "8px 16px", fontSize: "0.8rem", fontWeight: 700,
+            cursor: "pointer"
+          }}
+        >
+          Send Test Notification
+        </button>
+      </div>
 
       {role === "Employee" && (
         <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 40 }}>
