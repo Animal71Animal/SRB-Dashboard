@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789441710196",
-      "sender": "ANIMAL",
-      "text": "cool",
-      "timestamp": "2026-09-15T03:08:30.196Z",
-      "date": "Sep 14, 2026",
-      "time": "09:08 PM"
-    },
-    {
       "id": "1789447123257",
       "sender": "ANIMAL",
       "text": "were you able to log zara in? ",
@@ -880,6 +872,14 @@
       "timestamp": "2026-09-17T23:14:55.089Z",
       "date": "Sep 17, 2026",
       "time": "05:14 PM"
+    },
+    {
+      "id": "1789686917794",
+      "sender": "ANIMAL",
+      "text": "now?",
+      "timestamp": "2026-09-17T23:15:17.794Z",
+      "date": "Sep 17, 2026",
+      "time": "05:15 PM"
     }
   ]
 }
