@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789513211827",
-      "sender": "Star",
-      "text": "today? no one so far",
-      "timestamp": "2026-09-15T23:00:11.827Z",
-      "date": "Sep 15, 2026",
-      "time": "05:00 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1789513264525",
       "sender": "ANIMAL",
       "text": "Heard. Thank you. Just let me know everytime a  girl doesn't have it.. Make her sweat it out for a few min while you contact me and we'll go from there",
@@ -850,6 +837,14 @@
       "timestamp": "2026-09-18T02:40:41.363Z",
       "date": "Sep 17, 2026",
       "time": "08:40 PM"
+    },
+    {
+      "id": "1789699289813",
+      "sender": "ANIMAL",
+      "text": "all good lol",
+      "timestamp": "2026-09-18T02:41:29.813Z",
+      "date": "Sep 17, 2026",
+      "time": "08:41 PM"
     }
   ]
 }
