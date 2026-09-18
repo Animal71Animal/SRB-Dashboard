@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789512928967",
-      "sender": "ANIMAL",
-      "text": "Hey Star, who did we give passes to you yesterday on House Fees? Anyone? ",
-      "timestamp": "2026-09-15T22:55:28.967Z",
-      "date": "Sep 15, 2026",
-      "time": "04:55 PM"
-    },
-    {
       "id": "1789513016285",
       "sender": "ANIMAL",
       "text": "I need everyone to shoot me a list of girls each day who we let slide on house fees anytime in the next week or so.... please keep an accurate account. You can shoot me the name here in the messages as soon as it occurs if you would like",
@@ -865,6 +857,14 @@
           "ANIMAL"
         ]
       }
+    },
+    {
+      "id": "1789699143899",
+      "sender": "ANIMAL",
+      "text": "i need those names from both of you... every night please",
+      "timestamp": "2026-09-18T02:39:03.899Z",
+      "date": "Sep 17, 2026",
+      "time": "08:39 PM"
     }
   ]
 }
