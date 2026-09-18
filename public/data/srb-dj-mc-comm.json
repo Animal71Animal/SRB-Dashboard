@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514569639",
-      "sender": "ANIMAL",
-      "text": "ohhh so you logged in to the TOC under your account not just the general one I had opened up on the comp earlier today? ",
-      "timestamp": "2026-09-15T23:22:49.639Z",
-      "date": "Sep 15, 2026",
-      "time": "05:22 PM"
-    },
-    {
       "id": "1789514596570",
       "sender": "Star",
       "text": "i'm on the computer",
@@ -848,6 +840,14 @@
       "sender": "Steven",
       "text": "Okay, thank-you bro.",
       "timestamp": "2026-09-18T06:17:08.413Z",
+      "date": "Sep 18, 2026",
+      "time": "12:17 AM"
+    },
+    {
+      "id": "1789712244413",
+      "sender": "Steven",
+      "text": "Sugar didn't have her house fee tonight. ",
+      "timestamp": "2026-09-18T06:17:24.413Z",
       "date": "Sep 18, 2026",
       "time": "12:17 AM"
     }
