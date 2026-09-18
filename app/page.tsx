@@ -103,7 +103,7 @@ export default function OverviewPage() {
       setNotifPermission(permission);
       if (permission === "granted") {
         try {
-          const notif = new Notification("SRB Test Notification", {
+          const notif = new Notification("Torch DJ's Message Board", {
             body: "Verification works! system alerts are fully configured.",
             icon: "/images/torch-logo.png",
             requireInteraction: true

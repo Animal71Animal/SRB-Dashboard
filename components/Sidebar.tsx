@@ -67,7 +67,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
             latestMsg.id !== lastMsgId) {
           // browser notification only (the purple flashing panel has been removed)
           if ("Notification" in window && Notification.permission === "granted") {
-            const notif = new Notification("SRB Messaging Board", {
+            const notif = new Notification("Torch DJ's Message Board", {
               body: `${latestMsg.sender}: ${latestMsg.text.slice(0, 70)}...`,
               icon: "/images/torch-logo.png",
               requireInteraction: true // This keeps the system notification open until clicked!
