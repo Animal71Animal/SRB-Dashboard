@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789447614600",
-      "sender": "Star",
-      "text": "okay, will do.",
-      "timestamp": "2026-09-15T04:46:54.600Z",
-      "date": "Sep 14, 2026",
-      "time": "10:46 PM"
-    },
-    {
       "id": "1789447749734",
       "sender": "Star",
       "text": "Also, Jayden is heading your way. She doesn't know if she is clocking in there yet, apperantly she's going there for Mark Harris. good dude, going through some shit. but if she does, i did put in the transfer request on the tablet",
@@ -870,6 +862,14 @@
       "timestamp": "2026-09-18T00:58:53.578Z",
       "date": "Sep 17, 2026",
       "time": "06:58 PM"
+    },
+    {
+      "id": "1789693154744",
+      "sender": "Star",
+      "text": "it only works if i'm looking at chrome",
+      "timestamp": "2026-09-18T00:59:14.744Z",
+      "date": "Sep 17, 2026",
+      "time": "06:59 PM"
     }
   ]
 }
