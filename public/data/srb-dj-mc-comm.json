@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514656766",
-      "sender": "Star",
-      "text": "yes",
-      "timestamp": "2026-09-15T23:24:16.766Z",
-      "date": "Sep 15, 2026",
-      "time": "05:24 PM"
-    },
-    {
       "id": "1789514747605",
       "sender": "ANIMAL",
       "text": "ok that's cool... ya'll keep doing that when you use the comp. I don't care how you choose to respond (phone or PC) as long as you are signed in under your account everyone can see who is responding",
@@ -843,6 +835,14 @@
       "sender": "Steven",
       "text": "Okay, I let Bob know, thank-you Star.",
       "timestamp": "2026-09-18T06:37:44.772Z",
+      "date": "Sep 18, 2026",
+      "time": "12:37 AM"
+    },
+    {
+      "id": "1789713470920",
+      "sender": "Steven",
+      "text": "Okay, I let Bob know, thank-you Star.",
+      "timestamp": "2026-09-18T06:37:50.920Z",
       "date": "Sep 18, 2026",
       "time": "12:37 AM"
     }
