@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789449238201",
-      "sender": "ANIMAL",
-      "text": "Hey guys, need you to go through the stuff in this folder. If you have any questions let me know. A copy of the DJ Presentation, some videos on RotationX I couldn't show you at the meeting, and a podcast talking about our processes. Thanks.... https://drive.google.com/drive/folders/1nbqrGUyARkLEig9KlhSFGnPDJW0uRCYd?usp=sharing",
-      "timestamp": "2026-09-15T05:13:58.201Z",
-      "date": "Sep 14, 2026",
-      "time": "11:13 PM",
-      "reactions": {
-        "thumbsup": [
-          "Star"
-        ]
-      }
-    },
-    {
       "id": "1789512928967",
       "sender": "ANIMAL",
       "text": "Hey Star, who did we give passes to you yesterday on House Fees? Anyone? ",
@@ -865,6 +852,14 @@
       "timestamp": "2026-09-18T01:49:48.223Z",
       "date": "Sep 17, 2026",
       "time": "07:49 PM"
+    },
+    {
+      "id": "1789696233641",
+      "sender": "ANIMAL",
+      "text": "Test",
+      "timestamp": "2026-09-18T01:50:33.641Z",
+      "date": "Sep 17, 2026",
+      "time": "07:50 PM"
     }
   ]
 }
