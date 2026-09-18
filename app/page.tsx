@@ -219,32 +219,6 @@ export default function OverviewPage() {
         </div>
       )}
 
-      {/* Notification Debug Card */}
-      <div style={{
-        ...CARD,
-        background: "rgba(147, 51, 234, 0.05)",
-        border: "1px solid rgba(147, 51, 234, 0.2)",
-        display: "flex", justifyContent: "space-between", alignItems: "center",
-        gap: 16, marginBottom: 40
-      }}>
-        <div>
-          <div style={{ fontWeight: 650, color: "rgba(147, 51, 234, 0.82)" }}>🚀 Notification Debugger</div>
-          <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
-            Permission state: <strong style={{ textTransform: "uppercase" }}>{notifPermission}</strong>
-          </div>
-        </div>
-        <button 
-          onClick={triggerTestNotification}
-          style={{
-            background: "rgb(126, 34, 206)", color: "#fff", border: "none",
-            borderRadius: 6, padding: "8px 16px", fontSize: "0.8rem", fontWeight: 700,
-            cursor: "pointer"
-          }}
-        >
-          Send Test Notification
-        </button>
-      </div>
-
       {role === "Employee" && (
         <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 40 }}>
           <Link href="/dj-mc-communications/schedules" style={{ textDecoration: "none" }}>
