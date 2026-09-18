@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789447749734",
-      "sender": "Star",
-      "text": "Also, Jayden is heading your way. She doesn't know if she is clocking in there yet, apperantly she's going there for Mark Harris. good dude, going through some shit. but if she does, i did put in the transfer request on the tablet",
-      "timestamp": "2026-09-15T04:49:09.734Z",
-      "date": "Sep 14, 2026",
-      "time": "10:49 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1789449238201",
       "sender": "ANIMAL",
       "text": "Hey guys, need you to go through the stuff in this folder. If you have any questions let me know. A copy of the DJ Presentation, some videos on RotationX I couldn't show you at the meeting, and a podcast talking about our processes. Thanks.... https://drive.google.com/drive/folders/1nbqrGUyARkLEig9KlhSFGnPDJW0uRCYd?usp=sharing",
@@ -870,6 +857,14 @@
       "timestamp": "2026-09-18T00:59:14.744Z",
       "date": "Sep 17, 2026",
       "time": "06:59 PM"
+    },
+    {
+      "id": "1789696188223",
+      "sender": "ANIMAL",
+      "text": "Hmmm",
+      "timestamp": "2026-09-18T01:49:48.223Z",
+      "date": "Sep 17, 2026",
+      "time": "07:49 PM"
     }
   ]
 }
