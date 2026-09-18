@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514076782",
-      "sender": "Steven",
-      "text": "Yes ",
-      "timestamp": "2026-09-15T23:14:36.782Z",
-      "date": "Sep 15, 2026",
-      "time": "05:14 PM"
-    },
-    {
       "id": "1789514084062",
       "sender": "Steven",
       "text": "Well, I am, atleast.",
@@ -850,6 +842,14 @@
       "timestamp": "2026-09-18T04:30:18.065Z",
       "date": "Sep 17, 2026",
       "time": "10:30 PM"
+    },
+    {
+      "id": "1789706029705",
+      "sender": "Star",
+      "text": "Sophie. ",
+      "timestamp": "2026-09-18T04:33:49.705Z",
+      "date": "Sep 17, 2026",
+      "time": "10:33 PM"
     }
   ]
 }
