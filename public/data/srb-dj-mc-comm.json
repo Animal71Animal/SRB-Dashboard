@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514131937",
-      "sender": "ANIMAL",
-      "text": "ok... thats cool. that's why i see your name in accordance with who sent the message. I think if you respond in the app on the comp it will just say DJ.. can someone try that? ",
-      "timestamp": "2026-09-15T23:15:31.937Z",
-      "date": "Sep 15, 2026",
-      "time": "05:15 PM"
-    },
-    {
       "id": "1789514216585",
       "sender": "Steven",
       "text": "Yes.",
@@ -850,6 +842,14 @@
       "timestamp": "2026-09-18T04:41:50.120Z",
       "date": "Sep 17, 2026",
       "time": "10:41 PM"
+    },
+    {
+      "id": "1789709090271",
+      "sender": "Steven",
+      "text": "Hey Star, did Sophie transfer from T1?",
+      "timestamp": "2026-09-18T05:24:50.271Z",
+      "date": "Sep 17, 2026",
+      "time": "11:24 PM"
     }
   ]
 }
