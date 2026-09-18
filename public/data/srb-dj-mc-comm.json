@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789513126442",
-      "sender": "ANIMAL",
-      "text": "if the alarm goes off on the comp in the booth it will always say 'who' needs help in the on screen message. If it says 'Animal' or 'DJs' need help, that is me telling you to check the messages",
-      "timestamp": "2026-09-15T22:58:46.442Z",
-      "date": "Sep 15, 2026",
-      "time": "04:58 PM",
-      "reactions": {
-        "thumbsup": [
-          "Star"
-        ]
-      }
-    },
-    {
       "id": "1789513195854",
       "sender": "Star",
       "text": "yesterday? only Malika and Pyro",
@@ -858,6 +845,14 @@
       "sender": "Star",
       "text": "she did pay it after she got dances though, does that count lol?",
       "timestamp": "2026-09-18T02:39:11.181Z",
+      "date": "Sep 17, 2026",
+      "time": "08:39 PM"
+    },
+    {
+      "id": "1789699193274",
+      "sender": "ANIMAL",
+      "text": "nope.. she still used up her free pass :-)",
+      "timestamp": "2026-09-18T02:39:53.274Z",
       "date": "Sep 17, 2026",
       "time": "08:39 PM"
     }
