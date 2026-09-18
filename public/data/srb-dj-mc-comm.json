@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789447414388",
-      "sender": "Star",
-      "text": "Yes. she mentioned coming from T2. i thought it was weird cuz the system is the same but it didn't say that here",
-      "timestamp": "2026-09-15T04:43:34.388Z",
-      "date": "Sep 14, 2026",
-      "time": "10:43 PM"
-    },
-    {
       "id": "1789447519925",
       "sender": "ANIMAL",
       "text": "yeah i talked to Joanna, i guess she fixed it by the time Zara got over there.. That's good. I felt bad sending her away. Tell her I talked to Joanna and got it worked out...",
@@ -875,6 +867,14 @@
       "timestamp": "2026-09-18T00:51:33.792Z",
       "date": "Sep 17, 2026",
       "time": "06:51 PM"
+    },
+    {
+      "id": "1789692998236",
+      "sender": "Steven",
+      "text": "2nd text.",
+      "timestamp": "2026-09-18T00:56:38.236Z",
+      "date": "Sep 17, 2026",
+      "time": "06:56 PM"
     }
   ]
 }
