@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514596570",
-      "sender": "Star",
-      "text": "i'm on the computer",
-      "timestamp": "2026-09-15T23:23:16.570Z",
-      "date": "Sep 15, 2026",
-      "time": "05:23 PM"
-    },
-    {
       "id": "1789514605604",
       "sender": "Steven",
       "text": "Yes I did.",
@@ -850,6 +842,14 @@
       "timestamp": "2026-09-18T06:17:24.413Z",
       "date": "Sep 18, 2026",
       "time": "12:17 AM"
+    },
+    {
+      "id": "1789712435485",
+      "sender": "Steven",
+      "text": "So, Sophie didn't pay her fees at T1 Star?",
+      "timestamp": "2026-09-18T06:20:35.485Z",
+      "date": "Sep 18, 2026",
+      "time": "12:20 AM"
     }
   ]
 }
