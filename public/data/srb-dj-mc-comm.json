@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514314349",
-      "sender": "Steven",
-      "text": "Okay, i'm on PC now.",
-      "timestamp": "2026-09-15T23:18:34.349Z",
-      "date": "Sep 15, 2026",
-      "time": "05:18 PM"
-    },
-    {
       "id": "1789514386235",
       "sender": "ANIMAL",
       "text": "that last message was PC? hmmm i still see you're name... that's cool. I don't know how that is working like that but ok... we'll see what happens when Star sends a text from PC",
@@ -850,6 +842,14 @@
       "timestamp": "2026-09-18T05:32:06.514Z",
       "date": "Sep 17, 2026",
       "time": "11:32 PM"
+    },
+    {
+      "id": "1789709585377",
+      "sender": "Star",
+      "text": "if she is there. she didn't pay her housefee here. and that was supposed to be her pass.",
+      "timestamp": "2026-09-18T05:33:05.377Z",
+      "date": "Sep 17, 2026",
+      "time": "11:33 PM"
     }
   ]
 }
