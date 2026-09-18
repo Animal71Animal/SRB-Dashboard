@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789513301912",
-      "sender": "Steven",
-      "text": "Sounds good.",
-      "timestamp": "2026-09-15T23:01:41.912Z",
-      "date": "Sep 15, 2026",
-      "time": "05:01 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1789513353449",
       "sender": "Star",
       "text": "heard",
@@ -843,6 +830,14 @@
       "sender": "Steven",
       "text": "Last night was Kisha and Rocky.",
       "timestamp": "2026-09-18T02:48:25.745Z",
+      "date": "Sep 17, 2026",
+      "time": "08:48 PM"
+    },
+    {
+      "id": "1789699728949",
+      "sender": "Steven",
+      "text": "Tonight I didn't have any.",
+      "timestamp": "2026-09-18T02:48:48.949Z",
       "date": "Sep 17, 2026",
       "time": "08:48 PM"
     }
