@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789513353449",
-      "sender": "Star",
-      "text": "heard",
-      "timestamp": "2026-09-15T23:02:33.449Z",
-      "date": "Sep 15, 2026",
-      "time": "05:02 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1789513884263",
       "sender": "ANIMAL",
       "text": "one quick thing.... are you guys replying to these messages thru your phone?",
@@ -850,6 +837,14 @@
           "ANIMAL"
         ]
       }
+    },
+    {
+      "id": "1789700171992",
+      "sender": "Steven",
+      "text": "Definitely lied, Justice didn't have hers tonight.",
+      "timestamp": "2026-09-18T02:56:11.992Z",
+      "date": "Sep 17, 2026",
+      "time": "08:56 PM"
     }
   ]
 }
