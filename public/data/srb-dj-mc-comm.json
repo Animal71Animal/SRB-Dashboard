@@ -831,7 +831,12 @@
       "text": "Last night was Kisha and Rocky.",
       "timestamp": "2026-09-18T02:48:25.745Z",
       "date": "Sep 17, 2026",
-      "time": "08:48 PM"
+      "time": "08:48 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1789699728949",
