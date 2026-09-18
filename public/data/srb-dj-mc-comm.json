@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789447519925",
-      "sender": "ANIMAL",
-      "text": "yeah i talked to Joanna, i guess she fixed it by the time Zara got over there.. That's good. I felt bad sending her away. Tell her I talked to Joanna and got it worked out...",
-      "timestamp": "2026-09-15T04:45:19.925Z",
-      "date": "Sep 14, 2026",
-      "time": "10:45 PM",
-      "reactions": {
-        "thumbsup": [
-          "Star"
-        ]
-      }
-    },
-    {
       "id": "1789447614600",
       "sender": "Star",
       "text": "okay, will do.",
@@ -875,6 +862,14 @@
       "timestamp": "2026-09-18T00:56:38.236Z",
       "date": "Sep 17, 2026",
       "time": "06:56 PM"
+    },
+    {
+      "id": "1789693133578",
+      "sender": "Star",
+      "text": "is it supposed to work even if i'm looking at the Dj app?",
+      "timestamp": "2026-09-18T00:58:53.578Z",
+      "date": "Sep 17, 2026",
+      "time": "06:58 PM"
     }
   ]
 }
