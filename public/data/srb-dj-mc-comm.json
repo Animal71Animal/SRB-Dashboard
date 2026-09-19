@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514747605",
-      "sender": "ANIMAL",
-      "text": "ok that's cool... ya'll keep doing that when you use the comp. I don't care how you choose to respond (phone or PC) as long as you are signed in under your account everyone can see who is responding",
-      "timestamp": "2026-09-15T23:25:47.605Z",
-      "date": "Sep 15, 2026",
-      "time": "05:25 PM"
-    },
-    {
       "id": "1789514797091",
       "sender": "Steven",
       "text": "I wish we could get notifications on our phones, because I'm never on my phone when I'm at home.",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-18T06:37:50.920Z",
       "date": "Sep 18, 2026",
       "time": "12:37 AM"
+    },
+    {
+      "id": "1789852782254",
+      "sender": "ANIMAL",
+      "text": "hey guys, sooo sorry ive been out of the loop.. literally in bed for the last day and a half.... i appreciate yall holding it down",
+      "timestamp": "2026-09-19T21:19:42.254Z",
+      "date": "Sep 19, 2026",
+      "time": "03:19 PM"
     }
   ]
 }
