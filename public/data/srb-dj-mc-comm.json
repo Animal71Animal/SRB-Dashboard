@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514848696",
-      "sender": "ANIMAL",
-      "text": "yeah im trying to figure that out still... hopefully by next week it will be in place",
-      "timestamp": "2026-09-15T23:27:28.696Z",
-      "date": "Sep 15, 2026",
-      "time": "05:27 PM"
-    },
-    {
       "id": "1789515001147",
       "sender": "Steven",
       "text": "Okay, sounds good.",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-19T21:24:42.094Z",
       "date": "Sep 19, 2026",
       "time": "03:24 PM"
+    },
+    {
+      "id": "1789855805551",
+      "sender": "Steven",
+      "text": "I'm at T1 tonight.",
+      "timestamp": "2026-09-19T22:10:05.551Z",
+      "date": "Sep 19, 2026",
+      "time": "04:10 PM"
     }
   ]
 }
