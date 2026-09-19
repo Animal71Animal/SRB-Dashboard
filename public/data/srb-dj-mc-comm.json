@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789514797091",
-      "sender": "Steven",
-      "text": "I wish we could get notifications on our phones, because I'm never on my phone when I'm at home.",
-      "timestamp": "2026-09-15T23:26:37.091Z",
-      "date": "Sep 15, 2026",
-      "time": "05:26 PM"
-    },
-    {
       "id": "1789514848696",
       "sender": "ANIMAL",
       "text": "yeah im trying to figure that out still... hopefully by next week it will be in place",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-19T21:19:42.254Z",
       "date": "Sep 19, 2026",
       "time": "03:19 PM"
+    },
+    {
+      "id": "1789853082094",
+      "sender": "ANIMAL",
+      "text": "still feeling terrible but im back in the booth tonight star so keep the communications open this evening",
+      "timestamp": "2026-09-19T21:24:42.094Z",
+      "date": "Sep 19, 2026",
+      "time": "03:24 PM"
     }
   ]
 }
