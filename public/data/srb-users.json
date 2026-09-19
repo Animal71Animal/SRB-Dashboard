@@ -5,7 +5,7 @@
       "role": "SuperAdmin",
       "name": "ANIMAL",
       "password": "Wickeddrummr71!",
-      "mustResetPassword": false
+      "mustResetPassword": true
     },
     {
       "email": "joannatorchlounge@gmail.com",
