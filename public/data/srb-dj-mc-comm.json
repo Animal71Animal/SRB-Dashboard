@@ -836,7 +836,12 @@
       "text": "Just kicked out some guy who came in skirt, told him that he needed to have proper attire to be in a gentleman's club.",
       "timestamp": "2026-09-20T00:39:42.348Z",
       "date": "Sep 19, 2026",
-      "time": "06:39 PM"
+      "time": "06:39 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1789868251777",
