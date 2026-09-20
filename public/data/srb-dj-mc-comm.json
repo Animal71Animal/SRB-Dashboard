@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789515156015",
-      "sender": "ANIMAL",
-      "text": "kind of quaint ain't it",
-      "timestamp": "2026-09-15T23:32:36.015Z",
-      "date": "Sep 15, 2026",
-      "time": "05:32 PM"
-    },
-    {
       "id": "1789515253013",
       "sender": "ANIMAL",
       "text": "no, you can keep Bob informed of what's going on and what the process I've asked you to do for me is, but contact me however you can best get a quick response as far as any entertainers go... and both of you now know how to get girls signed up for the ignite entertainer app correct? ",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T01:52:30.500Z",
       "date": "Sep 19, 2026",
       "time": "07:52 PM"
+    },
+    {
+      "id": "1789870785964",
+      "sender": "Steven",
+      "text": "Hey Animal, Mercedes said that she doesn't have any other bottoms and wants to put a skirt on and see if that would help.",
+      "timestamp": "2026-09-20T02:19:45.964Z",
+      "date": "Sep 19, 2026",
+      "time": "08:19 PM"
     }
   ]
 }
