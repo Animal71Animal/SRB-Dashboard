@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789517535885",
-      "sender": "Steven",
-      "text": "I can't log into the Ignite app to send the link to the dancer.",
-      "timestamp": "2026-09-16T00:12:15.885Z",
-      "date": "Sep 15, 2026",
-      "time": "06:12 PM"
-    },
-    {
       "id": "1789518426599",
       "sender": "ANIMAL",
       "text": "what is happening when you go to the ignite app in the TOC on the computer?\n",
@@ -843,6 +835,14 @@
       "sender": "Steven",
       "text": "It's super busy here.",
       "timestamp": "2026-09-20T05:18:28.525Z",
+      "date": "Sep 19, 2026",
+      "time": "11:18 PM"
+    },
+    {
+      "id": "1789881523137",
+      "sender": "Steven",
+      "text": "Also, Kisha didn't have her house fee again tonight. ",
+      "timestamp": "2026-09-20T05:18:43.137Z",
       "date": "Sep 19, 2026",
       "time": "11:18 PM"
     }
