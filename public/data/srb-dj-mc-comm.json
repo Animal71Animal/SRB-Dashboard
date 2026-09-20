@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789515555127",
-      "sender": "Steven",
-      "text": "Okay.",
-      "timestamp": "2026-09-15T23:39:15.127Z",
-      "date": "Sep 15, 2026",
-      "time": "05:39 PM"
-    },
-    {
       "id": "1789515573532",
       "sender": "Steven",
       "text": "I still need to learn how to sign dancers up for the Ignite app.",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T03:50:13.978Z",
       "date": "Sep 19, 2026",
       "time": "09:50 PM"
+    },
+    {
+      "id": "1789877723507",
+      "sender": "Steven",
+      "text": "Got it, thank-you Animal.",
+      "timestamp": "2026-09-20T04:15:23.507Z",
+      "date": "Sep 19, 2026",
+      "time": "10:15 PM"
     }
   ]
 }
