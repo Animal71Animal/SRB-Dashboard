@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789515001147",
-      "sender": "Steven",
-      "text": "Okay, sounds good.",
-      "timestamp": "2026-09-15T23:30:01.147Z",
-      "date": "Sep 15, 2026",
-      "time": "05:30 PM"
-    },
-    {
       "id": "1789515028902",
       "sender": "Star",
       "text": "that would be nice",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-19T22:10:05.551Z",
       "date": "Sep 19, 2026",
       "time": "04:10 PM"
+    },
+    {
+      "id": "1789864782348",
+      "sender": "Steven",
+      "text": "Just kicked out some guy who came in skirt, told him that he needed to have proper attire to be in a gentleman's club.",
+      "timestamp": "2026-09-20T00:39:42.348Z",
+      "date": "Sep 19, 2026",
+      "time": "06:39 PM"
     }
   ]
 }
