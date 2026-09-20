@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789519069800",
-      "sender": "Steven",
-      "text": "Can*",
-      "timestamp": "2026-09-16T00:37:49.800Z",
-      "date": "Sep 15, 2026",
-      "time": "06:37 PM"
-    },
-    {
       "id": "1789519402883",
       "sender": "ANIMAL",
       "text": "no way to send link and code right now other than in a message to the entertainer on your phone using your messaging service. send them the link www.ignite.abacusai.cloud/  .... and then whatever code you generated for them",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T05:54:56.011Z",
       "date": "Sep 19, 2026",
       "time": "11:54 PM"
+    },
+    {
+      "id": "1789891836978",
+      "sender": "ANIMAL",
+      "text": "FML!!! lol",
+      "timestamp": "2026-09-20T08:10:36.978Z",
+      "date": "Sep 20, 2026",
+      "time": "02:10 AM"
     }
   ]
 }
