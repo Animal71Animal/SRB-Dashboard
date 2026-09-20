@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789519063959",
-      "sender": "Steven",
-      "text": "So, it logs me in on the PC, but, not when I use my phone so I cam send the link.",
-      "timestamp": "2026-09-16T00:37:43.959Z",
-      "date": "Sep 15, 2026",
-      "time": "06:37 PM"
-    },
-    {
       "id": "1789519069800",
       "sender": "Steven",
       "text": "Can*",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T05:45:57.296Z",
       "date": "Sep 19, 2026",
       "time": "11:45 PM"
+    },
+    {
+      "id": "1789883696011",
+      "sender": "Steven",
+      "text": "Okay, sounds good.",
+      "timestamp": "2026-09-20T05:54:56.011Z",
+      "date": "Sep 19, 2026",
+      "time": "11:54 PM"
     }
   ]
 }
