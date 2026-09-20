@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789519402883",
-      "sender": "ANIMAL",
-      "text": "no way to send link and code right now other than in a message to the entertainer on your phone using your messaging service. send them the link www.ignite.abacusai.cloud/  .... and then whatever code you generated for them",
-      "timestamp": "2026-09-16T00:43:22.883Z",
-      "date": "Sep 15, 2026",
-      "time": "06:43 PM"
-    },
-    {
       "id": "1789519443394",
       "sender": "ANIMAL",
       "text": "ill fix that as well to just be able to enter a phone number to generate and send a code to automatically",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T08:10:36.978Z",
       "date": "Sep 20, 2026",
       "time": "02:10 AM"
+    },
+    {
+      "id": "1789895069730",
+      "sender": "Steven",
+      "text": "What's up? Lol",
+      "timestamp": "2026-09-20T09:04:29.730Z",
+      "date": "Sep 20, 2026",
+      "time": "03:04 AM"
     }
   ]
 }
