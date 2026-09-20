@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789516835071",
-      "sender": "Steven",
-      "text": "I'm confused on trying to send it to the dancer Bee from the computer. ",
-      "timestamp": "2026-09-16T00:00:35.071Z",
-      "date": "Sep 15, 2026",
-      "time": "06:00 PM"
-    },
-    {
       "id": "1789517178872",
       "sender": "ANIMAL",
       "text": "not from the computer... you can generate the code from anywhere.. i was just saying it may be easier on the computer... do it however works for you",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T04:44:42.971Z",
       "date": "Sep 19, 2026",
       "time": "10:44 PM"
+    },
+    {
+      "id": "1789879652654",
+      "sender": "ANIMAL",
+      "text": "thanks... it's ok not terrible..not great",
+      "timestamp": "2026-09-20T04:47:32.654Z",
+      "date": "Sep 19, 2026",
+      "time": "10:47 PM"
     }
   ]
 }
