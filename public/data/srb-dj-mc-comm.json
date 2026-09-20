@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789515803751",
-      "sender": "ANIMAL",
-      "text": "prob easiest on the comp... go to the ignite app, scroll to the bottom and look for 'invite codes'. generate code and send entertainer a text with the link to the app and the code you generated. Like this........ 'please add the new entertainer/dj communications app asap - go to https://ignite.abacusai.cloud/  use signup code      TORCH-???",
-      "timestamp": "2026-09-15T23:43:23.751Z",
-      "date": "Sep 15, 2026",
-      "time": "05:43 PM"
-    },
-    {
       "id": "1789516835071",
       "sender": "Steven",
       "text": "I'm confused on trying to send it to the dancer Bee from the computer. ",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T04:18:59.534Z",
       "date": "Sep 19, 2026",
       "time": "10:18 PM"
+    },
+    {
+      "id": "1789879482971",
+      "sender": "Steven",
+      "text": "How's it going at T2?",
+      "timestamp": "2026-09-20T04:44:42.971Z",
+      "date": "Sep 19, 2026",
+      "time": "10:44 PM"
     }
   ]
 }
