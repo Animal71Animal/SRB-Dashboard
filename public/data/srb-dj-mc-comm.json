@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789515028902",
-      "sender": "Star",
-      "text": "that would be nice",
-      "timestamp": "2026-09-15T23:30:28.902Z",
-      "date": "Sep 15, 2026",
-      "time": "05:30 PM"
-    },
-    {
       "id": "1789515037511",
       "sender": "Steven",
       "text": "This reminds me of a chat room.",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-20T00:39:42.348Z",
       "date": "Sep 19, 2026",
       "time": "06:39 PM"
+    },
+    {
+      "id": "1789868251777",
+      "sender": "ANIMAL",
+      "text": "have you heard about girls knowing that Bob was on vacation?  just wondering why you have 13 girls and I have 4",
+      "timestamp": "2026-09-20T01:37:31.777Z",
+      "date": "Sep 19, 2026",
+      "time": "07:37 PM"
     }
   ]
 }
