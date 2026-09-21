@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789519920382",
-      "sender": "ANIMAL",
-      "text": "the TORCH has to be included capitalized",
-      "timestamp": "2026-09-16T00:52:00.382Z",
-      "date": "Sep 15, 2026",
-      "time": "06:52 PM"
-    },
-    {
       "id": "1789520013675",
       "sender": "Steven",
       "text": "www.ignite.abacusai.cloud/TORCH-95521E",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-21T01:38:34.039Z",
       "date": "Sep 20, 2026",
       "time": "07:38 PM"
+    },
+    {
+      "id": "1789956261440",
+      "sender": "Steven",
+      "text": "Yes.",
+      "timestamp": "2026-09-21T02:04:21.440Z",
+      "date": "Sep 20, 2026",
+      "time": "08:04 PM"
     }
   ]
 }
