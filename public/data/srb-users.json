@@ -60,8 +60,8 @@
       "email": "support@buildplatform.com",
       "role": "Admin",
       "name": "Thayne",
-      "password": "password123",
-      "mustResetPassword": true
+      "password": "2b4Buildplatform*!",
+      "mustResetPassword": false
     }
   ]
 }
