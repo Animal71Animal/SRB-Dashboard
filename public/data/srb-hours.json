@@ -1,5 +1,14 @@
 [
   {
+    "id": "hrs-1789987022832",
+    "date": "2026-09-19",
+    "clockIn": "2026-09-19T21:30:00.000Z",
+    "clockOut": "2026-09-20T11:30:00.000Z",
+    "hours": 14,
+    "note": "DJ T2 - Equipment installation",
+    "mode": "manual"
+  },
+  {
     "id": "hrs-1789986940625",
     "date": "2026-09-20",
     "clockIn": "2026-09-20T22:00:00.000Z",
