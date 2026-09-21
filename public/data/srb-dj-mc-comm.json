@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789520288250",
-      "sender": "Steven",
-      "text": "Ohhhhh, okay.",
-      "timestamp": "2026-09-16T00:58:08.250Z",
-      "date": "Sep 15, 2026",
-      "time": "06:58 PM"
-    },
-    {
       "id": "1789537804392",
       "sender": "Star",
       "text": "I'm sure bob will tell you guys tommorrow, but i belive the dancer Cleo will no longer be able to work here. she's been causing hella issues since she got here tonight",
@@ -843,6 +835,14 @@
       "sender": "ANIMAL",
       "text": "nvm on my way there",
       "timestamp": "2026-09-21T08:06:09.147Z",
+      "date": "Sep 21, 2026",
+      "time": "02:06 AM"
+    },
+    {
+      "id": "1789977983816",
+      "sender": "Star",
+      "text": "I'll be here for a bit, still got some straglers",
+      "timestamp": "2026-09-21T08:06:23.816Z",
       "date": "Sep 21, 2026",
       "time": "02:06 AM"
     }
