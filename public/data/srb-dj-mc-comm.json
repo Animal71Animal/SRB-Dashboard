@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789520216190",
-      "sender": "ANIMAL",
-      "text": "hahaha .. the 'TORCH-95521E' part is what she has to enter on her phone after she goes to www.ignite.abacusai.cloud/  webpage.. i sent you a message on your phone",
-      "timestamp": "2026-09-16T00:56:56.190Z",
-      "date": "Sep 15, 2026",
-      "time": "06:56 PM"
-    },
-    {
       "id": "1789520288250",
       "sender": "Steven",
       "text": "Ohhhhh, okay.",
@@ -845,6 +837,14 @@
       "timestamp": "2026-09-21T08:04:12.619Z",
       "date": "Sep 21, 2026",
       "time": "02:04 AM"
+    },
+    {
+      "id": "1789977969147",
+      "sender": "ANIMAL",
+      "text": "nvm on my way there",
+      "timestamp": "2026-09-21T08:06:09.147Z",
+      "date": "Sep 21, 2026",
+      "time": "02:06 AM"
     }
   ]
 }
