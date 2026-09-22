@@ -74,48 +74,6 @@ export default function StageAnnouncementIdeasPage() {
             The Torch 1 & 2 · Master MC Compendium for Dancer Stage Announcements
           </p>
         </div>
-
-        <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-          <a
-            href="/documents/stage-announcement-ideas.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "var(--accent)",
-              color: "#fff",
-              textDecoration: "none",
-              padding: "10px 18px",
-              borderRadius: 8,
-              fontWeight: 700,
-              fontSize: "0.85rem",
-              boxShadow: "0 2px 10px rgba(201,0,43,0.3)",
-            }}
-          >
-            📄 Open Original PDF ↗
-          </a>
-          <a
-            href="/documents/stage-announcement-ideas.pdf"
-            download="Stage_Announcement_Ideas.pdf"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              background: "rgba(255,255,255,0.06)",
-              border: "1px solid var(--border)",
-              color: "var(--text)",
-              textDecoration: "none",
-              padding: "10px 18px",
-              borderRadius: 8,
-              fontWeight: 600,
-              fontSize: "0.85rem",
-            }}
-          >
-            ⬇ Download PDF
-          </a>
-        </div>
       </div>
 
       <div
