@@ -57,6 +57,9 @@ export const subTabs: Record<string, Module[]> = {
     { href: "/influencers/outreach-templates", icon: "📧", title: "Outreach Templates", desc: "DM and email templates.", group: "social" },
     { href: "/influencers/weekly-report", icon: "📄", title: "Weekly Report", desc: "Weekly influencer summary.", group: "social" },
   ],
+  "/dj-mc-communications/stage-announcement-ideas": [
+    { href: "/dj-mc-communications/stage-announcement-ideas/adjectives", icon: "✨", title: "Adjectives", desc: "Stage Entertainer Adjective Compendium A to Z.", group: "djmc" },
+  ],
 };
 
 // Flat modules array for backward compatibility (Sidebar, etc.)

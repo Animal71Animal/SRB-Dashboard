@@ -131,6 +131,14 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     };
   }, [pathname]);
 
+  const [stageExpanded, setStageExpanded] = useState(false);
+
+  useEffect(() => {
+    if (pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")) {
+      setStageExpanded(true);
+    }
+  }, [pathname]);
+
   // Filter modules based on viewing permissions
   const allowedGroupedModules = groupOrder.reduce((acc, group) => {
     acc[group] = modules.filter((m) => {
@@ -273,32 +281,42 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
-                      {item.href === "/analytics" ? (
+                      {item.href === "/analytics" || item.href === "/dj-mc-communications/stage-announcement-ideas" ? (
                         <button
                           onClick={(e) => {
                             e.preventDefault();
-                            setAnalyticsExpanded(!analyticsExpanded);
+                            if (item.href === "/analytics") {
+                              setAnalyticsExpanded(!analyticsExpanded);
+                            } else {
+                              setStageExpanded(!stageExpanded);
+                            }
                           }}
                           style={{
                             display: "flex", alignItems: "center", justifyContent: "space-between",
                             width: "101%", padding: "9px 20px", fontSize: "0.875rem",
-                            color: (pathname === "/analytics" ||
-                                pathname.startsWith("/attendance") ||
-                                pathname.startsWith("/campaign-analytics") ||
-                                pathname.startsWith("/comp-codes") ||
-                                pathname.startsWith("/staff-notes")
+                            color: (item.href === "/analytics"
+                              ? (pathname === "/analytics" ||
+                                  pathname.startsWith("/attendance") ||
+                                  pathname.startsWith("/campaign-analytics") ||
+                                  pathname.startsWith("/comp-codes") ||
+                                  pathname.startsWith("/staff-notes"))
+                              : pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")
                             ) ? "var(--accent2)" : "var(--text)",
-                            background: (pathname === "/analytics" ||
-                                pathname.startsWith("/attendance") ||
-                                pathname.startsWith("/campaign-analytics") ||
-                                pathname.startsWith("/comp-codes") ||
-                                pathname.startsWith("/staff-notes")
+                            background: (item.href === "/analytics"
+                              ? (pathname === "/analytics" ||
+                                  pathname.startsWith("/attendance") ||
+                                  pathname.startsWith("/campaign-analytics") ||
+                                  pathname.startsWith("/comp-codes") ||
+                                  pathname.startsWith("/staff-notes"))
+                              : pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")
                             ) ? "rgba(201,0,43,0.1)" : "transparent",
-                            borderLeft: (pathname === "/analytics" ||
-                                pathname.startsWith("/attendance") ||
-                                pathname.startsWith("/campaign-analytics") ||
-                                pathname.startsWith("/comp-codes") ||
-                                pathname.startsWith("/staff-notes")
+                            borderLeft: (item.href === "/analytics"
+                              ? (pathname === "/analytics" ||
+                                  pathname.startsWith("/attendance") ||
+                                  pathname.startsWith("/campaign-analytics") ||
+                                  pathname.startsWith("/comp-codes") ||
+                                  pathname.startsWith("/staff-notes"))
+                              : pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")
                             ) ? "2px solid var(--accent)" : "2px solid transparent",
                             textDecoration: "none", transition: "all 0.15s", border: "none", cursor: "pointer", textAlign: "left"
                           }}>
@@ -306,7 +324,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             <span style={{ fontSize: "1rem" }}>{item.icon}</span>
                             {item.title}
                           </div>
-                          <ChevronIcon expanded={analyticsExpanded} />
+                          <ChevronIcon expanded={item.href === "/analytics" ? analyticsExpanded : stageExpanded} />
                         </button>
                       ) : (
                         <div style={{ position: "relative" }}>
@@ -350,6 +368,31 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             { href: "/campaign-analytics", title: "Campaign Analytics", icon: "📊" },
                             { href: "/comp-codes", title: "Comp Codes", icon: "🎟️" },
                             { href: "/staff-notes", title: "Staff Notes", icon: "📝" },
+                          ].map(sub => (
+                            <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                color: pathname === sub.href ? "var(--accent2)" : "var(--muted)",
+                                background: pathname === sub.href ? "rgba(201,0,43,0.1)" : "transparent",
+                                textDecoration: "none", transition: "all 0.15s",
+                              }}>
+                              <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
+                              {sub.title}
+                            </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Sub-tabs for Stage Announcement Ideas */}
+                      {item.href === "/dj-mc-communications/stage-announcement-ideas" && (
+                        <div style={{
+                          maxHeight: stageExpanded ? "2000px" : "0",
+                          overflow: "hidden", transition: "max-height 0.2s ease",
+                          display: "flex", flexDirection: "column"
+                        }}>
+                          {[
+                            { href: "/dj-mc-communications/stage-announcement-ideas/adjectives", title: "Adjectives", icon: "✨" },
                           ].map(sub => (
                             <Link key={sub.href} href={sub.href} onClick={() => setMobileOpen(false)}
                               style={{
