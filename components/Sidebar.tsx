@@ -138,14 +138,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
     };
   }, [pathname]);
 
-  const [stageExpanded, setStageExpanded] = useState(false);
-
-  useEffect(() => {
-    if (pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")) {
-      setStageExpanded(true);
-    }
-  }, [pathname]);
-
   // Filter modules based on viewing permissions
   const allowedGroupedModules = groupOrder.reduce((acc, group) => {
     acc[group] = modules.filter((m) => {
