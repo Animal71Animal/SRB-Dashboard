@@ -117,7 +117,12 @@
       "text": "we have this trio from florida spending decently, i beliver they pulled close to $400 by now. still no dances though, just stage",
       "timestamp": "2026-09-22T04:01:50.214Z",
       "date": "Sep 21, 2026",
-      "time": "10:01 PM"
+      "time": "10:01 PM",
+      "reactions": {
+        "eyes": [
+          "ANIMAL"
+        ]
+      }
     }
   ]
 }
