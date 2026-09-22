@@ -82,6 +82,7 @@ export default function LoggedHoursPage() {
     const currentDay = now.getDate();
 
     const months = [
+      { year: currentMonth === 0 ? currentYear - 1 : currentYear, month: (currentMonth - 1 + 12) % 12 }, // Prior
       { year: currentYear, month: currentMonth }, // Current
       { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: (currentMonth + 1) % 12 } // Next
     ];
