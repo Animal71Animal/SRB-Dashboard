@@ -281,50 +281,50 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   return (
                     <div key={item.href}>
                       {item.href === "/analytics" || item.href === "/dj-mc-communications/stage-announcement-ideas" ? (
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            if (item.href === "/analytics") {
-                              setAnalyticsExpanded(!analyticsExpanded);
-                            } else {
-                              setStageExpanded(!stageExpanded);
-                            }
-                          }}
-                          style={{
-                            display: "flex", alignItems: "center", justifyContent: "space-between",
-                            width: "101%", padding: "9px 20px", fontSize: "0.875rem",
-                            color: (item.href === "/analytics"
-                              ? (pathname === "/analytics" ||
-                                  pathname.startsWith("/attendance") ||
-                                  pathname.startsWith("/campaign-analytics") ||
-                                  pathname.startsWith("/comp-codes") ||
-                                  pathname.startsWith("/staff-notes"))
-                              : pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")
-                            ) ? "var(--accent2)" : "var(--text)",
-                            background: (item.href === "/analytics"
-                              ? (pathname === "/analytics" ||
-                                  pathname.startsWith("/attendance") ||
-                                  pathname.startsWith("/campaign-analytics") ||
-                                  pathname.startsWith("/comp-codes") ||
-                                  pathname.startsWith("/staff-notes"))
-                              : pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")
-                            ) ? "rgba(201,0,43,0.1)" : "transparent",
-                            borderLeft: (item.href === "/analytics"
-                              ? (pathname === "/analytics" ||
-                                  pathname.startsWith("/attendance") ||
-                                  pathname.startsWith("/campaign-analytics") ||
-                                  pathname.startsWith("/comp-codes") ||
-                                  pathname.startsWith("/staff-notes"))
-                              : pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")
-                            ) ? "2px solid var(--accent)" : "2px solid transparent",
-                            textDecoration: "none", transition: "all 0.15s", border: "none", cursor: "pointer", textAlign: "left"
-                          }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
+                          <Link
+                            href={item.href}
+                            onClick={() => {
+                              setMobileOpen(false);
+                              if (item.href === "/analytics") {
+                                setAnalyticsExpanded(true);
+                              } else {
+                                setStageExpanded(true);
+                              }
+                            }}
+                            style={{
+                              display: "flex", alignItems: "center", gap: 10,
+                              flex: 1,
+                              padding: "9px 0 9px 20px", fontSize: "0.875rem",
+                              color: active ? "var(--accent2)" : "var(--text)",
+                              background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                              borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                              textDecoration: "none", transition: "all 0.15s",
+                            }}>
                             <span style={{ fontSize: "1rem" }}>{item.icon}</span>
                             {item.title}
-                          </div>
-                          <ChevronIcon expanded={item.href === "/analytics" ? analyticsExpanded : stageExpanded} />
-                        </button>
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              if (item.href === "/analytics") {
+                                setAnalyticsExpanded(!analyticsExpanded);
+                              } else {
+                                setStageExpanded(!stageExpanded);
+                              }
+                            }}
+                            style={{
+                              background: "none", border: "none", cursor: "pointer",
+                              padding: "9px 20px", color: "var(--muted)", transition: "color 0.15s",
+                              display: "flex", alignItems: "center"
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.color = "var(--accent)"}
+                            onMouseLeave={(e) => e.currentTarget.style.color = "var(--muted)"}
+                          >
+                            <ChevronIcon expanded={item.href === "/analytics" ? analyticsExpanded : stageExpanded} />
+                          </button>
+                        </div>
                       ) : (
                         <div style={{ position: "relative" }}>
                           <Link href={item.href} onClick={() => setMobileOpen(false)}
