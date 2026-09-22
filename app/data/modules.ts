@@ -39,7 +39,6 @@ export const groupModules: Record<ModuleGroup, Module[]> = {
     { href: "/dj-mc-communications/schedules", icon: "📅", title: "Schedules", desc: "View upcoming shift rotations.", group: "djmc" },
     { href: "/dj-mc-communications/promotional-materials", icon: "📣", title: "Promotional Materials", desc: "Standardized marketing feeds.", group: "djmc" },
     { href: "/dj-mc-communications/stage-announcement-ideas", icon: "🎙️", title: "Stage Announcement Ideas", desc: "Master MC compendium and dancer announcements.", group: "djmc" },
-    { href: "/dj-mc-communications/stage-announcement-ideas/adjectives", icon: "✨", title: "Adjectives", desc: "Stage Entertainer Adjective Compendium A to Z.", group: "djmc" },
     { href: "/dj-mc-communications/equipment-reports", icon: "🛠️", title: "Equipment Reports", desc: "Maintenance logs.", group: "djmc" },
     { href: "/dj-mc-communications/passwords", icon: "🔑", title: "Passwords", desc: "Credential Vault.", group: "djmc" },
     { href: "/director-admin", icon: "🔥", title: "Ignite App", desc: "Ignite — booth, review queue, feed & more.", group: "djmc" },
@@ -58,7 +57,9 @@ export const subTabs: Record<string, Module[]> = {
     { href: "/influencers/outreach-templates", icon: "📧", title: "Outreach Templates", desc: "DM and email templates.", group: "social" },
     { href: "/influencers/weekly-report", icon: "📄", title: "Weekly Report", desc: "Weekly influencer summary.", group: "social" },
   ],
-  "/dj-mc-communications/stage-announcement-ideas": [],
+  "/dj-mc-communications/stage-announcement-ideas": [
+    { href: "/dj-mc-communications/stage-announcement-ideas/adjectives", icon: "✨", title: "Adjectives", desc: "Stage Entertainer Adjective Compendium A to Z.", group: "djmc" },
+  ],
 };
 
 // Flat modules array for backward compatibility (Sidebar, etc.)
