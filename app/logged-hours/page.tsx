@@ -69,6 +69,9 @@ export default function LoggedHoursPage() {
   const [editOut, setEditOut] = useState("");
   const [editNote, setEditNote] = useState("");
 
+  // ----- Accordion toggle for Master List -----
+  const [expanded, setExpanded] = useState(false);
+
   const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(a.clockIn).getTime() - new Date(b.clockIn).getTime()))).catch(() => {});
   useEffect(() => { load(); }, []);
 
@@ -367,71 +370,95 @@ export default function LoggedHoursPage() {
 
       {/* Itemized Master List */}
       <div style={{ ...CARD, marginTop: 24, padding: 0 }}>
-        <div style={{ padding: "16px 24px", borderBottom: "1px solid var(--border)", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h3 style={{ margin: 0, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)" }}>
-            Master List — Itemized Entries
-          </h3>
+        <div 
+          onClick={() => setExpanded(!expanded)}
+          style={{ 
+            padding: "16px 24px", 
+            borderBottom: expanded ? "1px solid var(--border)" : "none", 
+            display: "flex", 
+            justifyContent: "space-between", 
+            alignItems: "center",
+            cursor: "pointer",
+            userSelect: "none"
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ 
+              transform: expanded ? "rotate(90deg)" : "rotate(0deg)", 
+              transition: "transform 0.15s ease",
+              display: "inline-block",
+              fontSize: "0.8rem",
+              color: "var(--muted)"
+            }}>
+              ▶
+            </span>
+            <h3 style={{ margin: 0, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)" }}>
+              Master List — Itemized Entries
+            </h3>
+          </div>
           <span style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
             {logs.length} total · {fmtDuration(allTimeTotal)} logged
           </span>
         </div>
 
-        {logs.length === 0 ? (
-          <div style={{ color: "var(--muted)", textAlign: "center", padding: 32, fontSize: "0.875rem" }}>
-            No logs yet. Start a timer or add a manual entry.
-          </div>
-        ) : (
-          <div className="table-wrap">
-          <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
-            <thead>
-              <tr style={{ background: "var(--bg)" }}>
-                <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Activity</th>
-                <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Clock In</th>
-                <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Clock Out</th>
-                <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Mode</th>
-                <th style={{ textAlign: "right", padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Hours</th>
-                <th style={{ padding: "10px 24px" }}></th>
-              </tr>
-            </thead>
-            <tbody>
-              {logs.map((l) => (
-                <tr key={l.id} style={{ borderTop: "1px solid var(--border)" }}>
-                  <td style={{ padding: "12px 24px", maxWidth: 240 }}>{l.note}</td>
-                  <td style={{ padding: "12px 24px", color: "var(--muted)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
-                    {fmtClock(l.clockIn)}
-                  </td>
-                  <td style={{ padding: "12px 24px", color: "var(--muted)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
-                    {fmtClock(l.clockOut)}
-                  </td>
-                  <td style={{ padding: "12px 24px", fontSize: "0.75rem" }}>
-                    <span style={{
-                      padding: "3px 8px", borderRadius: 4, fontWeight: 600,
-                      background: l.mode === "timer" ? "rgba(255,0,85,0.15)" : "rgba(232,160,32,0.15)",
-                      color: l.mode === "timer" ? "var(--accent)" : "var(--accent2)",
-                    }}>
-                      {l.mode}
-                    </span>
-                  </td>
-                  <td style={{ padding: "12px 24px", textAlign: "right", fontWeight: 700, color: "var(--accent)", whiteSpace: "nowrap" }}>
-                    {fmtDuration(l.hours)}
-                  </td>
-                  <td style={{ padding: "12px 24px", textAlign: "right", whiteSpace: "nowrap" }}>
-                    <button onClick={() => openEdit(l)}
-                      style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--accent2)",
-                        borderRadius: 6, padding: "4px 10px", fontSize: "0.75rem", cursor: "pointer", marginRight: 6 }}>
-                      Edit
-                    </button>
-                    <button onClick={() => del(l.id)}
-                      style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--muted)",
-                        borderRadius: 6, padding: "4px 10px", fontSize: "0.75rem", cursor: "pointer" }}>
-                      Del
-                    </button>
-                  </td>
+        {expanded && (
+          logs.length === 0 ? (
+            <div style={{ color: "var(--muted)", textAlign: "center", padding: 32, fontSize: "0.875rem" }}>
+              No logs yet. Start a timer or add a manual entry.
+            </div>
+          ) : (
+            <div className="table-wrap">
+            <table style={{ width: "100%", borderCollapse: "collapse", minWidth: 620 }}>
+              <thead>
+                <tr style={{ background: "var(--bg)" }}>
+                  <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Activity</th>
+                  <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Clock In</th>
+                  <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Clock Out</th>
+                  <th style={{ textAlign: "left",  padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Mode</th>
+                  <th style={{ textAlign: "right", padding: "10px 24px", fontSize: "0.7rem", textTransform: "uppercase", color: "var(--muted)" }}>Hours</th>
+                  <th style={{ padding: "10px 24px" }}></th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          </div>
+              </thead>
+              <tbody>
+                {logs.map((l) => (
+                  <tr key={l.id} style={{ borderTop: "1px solid var(--border)" }}>
+                    <td style={{ padding: "12px 24px", maxWidth: 240 }}>{l.note}</td>
+                    <td style={{ padding: "12px 24px", color: "var(--muted)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+                      {fmtClock(l.clockIn)}
+                    </td>
+                    <td style={{ padding: "12px 24px", color: "var(--muted)", fontSize: "0.85rem", whiteSpace: "nowrap" }}>
+                      {fmtClock(l.clockOut)}
+                    </td>
+                    <td style={{ padding: "12px 24px", fontSize: "0.75rem" }}>
+                      <span style={{
+                        padding: "3px 8px", borderRadius: 4, fontWeight: 600,
+                        background: l.mode === "timer" ? "rgba(255,0,85,0.15)" : "rgba(232,160,32,0.15)",
+                        color: l.mode === "timer" ? "var(--accent)" : "var(--accent2)",
+                      }}>
+                        {l.mode}
+                      </span>
+                    </td>
+                    <td style={{ padding: "12px 24px", textAlign: "right", fontWeight: 700, color: "var(--accent)", whiteSpace: "nowrap" }}>
+                      {fmtDuration(l.hours)}
+                    </td>
+                    <td style={{ padding: "12px 24px", textAlign: "right", whiteSpace: "nowrap" }}>
+                      <button onClick={() => openEdit(l)}
+                        style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--accent2)",
+                          borderRadius: 6, padding: "4px 10px", fontSize: "0.75rem", cursor: "pointer", marginRight: 6 }}>
+                        Edit
+                      </button>
+                      <button onClick={() => del(l.id)}
+                        style={{ background: "transparent", border: "1px solid var(--border)", color: "var(--muted)",
+                          borderRadius: 6, padding: "4px 10px", fontSize: "0.75rem", cursor: "pointer" }}>
+                        Del
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            </div>
+          )
         )}
       </div>
 
