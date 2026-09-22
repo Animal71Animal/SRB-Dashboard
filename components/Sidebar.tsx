@@ -282,6 +282,41 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   return (
                     <div key={item.href}>
                       {item.href === "/analytics" ? (
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            setAnalyticsExpanded(!analyticsExpanded);
+                          }}
+                          style={{
+                            display: "flex", alignItems: "center", justifyContent: "space-between",
+                            width: "101%", padding: "9px 20px", fontSize: "0.875rem",
+                            color: (pathname === "/analytics" ||
+                                pathname.startsWith("/attendance") ||
+                                pathname.startsWith("/campaign-analytics") ||
+                                pathname.startsWith("/comp-codes") ||
+                                pathname.startsWith("/staff-notes")
+                            ) ? "var(--accent2)" : "var(--text)",
+                            background: (pathname === "/analytics" ||
+                                pathname.startsWith("/attendance") ||
+                                pathname.startsWith("/campaign-analytics") ||
+                                pathname.startsWith("/comp-codes") ||
+                                pathname.startsWith("/staff-notes")
+                            ) ? "rgba(201,0,43,0.1)" : "transparent",
+                            borderLeft: (pathname === "/analytics" ||
+                                pathname.startsWith("/attendance") ||
+                                pathname.startsWith("/campaign-analytics") ||
+                                pathname.startsWith("/comp-codes") ||
+                                pathname.startsWith("/staff-notes")
+                            ) ? "2px solid var(--accent)" : "2px solid transparent",
+                            textDecoration: "none", transition: "all 0.15s", border: "none", cursor: "pointer", textAlign: "left"
+                          }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                            {item.title}
+                          </div>
+                          <ChevronIcon expanded={analyticsExpanded} />
+                        </button>
+                      ) : (
                         <div style={{ position: "relative" }}>
                           <Link href={item.href} onClick={() => setMobileOpen(false)}
                             style={{
