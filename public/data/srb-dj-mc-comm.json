@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1789607182697",
-      "sender": "ANIMAL",
-      "text": "yeah",
-      "timestamp": "2026-09-17T01:06:22.697Z",
-      "date": "Sep 16, 2026",
-      "time": "07:06 PM"
-    },
-    {
       "id": "1789607202376",
       "sender": "Steven",
       "text": "It says that the site can't be reached.",
