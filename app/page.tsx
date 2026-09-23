@@ -191,9 +191,7 @@ export default function OverviewPage() {
   const activeGroupData = activeGroup ? visibleGroups.find(g => g.group === activeGroup) : null;
   const activeSubTabs = activeGroupData ? [
     ...activeGroupData.items,
-    ...(Object.entries(subTabs).flatMap(([parentHref, tabs]) =>
-      activeGroupData.items.some(i => i.href === parentHref) ? tabs : []
-    )),
+    ...(activeGroupData.items.flatMap(item => subTabs[item.href] || []))
   ].filter(m => hasPermission(role, "view", m.href)) : [];
 
   return (
