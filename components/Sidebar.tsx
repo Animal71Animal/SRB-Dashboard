@@ -220,7 +220,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
       {/* Sidebar */}
       <aside className={`sidebar ${mobileOpen ? "mobile-open" : ""}`}
         style={{
-          width: "220px", minHeight: "100vh", background: "var(--card)",
+          width: "220px", height: "calc(100vh - 40px)", background: "var(--card)",
           borderRight: "1px solid var(--border)", padding: "24px 0",
           display: "flex", flexDirection: "column", flexShrink: 0,
           position: "fixed", left: 0, top: 40, zIndex: 50,
