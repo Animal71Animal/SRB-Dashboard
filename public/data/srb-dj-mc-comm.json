@@ -283,7 +283,12 @@
       "text": "Already started using them today. Lol",
       "timestamp": "2026-09-24T03:55:46.396Z",
       "date": "Sep 23, 2026",
-      "time": "09:55 PM"
+      "time": "09:55 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1790222161044",
