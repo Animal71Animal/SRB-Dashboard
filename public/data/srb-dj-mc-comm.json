@@ -304,7 +304,12 @@
       "text": "I think I got a bunch of gay guys in here because none of them has gone to the stage yet.",
       "timestamp": "2026-09-24T04:34:24.082Z",
       "date": "Sep 23, 2026",
-      "time": "10:34 PM"
+      "time": "10:34 PM",
+      "reactions": {
+        "laugh": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1790224681238",
