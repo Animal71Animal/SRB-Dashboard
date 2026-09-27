@@ -1,1 +1,13 @@
-[]
+[
+  {
+    "id": "int-1790522851370",
+    "entertainerName": "Eric",
+    "date": "2026-10-05",
+    "time": "20:00",
+    "notes": "weirdo animal",
+    "venue": "Torch 2",
+    "role": "DJ",
+    "status": "Pending",
+    "createdAt": "2026-09-27T15:27:31.370Z"
+  }
+]
