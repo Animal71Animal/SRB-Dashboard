@@ -191,9 +191,9 @@
       {
         "id": "1787650967475-e5b4ft",
         "title": "Chicks 'n' Kicks ",
-        "date": "2026-11-05",
+        "date": "2026-11-12",
         "description": "SneakerHead Culture · Sneakerhead Culture, Hypebeast Culture - People who have disposable income. · Sneaker culture night. Targeting Sneakerheadz and B-boys. Cross-promotion with local high-end sneaker stores.",
-        "verbiage": "Get ready to see our entertainers like never before! 🔥 Step into the weekend early with the launch of \"Chicks 'n' Kicks\" Thursdays. Our girls are pairing fresh sneakers with killer coordinating fits, bringing a whole new energy to the floor. The inaugural kickoff drops on September 24—and we’re keeping the vibe going every single Thursday night after that. Come for the dope kicks, stay for the show! 👟✨",
+        "verbiage": "Get ready to see our entertainers like never before! 🔥 Step into the weekend early with the launch of \"Chicks 'n' Kicks\" Thursdays. Our girls are pairing fresh sneakers with killer coordinating fits, bringing a whole new energy to the floor. The inaugural kickoff drops in November—and we’re keeping the vibe going every single Thursday night after that. Come for the dope kicks, stay for the show! 👟✨",
         "drinkSpecials": "Sneakertini, My Adidas, The Air Force One, etc",
         "mcVerbiage": "",
         "mcVerbiageCollapsed": false,
@@ -203,9 +203,8 @@
           "id": "ser-002",
           "kind": "series",
           "name": "Chicks 'n' Kicks ",
-          "startDate": "2026-11-05",
+          "startDate": "2026-11-12",
           "dates": [
-            "2026-11-05",
             "2026-11-12",
             "2026-11-19",
             "2026-11-26",
