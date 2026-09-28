@@ -8,10 +8,10 @@ interface Route {
 }
 
 const SOURCES = [
-  { id: "src-1", label: "DirecTV 1", color: "#8b5cf6" },
-  { id: "src-2", label: "DirecTV 2", color: "#3b82f6" },
-  { id: "src-3", label: "Music Videos", color: "#10b981" },
-  { id: "src-4", label: "TorchTV/Rotation", color: "#f59e0b" },
+  { id: "src-1", label: "DirecTV 1", color: "#ef4444" }, // Red
+  { id: "src-2", label: "DirecTV 2", color: "#f97316" }, // Orange
+  { id: "src-3", label: "Music Videos", color: "#f59e0b" }, // Warm Yellow-Orange
+  { id: "src-4", label: "TorchTV/Rotation", color: "#eab308" }, // Bright Yellow
 ];
 
 const OUTPUTS = [
