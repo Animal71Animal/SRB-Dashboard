@@ -612,7 +612,12 @@
       "text": "You pay $35 a month to watch Frozen 17 times?",
       "timestamp": "2026-09-28T02:53:22.706Z",
       "date": "Sep 27, 2026",
-      "time": "08:53 PM"
+      "time": "08:53 PM",
+      "reactions": {
+        "laugh": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1790564168728",
