@@ -642,6 +642,9 @@
       "reactions": {
         "fire": [
           "Star"
+        ],
+        "laugh": [
+          "Steven"
         ]
       }
     },
