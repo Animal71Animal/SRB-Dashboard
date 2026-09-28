@@ -36,10 +36,14 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
   const [stageExpanded, setStageExpanded] = useState(false);
+  const [operationsExpanded, setOperationsExpanded] = useState(false);
 
   useEffect(() => {
     if (pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")) {
       setStageExpanded(true);
+    }
+    if (pathname.startsWith("/operations/stage-rotation")) {
+      setOperationsExpanded(true);
     }
   }, [pathname]);
   const [lastMsgId, setLastMsgId] = useState<string | null>(null);
@@ -280,36 +284,57 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
-                      {item.href === "/analytics" || item.href === "/dj-mc-communications/stage-announcement-ideas" ? (
+                      {item.href === "/analytics" || item.href === "/dj-mc-communications/stage-announcement-ideas" || item.href === "/operations/stage-rotation" ? (
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", position: "relative" }}>
-                          <Link
-                            href={item.href}
-                            onClick={() => {
-                              setMobileOpen(false);
-                              if (item.href === "/analytics") {
-                                setAnalyticsExpanded(true);
-                              } else {
-                                setStageExpanded(true);
-                              }
-                            }}
-                            style={{
-                              display: "flex", alignItems: "center", gap: 10,
-                              flex: 1,
-                              padding: "9px 0 9px 20px", fontSize: "0.875rem",
-                              color: active ? "var(--accent2)" : "var(--text)",
-                              background: active ? "rgba(201,0,43,0.1)" : "transparent",
-                              borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                              textDecoration: "none", transition: "all 0.15s",
-                            }}>
-                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                            {item.title}
-                          </Link>
+                          {item.href === "/operations/stage-rotation" ? (
+                            <div
+                              onClick={() => {
+                                setOperationsExpanded(true);
+                              }}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                flex: 1,
+                                padding: "9px 0 9px 20px", fontSize: "0.875rem",
+                                color: active ? "var(--accent2)" : "var(--text)",
+                                background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                                borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                                cursor: "pointer",
+                              }}>
+                              <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                              {item.title}
+                            </div>
+                          ) : (
+                            <Link
+                              href={item.href}
+                              onClick={() => {
+                                setMobileOpen(false);
+                                if (item.href === "/analytics") {
+                                  setAnalyticsExpanded(true);
+                                } else {
+                                  setStageExpanded(true);
+                                }
+                              }}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                flex: 1,
+                                padding: "9px 0 9px 20px", fontSize: "0.875rem",
+                                color: active ? "var(--accent2)" : "var(--text)",
+                                background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                                borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                                textDecoration: "none", transition: "all 0.15s",
+                              }}>
+                              <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                              {item.title}
+                            </Link>
+                          )}
                           <button
                             onClick={(e) => {
                               e.preventDefault();
                               e.stopPropagation();
                               if (item.href === "/analytics") {
                                 setAnalyticsExpanded(!analyticsExpanded);
+                              } else if (item.href === "/operations/stage-rotation") {
+                                setOperationsExpanded(!operationsExpanded);
                               } else {
                                 setStageExpanded(!stageExpanded);
                               }
@@ -322,7 +347,13 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             onMouseEnter={(e) => e.currentTarget.style.color = "var(--accent)"}
                             onMouseLeave={(e) => e.currentTarget.style.color = "var(--muted)"}
                           >
-                            <ChevronIcon expanded={item.href === "/analytics" ? analyticsExpanded : stageExpanded} />
+                            <ChevronIcon expanded={
+                              item.href === "/analytics"
+                                ? analyticsExpanded
+                                : item.href === "/operations/stage-rotation"
+                                ? operationsExpanded
+                                : stageExpanded
+                            } />
                           </button>
                         </div>
                       ) : (
@@ -404,6 +435,50 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                               <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
                               {sub.title}
                             </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Sub-tabs for Stage Rotation (Popups) */}
+                      {item.href === "/operations/stage-rotation" && (
+                        <div style={{
+                          maxHeight: operationsExpanded ? "2000px" : "0",
+                          overflow: "hidden", transition: "max-height 0.2s ease",
+                          display: "flex", flexDirection: "column"
+                        }}>
+                          {[
+                            { href: "https://torchrotation.abacusai.app/?venue=TORCH_1", title: "Torch 1", icon: "❶" },
+                            { href: "https://torchrotation.abacusai.app/?venue=TORCH_2", title: "Torch 2", icon: "❷" },
+                          ].map(sub => (
+                            <button
+                              key={sub.href}
+                              onClick={() => {
+                                setMobileOpen(false);
+                                window.open(
+                                  sub.href,
+                                  "torch-rotation",
+                                  "popup=yes,width=520,height=900"
+                                );
+                              }}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 10,
+                                padding: "6px 20px 6px 45px",
+                                fontSize: "0.75rem",
+                                color: "var(--muted)",
+                                background: "transparent",
+                                border: "none",
+                                textDecoration: "none",
+                                transition: "all 0.15s",
+                                cursor: "pointer",
+                                width: "100%",
+                                textAlign: "left"
+                              }}
+                            >
+                              <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
+                              {sub.title}
+                            </button>
                           ))}
                         </div>
                       )}
