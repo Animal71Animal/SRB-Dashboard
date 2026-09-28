@@ -1,14 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { safeRead, writeToGitHub } from "@/lib/github";
-import fs from "fs";
-import path from "path";
 
 export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { file, fileName, prefix } = body; // Base64 raw representation "data:image/png;base64,..."
+    const { file, fileName, prefix } = body;
     if (!file || !fileName) {
       return NextResponse.json({ ok: false, error: "Missing file payload or name" }, { status: 400 });
     }
@@ -19,23 +16,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ ok: false, error: "Invalid base64 payload format" }, { status: 400 });
     }
 
-    const fileType = matches[1];
     const base64Data = matches[2];
-    const buffer = Buffer.from(base64Data, "base64");
 
-    // Enforce folder names
+    // Enforce folder names and keep characters clean for raw URL matching
     const pre = prefix ? `${prefix}-` : "msg-";
     const cleanName = `${pre}${Date.now()}-${fileName.replace(/[^a-zA-Z0-9.\-_]/g, "_")}`;
-    
-    // Save locally
-    const publicUploadsDir = path.join(process.cwd(), "public", "uploads");
-    if (!fs.existsSync(publicUploadsDir)) {
-      fs.mkdirSync(publicUploadsDir, { recursive: true });
-    }
-    const localFilePath = path.join(publicUploadsDir, cleanName);
-    fs.writeFileSync(localFilePath, buffer);
 
-    // Save to GitHub repo directly inside public/uploads/
+    // Upload directly to GitHub repository inside public/uploads/
     const ghFilePath = `public/uploads/${cleanName}`;
     const url = `https://api.github.com/repos/${process.env.GITHUB_REPO || "Animal71Animal/SRB-Dashboard"}/contents/${ghFilePath}`;
     
@@ -48,7 +35,6 @@ export async function POST(req: NextRequest) {
       h["Authorization"] = `Bearer ${process.env.GITHUB_TOKEN}`;
     }
 
-    // Upload payload
     const putBody = JSON.stringify({
       message: `upload: add media asset ${cleanName}`,
       content: base64Data,
@@ -64,12 +50,19 @@ export async function POST(req: NextRequest) {
 
     if (!res.ok) {
       const txt = await res.text();
-      console.error(`[github upload] PUT failed with status: ${res.status}. Fallback to local-only.`);
+      console.error(`[github upload] PUT failed with status: ${res.status}`);
+      return NextResponse.json({ ok: false, error: `GitHub upload rejected: ${res.status}` }, { status: 502 });
     }
+
+    // Since Vercel Serverless environment `/var/task` is read-only, we bypass the local filesystem completely.
+    // We construct the direct Vercel static asset path. After GitHub safeWrite, the Next.js static asset map 
+    // serving `/uploads/${cleanName}` is available instantly on production once GitHub resolves, or
+    // we fallback to raw.githubusercontent.com for immediate real-time loading:
+    const finalUrl = `https://raw.githubusercontent.com/${process.env.GITHUB_REPO || "Animal71Animal/SRB-Dashboard"}/refs/heads/main/public/uploads/${cleanName}`;
 
     return NextResponse.json({
       ok: true,
-      url: `/uploads/${cleanName}`
+      url: finalUrl
     });
   } catch (err) {
     console.error("Upload handler failed:", err);
