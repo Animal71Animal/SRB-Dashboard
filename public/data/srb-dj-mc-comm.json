@@ -709,7 +709,12 @@
       "imageUrl": null,
       "timestamp": "2026-09-28T06:13:11.530Z",
       "date": "Sep 28, 2026",
-      "time": "12:13 AM"
+      "time": "12:13 AM",
+      "reactions": {
+        "laugh": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1790576030529",
