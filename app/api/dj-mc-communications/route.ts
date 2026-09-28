@@ -29,9 +29,15 @@ export async function GET() {
   }
 }
 
+export interface POSTBody {
+  sender: string;
+  text: string;
+  imageUrl?: string;
+}
+
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
+    const body: POSTBody = await req.json();
     const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
     
     const now = new Date();
@@ -39,6 +45,7 @@ export async function POST(req: Request) {
       id: Date.now().toString(),
       sender: body.sender,
       text: body.text,
+      imageUrl: body.imageUrl || null,
       timestamp: now.toISOString(),
       date: now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'America/Denver' }),
       time: now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true, timeZone: 'America/Denver' })

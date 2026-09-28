@@ -11,9 +11,13 @@ export default function MessagingPage() {
   const [messages, setMessages] = useState<any[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null); // Base64
+  const [imageFileName, setSelectedImageName] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const isNearBottomRef = useRef(true);
   const prevMsgCountRef = useRef(0);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const currentEmail = sessionStorage.getItem("srb-session-email") || "";
@@ -57,17 +61,70 @@ export default function MessagingPage() {
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!newMessage.trim()) return;
+    if (!newMessage.trim() && !selectedImage) return;
 
-    const res = await fetch("/api/dj-mc-communications", {
-      method: "POST",
-      body: JSON.stringify({ sender: userName || email, text: newMessage }),
-    });
+    setLoading(true);
+    let uploadedUrl = null;
 
-    if (res.ok) {
-      setNewMessage("");
-      fetchMessages();
+    try {
+      if (selectedImage && imageFileName) {
+        setUploading(true);
+        const upRes = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            file: selectedImage,
+            fileName: imageFileName,
+            prefix: "chat"
+          })
+        });
+        const upJson = await upRes.json();
+        if (upJson.ok) {
+          uploadedUrl = upJson.url;
+        } else {
+          alert(`Image upload failed: ${upJson.error}`);
+        }
+      }
+
+      const res = await fetch("/api/dj-mc-communications", {
+        method: "POST",
+        body: JSON.stringify({
+          sender: userName || email,
+          text: newMessage,
+          imageUrl: uploadedUrl
+        }),
+      });
+
+      if (res.ok) {
+        setNewMessage("");
+        setSelectedImage(null);
+        setSelectedImageName(null);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        fetchMessages();
+      }
+    } catch (err) {
+      console.error("Failed to send message:", err);
+    } finally {
+      setLoading(false);
+      setUploading(false);
     }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 8 * 1024 * 1024) {
+      alert("Image size must be smaller than 8MB");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setSelectedImage(reader.result as string);
+      setSelectedImageName(file.name);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleDelete = async (id: string) => {
@@ -148,6 +205,16 @@ export default function MessagingPage() {
                       </span>
                     </div>
                     <div className="text-sm break-words">{msg.text}</div>
+                    {msg.imageUrl && (
+                      <div className="mt-2 max-w-xs md:max-w-md rounded overflow-hidden border border-zinc-800/80 bg-black/40">
+                        <img 
+                          src={msg.imageUrl} 
+                          alt="Shared media" 
+                          className="max-h-[300px] w-auto object-contain cursor-pointer hover:opacity-95 transition-opacity"
+                          onClick={() => window.open(msg.imageUrl, "_blank")}
+                        />
+                      </div>
+                    )}
                   </div>
                   {/* Reactions row */}
                   <div className="flex items-center gap-1 mt-1">
@@ -187,7 +254,48 @@ export default function MessagingPage() {
 
         {/* Input Area */}
         <div className="bg-zinc-900/90 border-t border-red-900/30 p-4 rounded-b-xl">
-          <form onSubmit={handleSend} className="flex gap-3">
+          {selectedImage && (
+            <div className="mb-3 flex items-center gap-3 bg-black/40 border border-zinc-800 p-2 rounded max-w-sm">
+              <img 
+                src={selectedImage} 
+                alt="Upload preview" 
+                className="w-12 h-12 object-cover rounded border border-zinc-700"
+              />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs text-gray-400 truncate">{imageFileName}</p>
+                <p className="text-[0.65rem] text-red-500">Ready to upload</p>
+              </div>
+              <button 
+                type="button"
+                onClick={() => {
+                  setSelectedImage(null);
+                  setSelectedImageName(null);
+                  if (fileInputRef.current) fileInputRef.current.value = "";
+                }}
+                className="text-xs text-gray-500 hover:text-red-500 p-1 font-bold"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
+          <form onSubmit={handleSend} className="flex gap-3 items-end">
+            <input 
+              type="file"
+              accept="image/*"
+              ref={fileInputRef}
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="bg-zinc-800 hover:bg-zinc-700 text-gray-200 p-3 rounded font-bold text-sm transition-colors flex items-center justify-center min-h-[3rem] h-[3rem] w-[3rem] border border-zinc-700/50"
+              title="Attach image"
+              disabled={loading || uploading}
+            >
+              📷
+            </button>
             <textarea
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
@@ -203,9 +311,10 @@ export default function MessagingPage() {
             />
             <button 
               type="submit" 
-              className="bg-red-700 hover:bg-red-600 px-6 py-2 rounded font-bold text-sm transition-colors"
+              disabled={loading || uploading}
+              className="bg-red-700 hover:bg-red-600 disabled:opacity-50 px-6 py-2 rounded font-bold text-sm transition-colors min-h-[3rem] h-[3rem]"
             >
-              Send
+              {uploading ? "Uploading..." : "Send"}
             </button>
           </form>
         </div>
