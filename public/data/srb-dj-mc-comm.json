@@ -567,7 +567,12 @@
       "text": "Ohhhhhhh, yeah, there's 4 DJ's.",
       "timestamp": "2026-09-28T02:12:57.604Z",
       "date": "Sep 27, 2026",
-      "time": "08:12 PM"
+      "time": "08:12 PM",
+      "reactions": {
+        "laugh": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1790561706056",
