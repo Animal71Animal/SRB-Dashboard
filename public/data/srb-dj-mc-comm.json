@@ -686,7 +686,12 @@
       "text": "they spent their time here and bar hopped to the next locoation. some girl just turned 21 lol. we down to 6 custys now, but it will pick up again in a few hours",
       "timestamp": "2026-09-28T03:53:13.740Z",
       "date": "Sep 27, 2026",
-      "time": "09:53 PM"
+      "time": "09:53 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     }
   ]
 }
