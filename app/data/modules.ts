@@ -33,7 +33,7 @@ export const groupModules: Record<ModuleGroup, Module[]> = {
     { href: "/torch-radio", icon: "📻", title: "Torch Radio", desc: "Broadcast hub and show schedule.", group: "operations" },
     { href: "/torchtv", icon: "📺", title: "TorchTV Broadcast", desc: "Live feed and Studio broadcast hub.", group: "operations" },
     { href: "/logged-hours", icon: "⏱️", title: "ANiMAL's Hours", desc: "Off-site Torch work — live timer + manual log.", group: "operations" },
-    { href: "/operations/stage-rotation", icon: "💃", title: "Stage Rotation", desc: "Entertainer stage rotation schedules.", group: "operations" },
+    { href: "window-open:https://torchrotation.abacusai.app/", icon: "💃", title: "Stage Rotation", desc: "Open Stage Rotation controller panel in a popup companion window.", group: "operations" },
   ],
   djmc: [
     { href: "/dj-mc-communications/messaging", icon: "💬", title: "Messaging", desc: "Internal board for staff updates.", group: "djmc" },
@@ -60,10 +60,6 @@ export const subTabs: Record<string, Module[]> = {
   ],
   "/dj-mc-communications/stage-announcement-ideas": [
     { href: "/dj-mc-communications/stage-announcement-ideas/adjectives", icon: "✨", title: "Adjectives", desc: "Stage Entertainer Adjective Compendium A to Z.", group: "djmc" },
-  ],
-  "/operations/stage-rotation": [
-    { href: "window-open:https://torchrotation.abacusai.app/?venue=TORCH_1", icon: "❶", title: "Torch 1", desc: "Torch 1 Stage Rotation Panel", group: "operations" },
-    { href: "window-open:https://torchrotation.abacusai.app/?venue=TORCH_2", icon: "❷", title: "Torch 2", desc: "Torch 2 Stage Rotation Panel", group: "operations" },
   ],
 };
 
