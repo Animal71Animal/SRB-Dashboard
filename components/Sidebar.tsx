@@ -284,22 +284,18 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
-                      {item.href === "/analytics" || item.href === "/dj-mc-communications/stage-announcement-ideas" ? (
-                        <div style={{ position: "relative" }}>
-                          <Link href={item.href} onClick={() => setMobileOpen(false)}
-                            style={{
-                              display: "flex", alignItems: "center", gap: 10,
-                              padding: "9px 20px", fontSize: "0.875rem",
-                              color: active ? "var(--accent2)" : "var(--text)",
-                              background: active ? "rgba(201,0,43,0.1)" : "transparent",
-                              borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                              textDecoration: "none", transition: "all 0.15s",
-                            }}>
-                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                            {item.title}
-                          </Link>
-                        </div>
-                      ) : (
+                      <Link href={item.href} onClick={() => setMobileOpen(false)}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "9px 20px", fontSize: "0.875rem",
+                          color: active ? "var(--accent2)" : "var(--text)",
+                          background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                          borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                          textDecoration: "none", transition: "all 0.15s",
+                        }}>
+                        <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                        {item.title}
+                      </Link>
 
                       {/* Admin Console Sub-tab */}
                       {item.href === "/torchtv" && hasPermission(role, "special", "admin-console") && (
@@ -366,8 +362,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                           ))}
                         </div>
                       )}
-
-                      {/* Sub-tabs for Analytics */}
                     </div>
                   );
                 })}
