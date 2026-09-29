@@ -299,7 +299,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                             {item.title}
                           </Link>
                         </div>
-                      )}
+                      ) : (
 
                       {/* Admin Console Sub-tab */}
                       {item.href === "/torchtv" && hasPermission(role, "special", "admin-console") && (
