@@ -775,7 +775,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-01T23:06:25.330Z",
       "date": "Oct 1, 2026",
-      "time": "05:06 PM"
+      "time": "05:06 PM",
+      "reactions": {
+        "thumbsup": [
+          "Nico"
+        ]
+      }
     },
     {
       "id": "1790896027115",
