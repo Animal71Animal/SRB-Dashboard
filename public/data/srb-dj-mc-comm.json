@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790483844724",
-      "sender": "ANIMAL",
-      "text": "ill let bob know",
-      "timestamp": "2026-09-27T04:37:24.724Z",
-      "date": "Sep 26, 2026",
-      "time": "10:37 PM"
-    },
-    {
       "id": "1790483884047",
       "sender": "Steven",
       "text": "Sounds good, thank-you Animal.",
@@ -973,6 +965,15 @@
       "timestamp": "2026-10-02T09:26:55.562Z",
       "date": "Oct 2, 2026",
       "time": "03:26 AM"
+    },
+    {
+      "id": "1790982521690",
+      "sender": "ANIMAL",
+      "text": "star, please take down the ads and stuff off of any tv's that you have it on",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T23:08:41.690Z",
+      "date": "Oct 2, 2026",
+      "time": "05:08 PM"
     }
   ]
 }
