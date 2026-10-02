@@ -249,6 +249,28 @@ export default function EventsPage() {
     } finally { setLoading(false); }
   };
 
+  const removeEvent = async (id: string, kind: 'oneOff' | 'series') => {
+    if (!confirm("Are you sure you want to delete this event from the registry? This action cannot be undone.")) return;
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/events?id=${id}&kind=${kind}`, {
+        method: "DELETE",
+      });
+      if (res.ok) {
+        // Clear selection if deleted
+        setSelectedEventIds(prev => prev.filter(ref => ref.id !== id));
+        await load();
+      } else {
+        alert("Failed to delete event.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting event.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const renderEventForm = (e: any, refType: 'oneOff' | 'series', isCalendarDetail: boolean = false) => {
     const isEditing = editingId === e.id;
     const isCollapsed = !isCalendarDetail && !openRegistryIds.has(e.id);
@@ -320,7 +342,12 @@ export default function EventsPage() {
                     {e.status === "Confirmed" && (
                       <span title="Confirmed" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, borderRadius: "50%", background: "#00a86b", color: "#fff", fontSize: "0.9rem", fontWeight: 800, lineHeight: 1, flexShrink: 0 }}>✓</span>
                     )}
-                    {canEdit && !isCollapsed && <button onClick={() => { setEditingId(e.id); setEditBuffer({ ...e }); }} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Edit</button>}
+                    {canEdit && !isCollapsed && (
+                      <>
+                        <button onClick={() => { setEditingId(e.id); setEditBuffer({ ...e }); }} style={{ background: "none", border: "1px solid var(--accent2)", color: "var(--accent2)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Edit</button>
+                        <button onClick={() => removeEvent(e.id, refType)} style={{ background: "none", border: "1px solid var(--accent)", color: "var(--accent)", borderRadius: 6, padding: "4px 12px", fontSize: "0.75rem", cursor: "pointer" }}>Delete</button>
+                      </>
+                    )}
                     {!isCollapsed && <StatusPill status={e.status} />}
                   </>
                 )}
