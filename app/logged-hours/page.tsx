@@ -132,16 +132,15 @@ export default function LoggedHoursPage() {
       cursor.setMonth(cursor.getMonth() + 1);
     }
 
-    // Sort periods: group by month descending (newest month first), but within the same month,
-    // ensure 1st–15th (p1) is always ordered before 16th–EOM (p2).
+    // Sort periods chronologically (earliest month first)
     allPeriods.sort((a, b) => {
-      // Compare by year & month first (newest month first)
+      // Compare by year & month first (earliest month first)
       const dateA = new Date(a.endTime);
       const dateB = new Date(b.endTime);
-      const yearDiff = dateB.getFullYear() - dateA.getFullYear();
+      const yearDiff = dateA.getFullYear() - dateB.getFullYear();
       if (yearDiff !== 0) return yearDiff;
       
-      const monthDiff = dateB.getMonth() - dateA.getMonth();
+      const monthDiff = dateA.getMonth() - dateB.getMonth();
       if (monthDiff !== 0) return monthDiff;
 
       // Within the same month, chronological ascending order: 1st–15th comes before 16th–EOM.
