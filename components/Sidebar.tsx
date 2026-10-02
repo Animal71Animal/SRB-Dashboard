@@ -284,18 +284,37 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   const active = pathname === item.href;
                   return (
                     <div key={item.href}>
-                      <Link href={item.href} onClick={() => setMobileOpen(false)}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 10,
-                          padding: "9px 20px", fontSize: "0.875rem",
-                          color: active ? "var(--accent2)" : "var(--text)",
-                          background: active ? "rgba(201,0,43,0.1)" : "transparent",
-                          borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
-                          textDecoration: "none", transition: "all 0.15s",
-                        }}>
-                        <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                        {item.title}
-                      </Link>
+                      {item.href === "/operations/stage-rotation" ? (
+                        <button
+                          onClick={() => setOperationsExpanded((v) => !v)}
+                          style={{
+                            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+                            width: "100%", padding: "9px 20px", fontSize: "0.875rem",
+                            color: operationsExpanded ? "var(--accent2)" : "var(--text)",
+                            background: operationsExpanded ? "rgba(201,0,43,0.1)" : "transparent",
+                            border: "none", borderLeft: operationsExpanded ? "2px solid var(--accent)" : "2px solid transparent",
+                            textDecoration: "none", transition: "all 0.15s", cursor: "pointer", textAlign: "left",
+                          }}>
+                          <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                            {item.title}
+                          </span>
+                          <ChevronIcon expanded={operationsExpanded} />
+                        </button>
+                      ) : (
+                        <Link href={item.href} onClick={() => setMobileOpen(false)}
+                          style={{
+                            display: "flex", alignItems: "center", gap: 10,
+                            padding: "9px 20px", fontSize: "0.875rem",
+                            color: active ? "var(--accent2)" : "var(--text)",
+                            background: active ? "rgba(201,0,43,0.1)" : "transparent",
+                            borderLeft: active ? "2px solid var(--accent)" : "2px solid transparent",
+                            textDecoration: "none", transition: "all 0.15s",
+                          }}>
+                          <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                          {item.title}
+                        </Link>
+                      )}
 
                       {/* Admin Console Sub-tab */}
                       {item.href === "/torchtv" && hasPermission(role, "special", "admin-console") && (
@@ -359,6 +378,37 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                               <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
                               {sub.title}
                             </Link>
+                          ))}
+                        </div>
+                      )}
+
+                      {/* Sub-tabs for Stage Rotation */}
+                      {item.href === "/operations/stage-rotation" && (
+                        <div style={{
+                          maxHeight: operationsExpanded ? "2000px" : "0",
+                          overflow: "hidden", transition: "max-height 0.2s ease",
+                          display: "flex", flexDirection: "column"
+                        }}>
+                          {[
+                            { venue: "TORCH_1" as const, title: "Torch 1", icon: "❶" },
+                            { venue: "TORCH_2" as const, title: "Torch 2", icon: "❷" },
+                          ].map(sub => (
+                            <button
+                              key={sub.venue}
+                              onClick={() => {
+                                setMobileOpen(false);
+                                window.dispatchEvent(new CustomEvent("torch-stage-rotation-toggle", { detail: { venue: sub.venue } }));
+                              }}
+                              style={{
+                                display: "flex", alignItems: "center", gap: 10,
+                                padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                color: "var(--muted)", background: "transparent",
+                                border: "none", textDecoration: "none", transition: "all 0.15s",
+                                cursor: "pointer", width: "100%", textAlign: "left"
+                              }}>
+                              <span style={{ fontSize: "0.75rem" }}>{sub.icon}</span>
+                              {sub.title}
+                            </button>
                           ))}
                         </div>
                       )}
