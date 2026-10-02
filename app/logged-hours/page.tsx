@@ -75,7 +75,7 @@ export default function LoggedHoursPage() {
   // ----- Accordion toggle for Previous Pay Periods -----
   const [prevPeriodsExpanded, setPrevPeriodsExpanded] = useState(false);
 
-  const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(a.clockIn).getTime() - new Date(b.clockIn).getTime()))).catch(() => {});
+  const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(b.clockIn).getTime() - new Date(a.clockIn).getTime()))).catch(() => {});
   useEffect(() => { load(); }, []);
 
   const { currentPayPeriods, previousPayPeriods } = useMemo(() => {
