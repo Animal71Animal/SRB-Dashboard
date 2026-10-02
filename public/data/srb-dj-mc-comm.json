@@ -919,6 +919,15 @@
       "timestamp": "2026-10-02T05:07:13.935Z",
       "date": "Oct 1, 2026",
       "time": "11:07 PM"
+    },
+    {
+      "id": "1790928466252",
+      "sender": "ANIMAL",
+      "text": "ok guys check it out... first off, the ignite app is much easier for entertainers to install and set up notifications as it is more of a pwa app as opposed to a webapp. secondly, i have now included security staff in to the app where they get a scaled down version of the app with the 'help' alert from entertainers now going straight to their phones",
+      "imageUrl": "https://raw.githubusercontent.com/Animal71Animal/SRB-Dashboard/refs/heads/main/public/uploads/chat-1790928464797-Screenshot_2026-10-02_at_2.05.46_AM.png",
+      "timestamp": "2026-10-02T08:07:46.252Z",
+      "date": "Oct 2, 2026",
+      "time": "02:07 AM"
     }
   ]
 }
