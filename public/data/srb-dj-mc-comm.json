@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790483890514",
-      "sender": "Steven",
-      "text": "How's T2?",
-      "timestamp": "2026-09-27T04:38:10.514Z",
-      "date": "Sep 26, 2026",
-      "time": "10:38 PM"
-    },
-    {
       "id": "1790484189778",
       "sender": "ANIMAL",
       "text": "not good",
@@ -975,6 +967,15 @@
       "timestamp": "2026-10-02T23:09:45.362Z",
       "date": "Oct 2, 2026",
       "time": "05:09 PM"
+    },
+    {
+      "id": "1790982624673",
+      "sender": "ANIMAL",
+      "text": "tell me what is it showing after you do that",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T23:10:24.673Z",
+      "date": "Oct 2, 2026",
+      "time": "05:10 PM"
     }
   ]
 }
