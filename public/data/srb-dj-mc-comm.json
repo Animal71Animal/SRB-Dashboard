@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790483840542",
-      "sender": "ANIMAL",
-      "text": "heard",
-      "timestamp": "2026-09-27T04:37:20.542Z",
-      "date": "Sep 26, 2026",
-      "time": "10:37 PM"
-    },
-    {
       "id": "1790483844724",
       "sender": "ANIMAL",
       "text": "ill let bob know",
@@ -968,6 +960,15 @@
       "timestamp": "2026-10-02T08:37:52.165Z",
       "date": "Oct 2, 2026",
       "time": "02:37 AM"
+    },
+    {
+      "id": "1790933215562",
+      "sender": "Steven",
+      "text": "Okay. Lol",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T09:26:55.562Z",
+      "date": "Oct 2, 2026",
+      "time": "03:26 AM"
     }
   ]
 }
