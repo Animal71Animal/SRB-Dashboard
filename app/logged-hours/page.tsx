@@ -72,49 +72,79 @@ export default function LoggedHoursPage() {
   // ----- Accordion toggle for Master List -----
   const [expanded, setExpanded] = useState(false);
 
+  // ----- Accordion toggle for Previous Pay Periods -----
+  const [prevPeriodsExpanded, setPrevPeriodsExpanded] = useState(false);
+
   const load = () => fetch("/api/hours").then((r) => r.json()).then((data) => setLogs(data.sort((a: HoursLog, b: HoursLog) => new Date(a.clockIn).getTime() - new Date(b.clockIn).getTime()))).catch(() => {});
   useEffect(() => { load(); }, []);
 
-  const periods = useMemo(() => {
+  const { currentPayPeriods, previousPayPeriods } = useMemo(() => {
     const now = new Date();
     const currentYear = now.getFullYear();
     const currentMonth = now.getMonth();
     const currentDay = now.getDate();
 
-    const months = [
-      { year: currentMonth === 0 ? currentYear - 1 : currentYear, month: (currentMonth - 1 + 12) % 12 }, // Prior
-      { year: currentYear, month: currentMonth }, // Current
-      { year: currentMonth === 11 ? currentYear + 1 : currentYear, month: (currentMonth + 1) % 12 } // Next
-    ];
+    // Map logs to pay periods starting from the earliest log date up to current/next month
+    const earliestTime = logs.length > 0 
+      ? new Date(logs[0].clockIn || logs[0].date).getTime() 
+      : new Date(2026, 6, 1).getTime(); // Default July 1, 2026
 
-    return months.flatMap(({ year, month }) => {
+    const start = new Date(earliestTime);
+    start.setDate(1); // floor to first of month
+    
+    const end = new Date(currentYear, currentMonth + 1, 1); // Up to next month
+    
+    const allPeriods: { label: string; hours: number; isCurrent: boolean; endTime: number }[] = [];
+    
+    const cursor = new Date(start);
+    while (cursor <= end) {
+      const year = cursor.getFullYear();
+      const month = cursor.getMonth();
+      
       const p1Start = new Date(year, month, 1).getTime();
       const p1End = new Date(year, month, 15, 23, 59, 59, 999).getTime();
       const p2Start = new Date(year, month, 16).getTime();
       const p2End = new Date(year, month + 1, 0, 23, 59, 59, 999).getTime();
 
-      const monthName = new Date(year, month).toLocaleString("en-US", { month: "short" });
+      const monthName = cursor.toLocaleString("en-US", { month: "short" });
       const isCurrentMonth = year === currentYear && month === currentMonth;
 
-      return [
-        {
-          label: `${monthName} 1st–15th`,
-          hours: logs.reduce((s, l) => {
-            const ts = new Date(l.clockIn || l.date).getTime();
-            return (ts >= p1Start && ts <= p1End) ? s + (l.hours || 0) : s;
-          }, 0),
-          isCurrent: isCurrentMonth && currentDay <= 15
-        },
-        {
-          label: `${monthName} 16th–EOM`,
-          hours: logs.reduce((s, l) => {
-            const ts = new Date(l.clockIn || l.date).getTime();
-            return (ts >= p2Start && ts <= p2End) ? s + (l.hours || 0) : s;
-          }, 0),
-          isCurrent: isCurrentMonth && currentDay >= 16
-        }
-      ];
+      allPeriods.push({
+        label: `${monthName} ${year} 1st–15th`,
+        hours: logs.reduce((s, l) => {
+          const ts = new Date(l.clockIn || l.date).getTime();
+          return (ts >= p1Start && ts <= p1End) ? s + (l.hours || 0) : s;
+        }, 0),
+        isCurrent: isCurrentMonth && currentDay <= 15,
+        endTime: p1End
+      });
+
+      allPeriods.push({
+        label: `${monthName} ${year} 16th–EOM`,
+        hours: logs.reduce((s, l) => {
+          const ts = new Date(l.clockIn || l.date).getTime();
+          return (ts >= p2Start && ts <= p2End) ? s + (l.hours || 0) : s;
+        }, 0),
+        isCurrent: isCurrentMonth && currentDay >= 16,
+        endTime: p2End
+      });
+
+      cursor.setMonth(cursor.getMonth() + 1);
+    }
+
+    // Sort periods chronologically (descending to show newest first)
+    allPeriods.sort((a, b) => b.endTime - a.endTime);
+
+    // Active/current and next periods (e.g. current year/month and future)
+    const currentPayPeriods = allPeriods.filter(p => {
+      const pDate = new Date(p.endTime);
+      return p.isCurrent || (pDate.getFullYear() === currentYear && pDate.getMonth() === currentMonth) || pDate.getTime() > now.getTime();
     });
+
+    // Past pay periods
+    const previousPayPeriods = allPeriods.filter(p => !currentPayPeriods.includes(p));
+
+    return { currentPayPeriods, previousPayPeriods };
   }, [logs]);
   const allTimeTotal = useMemo(() => logs.reduce((s, l) => s + (l.hours || 0), 0), [logs]);
 
@@ -251,9 +281,9 @@ export default function LoggedHoursPage() {
         </div>
       </div>
 
-      {/* KPIs */}
+      {/* KPIs (Active and Current Periods) */}
       <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, marginBottom: 24 }}>
-        {periods.map((p, i) => (
+        {currentPayPeriods.map((p, i) => (
           <div key={i} style={CARD}>
             <div style={labelStyle}>{p.label}</div>
             <div style={{ fontSize: "2rem", fontWeight: 700, color: "var(--accent)" }}>{fmtDuration(p.hours)}</div>
@@ -268,6 +298,53 @@ export default function LoggedHoursPage() {
           <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>{logs.length} entries</div>
         </div>
       </div>
+
+      {/* Previous Pay Periods Collapsible Card */}
+      {previousPayPeriods.length > 0 && (
+        <div style={{ ...CARD, marginBottom: 24, padding: 0 }}>
+          <div 
+            onClick={() => setPrevPeriodsExpanded(!prevPeriodsExpanded)}
+            style={{ 
+              padding: "16px 24px", 
+              borderBottom: prevPeriodsExpanded ? "1px solid var(--border)" : "none", 
+              display: "flex", 
+              justifyContent: "space-between", 
+              alignItems: "center",
+              cursor: "pointer",
+              userSelect: "none"
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <span style={{ 
+                transform: prevPeriodsExpanded ? "rotate(90deg)" : "rotate(0deg)", 
+                transition: "transform 0.15s ease",
+                display: "inline-block",
+                fontSize: "0.8rem",
+                color: "var(--muted)"
+              }}>
+                ▶
+              </span>
+              <h3 style={{ margin: 0, fontSize: "0.85rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--muted)" }}>
+                Previous Pay Periods
+              </h3>
+            </div>
+            <span style={{ fontSize: "0.75rem", color: "var(--muted)" }}>
+              {previousPayPeriods.length} past periods
+            </span>
+          </div>
+
+          {prevPeriodsExpanded && (
+            <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 16, padding: "24px" }}>
+              {previousPayPeriods.map((p, i) => (
+                <div key={i} style={{ background: "rgba(255,255,255,0.02)", border: "1px solid var(--border)", borderRadius: 8, padding: 16 }}>
+                  <div style={labelStyle}>{p.label}</div>
+                  <div style={{ fontSize: "1.5rem", fontWeight: 700, color: "var(--text)" }}>{fmtDuration(p.hours)}</div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Mode toggle */}
       <div style={{ display: "flex", gap: 10, marginBottom: 16 }}>
