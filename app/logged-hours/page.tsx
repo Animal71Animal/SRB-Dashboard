@@ -132,8 +132,21 @@ export default function LoggedHoursPage() {
       cursor.setMonth(cursor.getMonth() + 1);
     }
 
-    // Sort periods chronologically (descending to show newest first)
-    allPeriods.sort((a, b) => b.endTime - a.endTime);
+    // Sort periods: group by month descending (newest month first), but within the same month,
+    // ensure 1st–15th (p1) is always ordered before 16th–EOM (p2).
+    allPeriods.sort((a, b) => {
+      // Compare by year & month first (newest month first)
+      const dateA = new Date(a.endTime);
+      const dateB = new Date(b.endTime);
+      const yearDiff = dateB.getFullYear() - dateA.getFullYear();
+      if (yearDiff !== 0) return yearDiff;
+      
+      const monthDiff = dateB.getMonth() - dateA.getMonth();
+      if (monthDiff !== 0) return monthDiff;
+
+      // Within the same month, chronological ascending order: 1st–15th comes before 16th–EOM.
+      return a.endTime - b.endTime;
+    });
 
     // Active/current and next periods (e.g. current year/month and future)
     const currentPayPeriods = allPeriods.filter(p => {
