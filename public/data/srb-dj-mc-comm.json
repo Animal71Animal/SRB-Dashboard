@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790498438240",
-      "sender": "ANIMAL",
-      "text": "did BJ show uo for work?",
-      "timestamp": "2026-09-27T08:40:38.240Z",
-      "date": "Sep 27, 2026",
-      "time": "02:40 AM"
-    },
-    {
       "id": "1790498984672",
       "sender": "Steven",
       "text": "He did not.",
@@ -976,6 +968,15 @@
       "text": "ok cool... i will explain the new tv system and how it works asap but for now do not put any torch stuff on tv's",
       "imageUrl": null,
       "timestamp": "2026-10-02T23:13:29.890Z",
+      "date": "Oct 2, 2026",
+      "time": "05:13 PM"
+    },
+    {
+      "id": "1790982816795",
+      "sender": "ANIMAL",
+      "text": "thank you sir",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T23:13:36.795Z",
       "date": "Oct 2, 2026",
       "time": "05:13 PM"
     }
