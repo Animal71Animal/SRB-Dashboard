@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790498984672",
-      "sender": "Steven",
-      "text": "He did not.",
-      "timestamp": "2026-09-27T08:49:44.672Z",
-      "date": "Sep 27, 2026",
-      "time": "02:49 AM"
-    },
-    {
       "id": "1790499053897",
       "sender": "ANIMAL",
       "text": "ok",
@@ -979,6 +971,15 @@
       "timestamp": "2026-10-02T23:13:36.795Z",
       "date": "Oct 2, 2026",
       "time": "05:13 PM"
+    },
+    {
+      "id": "1790982969051",
+      "sender": "Star",
+      "text": "yes sir",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T23:16:09.051Z",
+      "date": "Oct 2, 2026",
+      "time": "05:16 PM"
     }
   ]
 }
