@@ -90,6 +90,36 @@
           "linkedAt": "2026-08-25T09:38:10.148Z"
         },
         "timestamp": "2026-08-25T09:38:10.918Z"
+      },
+      {
+        "id": "1790910428254-vw1qyb",
+        "title": "Racktober - Best Shakers",
+        "date": "2026-10-15",
+        "description": "Titties!!!",
+        "verbiage": "Racktober week two is Best Shakers — we're finding out who shakes it best on that stage tonight! Get your dollars ready and your votes loud, because these ladies are bringing it. Don't forget — $7 drink specials on Jack Daniel's, Pendleton, 1800, Tito's, and G4, $6 shot specials, $4 Bud Light and NÜTRL all night. And if you're rolling deep, ask about the $100 table service special. Let's see those shakers!\"",
+        "drinkSpecials": "$7  Jack Daniel's — Black • Honey • Fire Pendleton 1800 Tequila — Coconut • Reposado • Blanco Tito's Vodka G4 Tequila $6 Shot Special  Rack Attack • Double D's $4  Bud Light • NÜTRL Seltzer Table Service Special — $100  Jack Daniel's • Pendleton • 1800 • Tito's",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1790910069518",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1790910069518",
+          "kind": "oneoff",
+          "name": "Racktober - Best Shakers",
+          "date": "2026-10-15",
+          "theme": "Titties!!!",
+          "who": "",
+          "format": "",
+          "drinks": "$7  Jack Daniel's — Black • Honey • Fire Pendleton 1800 Tequila — Coconut • Reposado • Blanco Tito's Vodka G4 Tequila $6 Shot Special  Rack Attack • Double D's $4  Bud Light • NÜTRL Seltzer Table Service Special — $100  Jack Daniel's • Pendleton • 1800 • Tito's",
+          "games": "",
+          "costuming": "",
+          "verbiage": "Racktober week two is Best Shakers — we're finding out who shakes it best on that stage tonight! Get your dollars ready and your votes loud, because these ladies are bringing it. Don't forget — $7 drink specials on Jack Daniel's, Pendleton, 1800, Tito's, and G4, $6 shot specials, $4 Bud Light and NÜTRL all night. And if you're rolling deep, ask about the $100 table service special. Let's see those shakers!\"",
+          "icon": "",
+          "venue": "torch1",
+          "status": "Confirmed",
+          "linkedAt": "2026-10-02T03:07:06.250Z"
+        },
+        "timestamp": "2026-10-02T03:07:08.254Z"
       }
     ],
     "upcoming": []
