@@ -54,6 +54,7 @@ interface LinkedEventSnapshot {
   venue?: string;
   status?: string;
   linkedAt: string;
+  flyerImage?: string;
 }
 
 interface PromoItem {
@@ -88,6 +89,7 @@ interface OneOffEvent {
   costuming?: string;
   verbiage?: string;
   venue?: string;
+  flyerImage?: string;
 }
 
 interface EventSeries {
@@ -293,6 +295,7 @@ export default function PromotionalMaterialsPage() {
                 venue: ev.venue,
                 status: ev.status,
                 linkedAt: item.linkedEvent?.linkedAt ?? new Date().toISOString(),
+                flyerImage: ev.flyerImage,
               },
             };
             // Cheap identity check — if nothing changed, keep the original object
@@ -311,7 +314,8 @@ export default function PromotionalMaterialsPage() {
               merged.linkedEvent?.drinks === item.linkedEvent?.drinks &&
               merged.linkedEvent?.name === item.linkedEvent?.name &&
               merged.linkedEvent?.venue === item.linkedEvent?.venue &&
-              merged.linkedEvent?.status === item.linkedEvent?.status
+              merged.linkedEvent?.status === item.linkedEvent?.status &&
+              merged.linkedEvent?.flyerImage === item.linkedEvent?.flyerImage
             ) {
               return item;
             }
@@ -523,6 +527,7 @@ export default function PromotionalMaterialsPage() {
         venue: event.kind === "oneoff" ? event.oneOff!.venue : event.series!.venue,
         status: event.kind === "oneoff" ? event.oneOff!.status : event.series!.status,
         linkedAt: new Date().toISOString(),
+        flyerImage: event.kind === "oneoff" ? event.oneOff!.flyerImage : event.series!.flyerImage,
       };
       const item: Partial<PromoItem> = {
         title: name,
@@ -840,6 +845,15 @@ function PromoCard({
       {isExpanded && (
         <div style={{ padding: "0 20px 20px", borderTop: "1px solid rgba(255,255,255,0.05)", marginTop: 0 }}>
           <div className="responsive-grid" style={{ paddingTop: 20, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24 }}>
+            {linked?.flyerImage && (
+              <div style={{ gridColumn: "1 / -1", marginBottom: 12 }}>
+                <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>Linked Flyer</div>
+                <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                  <img src={linked.flyerImage} alt="Event Flyer" style={{ maxWidth: "200px", maxHeight: "150px", objectFit: "contain", borderRadius: 8, border: "1px solid var(--border)" }} />
+                  <a href={linked.flyerImage} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent2)", fontSize: "0.85rem", fontWeight: 600 }}>Open Flyer Fullscreen ↗</a>
+                </div>
+              </div>
+            )}
             <div>
               <div style={{ fontSize: "0.7rem", color: "var(--muted)", textTransform: "uppercase", marginBottom: 8 }}>Event Description</div>
               {isEditing ? (

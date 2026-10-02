@@ -23,7 +23,7 @@ interface ShowEntry {
 interface OneOffEvent {
   id: string; date: string; name: string; theme: string; status: SRBStatus;
   icon?: string; who?: string; format?: string; drinks?: string; games?: string; costuming?: string; verbiage?: string;
-  shows?: ShowEntry[]; venue?: string;
+  shows?: ShowEntry[]; venue?: string; flyerImage?: string;
 }
 
 interface EventSeries {
@@ -36,7 +36,7 @@ type NewEventForm = Partial<OneOffEvent> & Partial<EventSeries> & { id: string }
 
 interface EventsFile { oneOffs: OneOffEvent[]; series: EventSeries[]; }
 
-const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", verbiage: "", shows: [] };
+const emptyOneOff: OneOffEvent = { id: "", date: "", name: "", theme: "", status: "Planned", icon: "", who: "", format: "", drinks: "", games: "", costuming: "", verbiage: "", shows: [], flyerImage: "" };
 
 function formatVenueLabel(v?: string) {
   if (v === "torch1") return "Torch 1";
@@ -443,6 +443,19 @@ export default function EventsPage() {
                   ) : <p style={{ margin: 0, fontSize: "0.9rem" }}>{e.costuming || "—"}</p>}
                 </div>
                 <div style={{ gridColumn: "span 2" }}>
+                  <label style={LABEL_STYLE}>Flyer Image URL</label>
+                  {isEditing ? (
+                    <input value={target.flyerImage || ""} onChange={b => setEditBuffer({ ...editBuffer, flyerImage: b.target.value })} style={INPUT_STYLE} placeholder="e.g. /images/special-event.png or https://..." />
+                  ) : (
+                    e.flyerImage ? (
+                      <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+                        <a href={e.flyerImage} target="_blank" rel="noopener noreferrer" style={{ color: "var(--accent2)", fontSize: "0.85rem", fontWeight: 600 }}>View Flyer ↗</a>
+                        <img src={e.flyerImage} alt="Flyer preview" style={{ maxWidth: 80, maxHeight: 60, objectFit: "contain", borderRadius: 6, border: "1px solid var(--border)" }} />
+                      </div>
+                    ) : <p style={{ margin: 0, fontSize: "0.9rem", color: "var(--muted)" }}>No flyer uploaded</p>
+                  )}
+                </div>
+                <div style={{ gridColumn: "span 2" }}>
                   <label style={LABEL_STYLE} title="MC / promo verbiage — synced bidirectionally with linked Promotional Materials cards">
                     🎙️ Verbiage <span style={{ fontSize: "0.65rem", color: "var(--muted)", textTransform: "none", letterSpacing: 0, fontWeight: 500 }}>(synced to Promotional Materials)</span>
                   </label>
@@ -549,12 +562,24 @@ export default function EventsPage() {
                   {events.series.map(s => {
                     const bg = s.venue === "torch1" ? "#fb923c" : s.venue === "torch2" ? "#facc15" : s.venue === "both" ? "#dc2626" : "var(--border)";
                     const fg = s.venue === "torch2" ? "#1a1a1a" : "#fff";
-                    return <div key={s.id} className="cal-pill" role="button" tabIndex={0} onClick={(event) => { event.stopPropagation(); selectCalendarEvent('series', s.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectCalendarEvent('series', s.id); } }} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", cursor: "pointer" }} title={`Open ${s.name}`} >{s.icon || "📁"} {s.name}</div>;
+                    return (
+                      <div key={s.id} className="cal-pill" role="button" tabIndex={0} onClick={(event) => { event.stopPropagation(); selectCalendarEvent('series', s.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectCalendarEvent('series', s.id); } }} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }} title={`Open ${s.name}`} >
+                        <span>{s.icon || "📁"}</span>
+                        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{s.name}</span>
+                        {s.flyerImage && <span style={{ fontSize: "0.6rem" }} title="Has Flyer">🖼️</span>}
+                      </div>
+                    );
                   })}
                   {events.oneOffs.map(e => {
                     const bg = e.venue === "torch1" ? "#fb923c" : e.venue === "torch2" ? "#facc15" : e.venue === "both" ? "#dc2626" : "var(--accent2)";
                     const fg = e.venue === "torch2" ? "#1a1a1a" : "#fff";
-                    return <div key={e.id} className="cal-pill" role="button" tabIndex={0} onClick={(event) => { event.stopPropagation(); selectCalendarEvent('oneOff', e.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectCalendarEvent('oneOff', e.id); } }} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", cursor: "pointer" }} title={`Open ${e.name}`} >{e.icon || "📅"} {e.name}</div>;
+                    return (
+                      <div key={e.id} className="cal-pill" role="button" tabIndex={0} onClick={(event) => { event.stopPropagation(); selectCalendarEvent('oneOff', e.id); }} onKeyDown={(event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); event.stopPropagation(); selectCalendarEvent('oneOff', e.id); } }} style={{ background: bg, color: fg, padding: "2px 6px", borderRadius: 4, fontSize: "0.7rem", fontWeight: 600, whiteSpace: "nowrap", overflow: "hidden", cursor: "pointer", display: "flex", alignItems: "center", gap: 3 }} title={`Open ${e.name}`} >
+                        <span>{e.icon || "📅"}</span>
+                        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>{e.name}</span>
+                        {e.flyerImage && <span style={{ fontSize: "0.6rem" }} title="Has Flyer">🖼️</span>}
+                      </div>
+                    );
                   })}
                 </div>
               </div>

@@ -30,6 +30,7 @@ export interface OneOffEvent {
   costuming?: string;
   /** Dedicated MC/promo verbiage. Separate from `costuming`. Synced bidirectionally with linked Promotional Materials cards. */
   verbiage?: string;
+  flyerImage?: string;
   shows?: ShowEntry[];
 }
 
@@ -133,6 +134,7 @@ export async function POST(req: NextRequest) {
       games: body.games ?? "",
       costuming: body.costuming ?? "",
       verbiage: body.verbiage ?? "",
+      flyerImage: body.flyerImage ?? "",
     });
     await safeWrite(FILE, { oneOffs: [item, ...oneOffs], series }, sha, `feat: add event "${item.name}"`);
     return NextResponse.json({ ok: true, item });
