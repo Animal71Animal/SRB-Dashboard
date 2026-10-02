@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790484189778",
-      "sender": "ANIMAL",
-      "text": "not good",
-      "timestamp": "2026-09-27T04:43:09.778Z",
-      "date": "Sep 26, 2026",
-      "time": "10:43 PM"
-    },
-    {
       "id": "1790484457806",
       "sender": "Steven",
       "text": "Really?",
@@ -976,6 +968,15 @@
       "timestamp": "2026-10-02T23:10:24.673Z",
       "date": "Oct 2, 2026",
       "time": "05:10 PM"
+    },
+    {
+      "id": "1790982738988",
+      "sender": "Star",
+      "text": "it shows the direct TV channels, same as the bar",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T23:12:18.988Z",
+      "date": "Oct 2, 2026",
+      "time": "05:12 PM"
     }
   ]
 }
