@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790482554615",
-      "sender": "ANIMAL",
-      "text": "good?",
-      "timestamp": "2026-09-27T04:15:54.615Z",
-      "date": "Sep 26, 2026",
-      "time": "10:15 PM"
-    },
-    {
       "id": "1790483352613",
       "sender": "Steven",
       "text": "It's alright. ",
@@ -960,6 +952,15 @@
       "timestamp": "2026-10-02T08:26:01.030Z",
       "date": "Oct 2, 2026",
       "time": "02:26 AM"
+    },
+    {
+      "id": "1790930181874",
+      "sender": "DJ",
+      "text": "lmao i did get up and thought someone went out the back door -nico",
+      "imageUrl": null,
+      "timestamp": "2026-10-02T08:36:21.874Z",
+      "date": "Oct 2, 2026",
+      "time": "02:36 AM"
     }
   ]
 }
