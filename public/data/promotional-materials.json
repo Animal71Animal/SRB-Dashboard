@@ -120,6 +120,36 @@
           "linkedAt": "2026-10-02T03:07:06.250Z"
         },
         "timestamp": "2026-10-02T03:07:08.254Z"
+      },
+      {
+        "id": "1790910452255-mkffwy",
+        "title": "Racktober - Boob Olympics - Finals Miss Racktober 2026",
+        "date": "2026-10-29",
+        "description": "Titties!!",
+        "verbiage": "This is it, the finals where we crown Miss Racktober 2026 with Boob Olympics— the best of the best from every week, all on one stage, one winner takes the crown! This is the biggest night of the month so I need EVERYBODY to make sure you are there! $7 specials on Jack, Pendleton, 1800, Tito's, and G4, $6 shot specials, $4 Bud Light and NÜTRL — and the $100 table service special for the full VIP experience. Let's crown our queen — Miss Racktober 2026!\"",
+        "drinkSpecials": "$7  Jack Daniel's — Black • Honey • Fire Pendleton 1800 Tequila — Coconut • Reposado • Blanco Tito's Vodka G4 Tequila $6 Shot Special  Rack Attack • Double D's $4  Bud Light • NÜTRL Seltzer Table Service Special — $100  Jack Daniel's • Pendleton • 1800 • Tito's",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1790910277406",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1790910277406",
+          "kind": "oneoff",
+          "name": "Racktober - Boob Olympics - Finals Miss Racktober 2026",
+          "date": "2026-10-29",
+          "theme": "Titties!!",
+          "who": "",
+          "format": "",
+          "drinks": "$7  Jack Daniel's — Black • Honey • Fire Pendleton 1800 Tequila — Coconut • Reposado • Blanco Tito's Vodka G4 Tequila $6 Shot Special  Rack Attack • Double D's $4  Bud Light • NÜTRL Seltzer Table Service Special — $100  Jack Daniel's • Pendleton • 1800 • Tito's",
+          "games": "",
+          "costuming": "",
+          "verbiage": "This is it, the finals where we crown Miss Racktober 2026 with Boob Olympics— the best of the best from every week, all on one stage, one winner takes the crown! This is the biggest night of the month so I need EVERYBODY to make sure you are there! $7 specials on Jack, Pendleton, 1800, Tito's, and G4, $6 shot specials, $4 Bud Light and NÜTRL — and the $100 table service special for the full VIP experience. Let's crown our queen — Miss Racktober 2026!\"",
+          "icon": "",
+          "venue": "torch1",
+          "status": "Confirmed",
+          "linkedAt": "2026-10-02T03:07:30.264Z"
+        },
+        "timestamp": "2026-10-02T03:07:32.255Z"
       }
     ],
     "upcoming": []
