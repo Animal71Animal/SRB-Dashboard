@@ -215,6 +215,36 @@
           "linkedAt": "2026-10-02T03:00:05.364Z"
         },
         "timestamp": "2026-10-02T03:00:07.831Z"
+      },
+      {
+        "id": "1790910439775-cxzazg",
+        "title": "Racktober - Sexiest Cleavage",
+        "date": "2026-10-22",
+        "description": "Titties!!!",
+        "verbiage": "it's week three of Racktober and tonight we're crowning the Sexiest Cleavage in the building! Ladies, flaunt what you got — the crowd decides who takes it. Gentlemen, you know what to do — cheer loud for your favorite! Keep those $7 Jack, Pendleton, 1800, Tito's, and G4 drinks flowing, grab $6 Rack Attack shots, $4 Bud Lights, and remember the $100 table service special if you want the VIP treatment. Let's make week three the hottest one yet!\"",
+        "drinkSpecials": "$7  Jack Daniel's — Black • Honey • Fire Pendleton 1800 Tequila — Coconut • Reposado • Blanco Tito's Vodka G4 Tequila $6 Shot Special  Rack Attack • Double D's $4  Bud Light • NÜTRL Seltzer Table Service Special — $100  Jack Daniel's • Pendleton • 1800 • Tito's",
+        "mcVerbiage": "",
+        "mcVerbiageCollapsed": false,
+        "eventId": "evt-1790910165690",
+        "eventKind": "oneoff",
+        "linkedEvent": {
+          "id": "evt-1790910165690",
+          "kind": "oneoff",
+          "name": "Racktober - Sexiest Cleavage",
+          "date": "2026-10-22",
+          "theme": "Titties!!!",
+          "who": "",
+          "format": "",
+          "drinks": "$7  Jack Daniel's — Black • Honey • Fire Pendleton 1800 Tequila — Coconut • Reposado • Blanco Tito's Vodka G4 Tequila $6 Shot Special  Rack Attack • Double D's $4  Bud Light • NÜTRL Seltzer Table Service Special — $100  Jack Daniel's • Pendleton • 1800 • Tito's",
+          "games": "",
+          "costuming": "",
+          "verbiage": "it's week three of Racktober and tonight we're crowning the Sexiest Cleavage in the building! Ladies, flaunt what you got — the crowd decides who takes it. Gentlemen, you know what to do — cheer loud for your favorite! Keep those $7 Jack, Pendleton, 1800, Tito's, and G4 drinks flowing, grab $6 Rack Attack shots, $4 Bud Lights, and remember the $100 table service special if you want the VIP treatment. Let's make week three the hottest one yet!\"",
+          "icon": "",
+          "venue": "torch2",
+          "status": "Confirmed",
+          "linkedAt": "2026-10-02T03:07:17.574Z"
+        },
+        "timestamp": "2026-10-02T03:07:19.775Z"
       }
     ],
     "upcoming": [
