@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790826108697",
-      "sender": "ANIMAL",
-      "text": "and Alina",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T03:41:48.697Z",
-      "date": "Sep 30, 2026",
-      "time": "09:41 PM"
-    },
-    {
       "id": "1790827759919",
       "sender": "Steven",
       "text": "Sorry, I just saw this, been dealing with a situation and had to call the cops, I told Bob about it.",
@@ -993,6 +984,15 @@
       "timestamp": "2026-10-03T05:09:40.191Z",
       "date": "Oct 2, 2026",
       "time": "11:09 PM"
+    },
+    {
+      "id": "1791014657807",
+      "sender": "ANIMAL",
+      "text": "how was your night brother?",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T08:04:17.807Z",
+      "date": "Oct 3, 2026",
+      "time": "02:04 AM"
     }
   ]
 }
