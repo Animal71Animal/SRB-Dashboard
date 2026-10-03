@@ -1,20 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790575991530",
-      "sender": "Steven",
-      "text": "Hey, I know that guy, that's Ladiesman217.",
-      "imageUrl": null,
-      "timestamp": "2026-09-28T06:13:11.530Z",
-      "date": "Sep 28, 2026",
-      "time": "12:13 AM",
-      "reactions": {
-        "laugh": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1790576030529",
       "sender": "ANIMAL",
       "text": "if you say so",
@@ -999,6 +985,15 @@
       "timestamp": "2026-10-03T04:43:22.238Z",
       "date": "Oct 2, 2026",
       "time": "10:43 PM"
+    },
+    {
+      "id": "1791002695167",
+      "sender": "ANIMAL",
+      "text": "star is kendall paid her house fee?",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T04:44:55.167Z",
+      "date": "Oct 2, 2026",
+      "time": "10:44 PM"
     }
   ]
 }
