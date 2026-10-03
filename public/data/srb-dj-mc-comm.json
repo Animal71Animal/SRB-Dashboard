@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790561008290",
-      "sender": "Star",
-      "text": "I'm good. excited for that day. it's gonna be a good night! i can feel it",
-      "timestamp": "2026-09-28T02:03:28.290Z",
-      "date": "Sep 27, 2026",
-      "time": "08:03 PM"
-    },
-    {
       "id": "1790561033493",
       "sender": "Star",
       "text": "also, i'm not seeing a red box?",
@@ -984,6 +976,15 @@
       "timestamp": "2026-10-03T02:30:48.544Z",
       "date": "Oct 2, 2026",
       "time": "08:30 PM"
+    },
+    {
+      "id": "1790994680574",
+      "sender": "ANIMAL",
+      "text": "and it is gonna help yall so much cuz im about to be asking A LOT of yall with all the new systems getting ready to deploy",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T02:31:20.574Z",
+      "date": "Oct 2, 2026",
+      "time": "08:31 PM"
     }
   ]
 }
