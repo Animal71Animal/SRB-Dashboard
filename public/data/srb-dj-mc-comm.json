@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790650086896",
-      "sender": "Steven",
-      "text": "I have 4 currently, I had more before, but, they checked out.",
-      "imageUrl": null,
-      "timestamp": "2026-09-29T02:48:06.896Z",
-      "date": "Sep 28, 2026",
-      "time": "08:48 PM"
-    },
-    {
       "id": "1790656435653",
       "sender": "ANIMAL",
       "text": "Hey guys all entertainers paid their house fees upfront correct?",
@@ -994,6 +985,15 @@
       "timestamp": "2026-10-03T04:47:49.352Z",
       "date": "Oct 2, 2026",
       "time": "10:47 PM"
+    },
+    {
+      "id": "1791002885038",
+      "sender": "Star",
+      "text": "idk what she is doing",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T04:48:05.038Z",
+      "date": "Oct 2, 2026",
+      "time": "10:48 PM"
     }
   ]
 }
