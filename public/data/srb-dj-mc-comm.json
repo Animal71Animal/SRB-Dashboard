@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790560278719",
-      "sender": "Star",
-      "text": "yes sir, we got a decent headcount of customers. all dancers are currently paid up",
-      "timestamp": "2026-09-28T01:51:18.719Z",
-      "date": "Sep 27, 2026",
-      "time": "07:51 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1790560554733",
       "sender": "Steven",
       "text": "How are YOU doing Star?",
@@ -982,6 +969,15 @@
       "text": "Whoever is at T1 tonight, that Ivy on roll call isn't working.",
       "imageUrl": null,
       "timestamp": "2026-10-03T02:24:24.550Z",
+      "date": "Oct 2, 2026",
+      "time": "08:24 PM"
+    },
+    {
+      "id": "1790994293209",
+      "sender": "Steven",
+      "text": "The one that's there now is the one that has to change her name.",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T02:24:53.209Z",
       "date": "Oct 2, 2026",
       "time": "08:24 PM"
     }
