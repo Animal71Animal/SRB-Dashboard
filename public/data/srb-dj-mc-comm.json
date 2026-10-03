@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790656435653",
-      "sender": "ANIMAL",
-      "text": "Hey guys all entertainers paid their house fees upfront correct?",
-      "imageUrl": null,
-      "timestamp": "2026-09-29T04:33:55.653Z",
-      "date": "Sep 28, 2026",
-      "time": "10:33 PM"
-    },
-    {
       "id": "1790656460001",
       "sender": "Steven",
       "text": "Yes, all house fees are paid up at T2.",
@@ -992,6 +983,15 @@
       "text": "idk what she is doing",
       "imageUrl": null,
       "timestamp": "2026-10-03T04:48:05.038Z",
+      "date": "Oct 2, 2026",
+      "time": "10:48 PM"
+    },
+    {
+      "id": "1791002918031",
+      "sender": "ANIMAL",
+      "text": "shiloh and pyro pays or goes home... period no exceptions for them",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T04:48:38.031Z",
       "date": "Oct 2, 2026",
       "time": "10:48 PM"
     }
