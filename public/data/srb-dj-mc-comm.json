@@ -943,7 +943,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-03T02:30:48.544Z",
       "date": "Oct 2, 2026",
-      "time": "08:30 PM"
+      "time": "08:30 PM",
+      "reactions": {
+        "thumbsup": [
+          "Steven"
+        ]
+      }
     },
     {
       "id": "1790994680574",
