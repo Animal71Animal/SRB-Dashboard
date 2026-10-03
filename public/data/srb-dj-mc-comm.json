@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790567242087",
-      "sender": "Star",
-      "text": "ya damn right!",
-      "timestamp": "2026-09-28T03:47:22.087Z",
-      "date": "Sep 27, 2026",
-      "time": "09:47 PM"
-    },
-    {
       "id": "1790567259018",
       "sender": "Star",
       "text": "everything good here! we had a party bus for a moment",
@@ -995,6 +987,15 @@
           "Steven"
         ]
       }
+    },
+    {
+      "id": "1790999112677",
+      "sender": "Steven",
+      "text": "It ain't much, but, it's honest work. 😌",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T03:45:12.677Z",
+      "date": "Oct 2, 2026",
+      "time": "09:45 PM"
     }
   ]
 }
