@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790560180629",
-      "sender": "ANIMAL",
-      "text": "everything good Star/?",
-      "timestamp": "2026-09-28T01:49:40.629Z",
-      "date": "Sep 27, 2026",
-      "time": "07:49 PM"
-    },
-    {
       "id": "1790560278719",
       "sender": "Star",
       "text": "yes sir, we got a decent headcount of customers. all dancers are currently paid up",
@@ -983,6 +975,15 @@
       "timestamp": "2026-10-03T01:25:07.052Z",
       "date": "Oct 2, 2026",
       "time": "07:25 PM"
+    },
+    {
+      "id": "1790994264550",
+      "sender": "Steven",
+      "text": "Whoever is at T1 tonight, that Ivy on roll call isn't working.",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T02:24:24.550Z",
+      "date": "Oct 2, 2026",
+      "time": "08:24 PM"
     }
   ]
 }
