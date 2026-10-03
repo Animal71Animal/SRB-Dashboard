@@ -1,13 +1,3 @@
 {
-  "messages": [
-    {
-      "id": "1791033570530",
-      "sender": "ANIMAL",
-      "text": "test",
-      "imageUrl": null,
-      "timestamp": "2026-10-03T13:19:30.530Z",
-      "date": "Oct 3, 2026",
-      "time": "07:19 AM"
-    }
-  ]
+  "messages": []
 }
