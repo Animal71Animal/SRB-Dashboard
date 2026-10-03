@@ -1,30 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790499053897",
-      "sender": "ANIMAL",
-      "text": "ok",
-      "timestamp": "2026-09-27T08:50:53.897Z",
-      "date": "Sep 27, 2026",
-      "time": "02:50 AM"
-    },
-    {
-      "id": "1790549303132",
-      "sender": "ANIMAL",
-      "text": "how goes it Steven?",
-      "timestamp": "2026-09-27T22:48:23.132Z",
-      "date": "Sep 27, 2026",
-      "time": "04:48 PM"
-    },
-    {
-      "id": "1790553216876",
-      "sender": "Steven",
-      "text": "It goes, as best as it can go.",
-      "timestamp": "2026-09-27T23:53:36.876Z",
-      "date": "Sep 27, 2026",
-      "time": "05:53 PM"
-    },
-    {
       "id": "1790560180629",
       "sender": "ANIMAL",
       "text": "everything good Star/?",
