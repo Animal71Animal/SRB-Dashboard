@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790563389681",
-      "sender": "Star",
-      "text": "well, thats what both of my daughters are going to be for halloween hahaha. and that's what i pay $35 a month for lol",
-      "timestamp": "2026-09-28T02:43:09.681Z",
-      "date": "Sep 27, 2026",
-      "time": "08:43 PM"
-    },
-    {
       "id": "1790564002706",
       "sender": "Steven",
       "text": "You pay $35 a month to watch Frozen 17 times?",
@@ -993,6 +985,15 @@
       "timestamp": "2026-10-03T03:02:47.855Z",
       "date": "Oct 2, 2026",
       "time": "09:02 PM"
+    },
+    {
+      "id": "1790996768833",
+      "sender": "Star",
+      "text": "heard",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T03:06:08.833Z",
+      "date": "Oct 2, 2026",
+      "time": "09:06 PM"
     }
   ]
 }
