@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790826080085",
-      "sender": "ANIMAL",
-      "text": "Steven, can you get molly on the app if you have time please",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T03:41:20.085Z",
-      "date": "Sep 30, 2026",
-      "time": "09:41 PM"
-    },
-    {
       "id": "1790826108697",
       "sender": "ANIMAL",
       "text": "and Alina",
@@ -988,6 +979,15 @@
       "timestamp": "2026-10-03T05:07:04.309Z",
       "date": "Oct 2, 2026",
       "time": "11:07 PM"
+    },
+    {
+      "id": "1791004180191",
+      "sender": "ANIMAL",
+      "text": "my man!!!",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T05:09:40.191Z",
+      "date": "Oct 2, 2026",
+      "time": "11:09 PM"
     }
   ]
 }
