@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790561706056",
-      "sender": "Star",
-      "text": "\"a new emotion\" - some line from a kids pixar movie i was forced to watch this morning",
-      "timestamp": "2026-09-28T02:15:06.056Z",
-      "date": "Sep 27, 2026",
-      "time": "08:15 PM"
-    },
-    {
       "id": "1790562399687",
       "sender": "Steven",
       "text": "Must be a tough life brother.",
@@ -990,6 +982,15 @@
       "timestamp": "2026-10-03T02:38:09.812Z",
       "date": "Oct 2, 2026",
       "time": "08:38 PM"
+    },
+    {
+      "id": "1790995382131",
+      "sender": "ANIMAL",
+      "text": "ok ill grab another couple",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T02:43:02.130Z",
+      "date": "Oct 2, 2026",
+      "time": "08:43 PM"
     }
   ]
 }
