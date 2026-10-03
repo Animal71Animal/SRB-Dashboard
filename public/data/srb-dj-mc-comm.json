@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790563130100",
-      "sender": "ANIMAL",
-      "text": "\"forced\" to watch... like the 17 times he was 'forced' to watch Frozen",
-      "timestamp": "2026-09-28T02:38:50.100Z",
-      "date": "Sep 27, 2026",
-      "time": "08:38 PM"
-    },
-    {
       "id": "1790563389681",
       "sender": "Star",
       "text": "well, thats what both of my daughters are going to be for halloween hahaha. and that's what i pay $35 a month for lol",
@@ -992,6 +984,15 @@
       "timestamp": "2026-10-03T03:01:59.603Z",
       "date": "Oct 2, 2026",
       "time": "09:01 PM"
+    },
+    {
+      "id": "1790996567855",
+      "sender": "ANIMAL",
+      "text": "tell her this her absolute last time... next time she goes home period",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T03:02:47.855Z",
+      "date": "Oct 2, 2026",
+      "time": "09:02 PM"
     }
   ]
 }
