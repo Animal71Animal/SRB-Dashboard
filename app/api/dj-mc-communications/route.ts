@@ -19,11 +19,21 @@ export async function GET() {
   try {
     const { data, sha } = await safeRead(FILE_PATH, { messages: [] });
     const pruned = pruneOld(data.messages || []);
-    // If pruning dropped messages, persist the cleaned list
-    if (pruned.length < (data.messages || []).length) {
-      await writeToGitHub(FILE_PATH, { messages: pruned }, sha, `chat: auto-prune messages older than ${TTL_DAYS} days`);
+    
+    // Sort chronologically ascending (oldest first, newest last) so they display with last messages last
+    const sorted = pruned.sort((a: any, b: any) => {
+      const tA = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+      const tB = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+      return tA - tB;
+    });
+
+    // If pruning or sorting changed the message structure, persist the cleaned/sorted list
+    const originalIds = (data.messages || []).map((m: any) => m.id).join(",");
+    const sortedIds = sorted.map((m: any) => m.id).join(",");
+    if (originalIds !== sortedIds) {
+      await writeToGitHub(FILE_PATH, { messages: sorted }, sha, `chat: auto-prune/sort message database`);
     }
-    return NextResponse.json({ messages: pruned });
+    return NextResponse.json({ messages: sorted });
   } catch (e) {
     return NextResponse.json({ messages: [] });
   }
