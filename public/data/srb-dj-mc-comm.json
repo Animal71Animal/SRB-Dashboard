@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790579892019",
-      "sender": "ANIMAL",
-      "text": "Star you hold on to my tip out till tomorrow like last week please",
-      "imageUrl": null,
-      "timestamp": "2026-09-28T07:18:12.019Z",
-      "date": "Sep 28, 2026",
-      "time": "01:18 AM"
-    },
-    {
       "id": "1790648953457",
       "sender": "Nico",
       "text": "are we really short girls in both clubs rn??",
@@ -994,6 +985,15 @@
       "timestamp": "2026-10-03T04:45:55.535Z",
       "date": "Oct 2, 2026",
       "time": "10:45 PM"
+    },
+    {
+      "id": "1791002760531",
+      "sender": "ANIMAL",
+      "text": "lilliana? pyro? ",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T04:46:00.531Z",
+      "date": "Oct 2, 2026",
+      "time": "10:46 PM"
     }
   ]
 }
