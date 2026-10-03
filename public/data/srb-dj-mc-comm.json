@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790827844936",
-      "sender": "ANIMAL",
-      "text": "wtf?!?!",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T04:10:44.936Z",
-      "date": "Sep 30, 2026",
-      "time": "10:10 PM"
-    },
-    {
       "id": "1790829496481",
       "sender": "Steven",
       "text": "Yeah, just some fuck heads that didn't want to leave and got aggressive. ",
@@ -993,6 +984,15 @@
       "timestamp": "2026-10-03T08:09:40.977Z",
       "date": "Oct 3, 2026",
       "time": "02:09 AM"
+    },
+    {
+      "id": "1791015132564",
+      "sender": "ANIMAL",
+      "text": "i appreciate you man!",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T08:12:12.564Z",
+      "date": "Oct 3, 2026",
+      "time": "02:12 AM"
     }
   ]
 }
