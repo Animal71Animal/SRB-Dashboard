@@ -983,7 +983,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-03T03:39:29.756Z",
       "date": "Oct 2, 2026",
-      "time": "09:39 PM"
+      "time": "09:39 PM",
+      "reactions": {
+        "laugh": [
+          "Star"
+        ]
+      }
     }
   ]
 }
