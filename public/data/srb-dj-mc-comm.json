@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790566787593",
-      "sender": "ANIMAL",
-      "text": "everything good over there? you guys busy? do i need to swing thru? and BJ is there right? ",
-      "timestamp": "2026-09-28T03:39:47.593Z",
-      "date": "Sep 27, 2026",
-      "time": "09:39 PM"
-    },
-    {
       "id": "1790567242087",
       "sender": "Star",
       "text": "ya damn right!",
@@ -989,6 +981,15 @@
           "Star"
         ]
       }
+    },
+    {
+      "id": "1790998856545",
+      "sender": "ANIMAL",
+      "text": "your Anus!!!1",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T03:40:56.545Z",
+      "date": "Oct 2, 2026",
+      "time": "09:40 PM"
     }
   ]
 }
