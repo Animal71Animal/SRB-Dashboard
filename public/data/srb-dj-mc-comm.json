@@ -1,20 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790840202822",
-      "sender": "Steven",
-      "text": "Got you!",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T07:36:42.822Z",
-      "date": "Oct 1, 2026",
-      "time": "01:36 AM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1790890817439",
       "sender": "DJ",
       "text": "sounds good",
@@ -988,6 +974,15 @@
       "timestamp": "2026-10-03T09:22:51.945Z",
       "date": "Oct 3, 2026",
       "time": "03:22 AM"
+    },
+    {
+      "id": "1791020176971",
+      "sender": "ANIMAL",
+      "text": "On my way to you to grab that 59",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T09:36:16.971Z",
+      "date": "Oct 3, 2026",
+      "time": "03:36 AM"
     }
   ]
 }
