@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790656460001",
-      "sender": "Steven",
-      "text": "Yes, all house fees are paid up at T2.",
-      "imageUrl": null,
-      "timestamp": "2026-09-29T04:34:20.001Z",
-      "date": "Sep 28, 2026",
-      "time": "10:34 PM"
-    },
-    {
       "id": "1790659769694",
       "sender": "Steven",
       "text": "Honey wanted to check in, but, she didn't have her house fee, so, I told her that I wasn't able to check her in.",
@@ -994,6 +985,15 @@
       "timestamp": "2026-10-03T04:48:38.031Z",
       "date": "Oct 2, 2026",
       "time": "10:48 PM"
+    },
+    {
+      "id": "1791002970100",
+      "sender": "Star",
+      "text": "understood",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T04:49:30.100Z",
+      "date": "Oct 2, 2026",
+      "time": "10:49 PM"
     }
   ]
 }
