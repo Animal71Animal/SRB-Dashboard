@@ -784,20 +784,6 @@
       "timestamp": "2026-10-03T03:46:03.398Z",
       "date": "Oct 2, 2026",
       "time": "09:46 PM"
-    },
-    {
-      "id": "1791002301591",
-      "sender": "Star",
-      "text": "that's pretty useful",
-      "imageUrl": null,
-      "timestamp": "2026-10-03T04:38:21.591Z",
-      "date": "Oct 2, 2026",
-      "time": "10:38 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
     }
   ]
 }
