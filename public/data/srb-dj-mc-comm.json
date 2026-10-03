@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790827759919",
-      "sender": "Steven",
-      "text": "Sorry, I just saw this, been dealing with a situation and had to call the cops, I told Bob about it.",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T04:09:19.919Z",
-      "date": "Sep 30, 2026",
-      "time": "10:09 PM"
-    },
-    {
       "id": "1790827844936",
       "sender": "ANIMAL",
       "text": "wtf?!?!",
@@ -993,6 +984,15 @@
       "timestamp": "2026-10-03T08:04:17.807Z",
       "date": "Oct 3, 2026",
       "time": "02:04 AM"
+    },
+    {
+      "id": "1791014980977",
+      "sender": "Star",
+      "text": "it was steady all night, we finished strong. drunk people issues but we got through it ",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T08:09:40.977Z",
+      "date": "Oct 3, 2026",
+      "time": "02:09 AM"
     }
   ]
 }
