@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790560992180",
-      "sender": "ANIMAL",
-      "text": "scroll up and find the red/pink dialog box",
-      "timestamp": "2026-09-28T02:03:12.180Z",
-      "date": "Sep 27, 2026",
-      "time": "08:03 PM"
-    },
-    {
       "id": "1790561008290",
       "sender": "Star",
       "text": "I'm good. excited for that day. it's gonna be a good night! i can feel it",
@@ -983,6 +975,15 @@
           "ANIMAL"
         ]
       }
+    },
+    {
+      "id": "1790994648544",
+      "sender": "ANIMAL",
+      "text": "i appreciate you guys so much for being on your shit!!!",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T02:30:48.544Z",
+      "date": "Oct 2, 2026",
+      "time": "08:30 PM"
     }
   ]
 }
