@@ -1,20 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790829514409",
-      "sender": "Steven",
-      "text": "We're all good now, the cops came and took them away.",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T04:38:34.409Z",
-      "date": "Sep 30, 2026",
-      "time": "10:38 PM",
-      "reactions": {
-        "thumbsup": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1790839607575",
       "sender": "ANIMAL",
       "text": "Hope you guys had a good night! Remember ALL entertainers MUST pay their house fees before being allowed to work. If there is any question at all, text me to see if said entertainer can get a pass for the evening. This way I can document it and see who actually deserves a pass (usually pays and just doesn't have it for some reason) or are a chronic problem... capiche? ",
@@ -993,6 +979,15 @@
       "timestamp": "2026-10-03T08:14:13.213Z",
       "date": "Oct 3, 2026",
       "time": "02:14 AM"
+    },
+    {
+      "id": "1791015345781",
+      "sender": "ANIMAL",
+      "text": "i only had 1/3 the girls as you and we did 68... you need to step it up son!! j/k",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T08:15:45.781Z",
+      "date": "Oct 3, 2026",
+      "time": "02:15 AM"
     }
   ]
 }
