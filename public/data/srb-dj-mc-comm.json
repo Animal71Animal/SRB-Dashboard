@@ -1,14 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790567259018",
-      "sender": "Star",
-      "text": "everything good here! we had a party bus for a moment",
-      "timestamp": "2026-09-28T03:47:39.018Z",
-      "date": "Sep 27, 2026",
-      "time": "09:47 PM"
-    },
-    {
       "id": "1790567428896",
       "sender": "ANIMAL",
       "text": "ok ill be over later then.. working on something right now",
@@ -994,6 +986,15 @@
       "text": "It ain't much, but, it's honest work. 😌",
       "imageUrl": null,
       "timestamp": "2026-10-03T03:45:12.677Z",
+      "date": "Oct 2, 2026",
+      "time": "09:45 PM"
+    },
+    {
+      "id": "1790999144560",
+      "sender": "ANIMAL",
+      "text": "oh by the way Star, when you settle tonight, look at the last tab on the ipad and it says end of night report. tells you exactly how much you owe. no more blind drops",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T03:45:44.560Z",
       "date": "Oct 2, 2026",
       "time": "09:45 PM"
     }
