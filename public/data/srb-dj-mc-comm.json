@@ -1,19 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790561577604",
-      "sender": "Steven",
-      "text": "Ohhhhhhh, yeah, there's 4 DJ's.",
-      "timestamp": "2026-09-28T02:12:57.604Z",
-      "date": "Sep 27, 2026",
-      "time": "08:12 PM",
-      "reactions": {
-        "laugh": [
-          "ANIMAL"
-        ]
-      }
-    },
-    {
       "id": "1790561706056",
       "sender": "Star",
       "text": "\"a new emotion\" - some line from a kids pixar movie i was forced to watch this morning",
@@ -994,6 +981,15 @@
       "timestamp": "2026-10-03T02:37:08.193Z",
       "date": "Oct 2, 2026",
       "time": "08:37 PM"
+    },
+    {
+      "id": "1790995089812",
+      "sender": "Steven",
+      "text": "I looked EVERYWHERE for it but, couldn't find it.",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T02:38:09.812Z",
+      "date": "Oct 2, 2026",
+      "time": "08:38 PM"
     }
   ]
 }
