@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790829496481",
-      "sender": "Steven",
-      "text": "Yeah, just some fuck heads that didn't want to leave and got aggressive. ",
-      "imageUrl": null,
-      "timestamp": "2026-10-01T04:38:16.481Z",
-      "date": "Sep 30, 2026",
-      "time": "10:38 PM"
-    },
-    {
       "id": "1790829514409",
       "sender": "Steven",
       "text": "We're all good now, the cops came and took them away.",
@@ -993,6 +984,15 @@
       "timestamp": "2026-10-03T08:12:12.564Z",
       "date": "Oct 3, 2026",
       "time": "02:12 AM"
+    },
+    {
+      "id": "1791015253213",
+      "sender": "Star",
+      "text": "we still have some dances going but we got 120+",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T08:14:13.213Z",
+      "date": "Oct 3, 2026",
+      "time": "02:14 AM"
     }
   ]
 }
