@@ -1,15 +1,6 @@
 {
   "messages": [
     {
-      "id": "1790733158267",
-      "sender": "ANIMAL",
-      "text": "ok thank you sir",
-      "imageUrl": null,
-      "timestamp": "2026-09-30T01:52:38.267Z",
-      "date": "Sep 29, 2026",
-      "time": "07:52 PM"
-    },
-    {
       "id": "1790826080085",
       "sender": "ANIMAL",
       "text": "Steven, can you get molly on the app if you have time please",
@@ -988,6 +979,15 @@
       "timestamp": "2026-10-03T05:04:36.068Z",
       "date": "Oct 2, 2026",
       "time": "11:04 PM"
+    },
+    {
+      "id": "1791004024309",
+      "sender": "Star",
+      "text": "no, she was just confused cuz she thought i was sending her home, and i was like no but i need the housefee or i have to and yeah",
+      "imageUrl": null,
+      "timestamp": "2026-10-03T05:07:04.309Z",
+      "date": "Oct 2, 2026",
+      "time": "11:07 PM"
     }
   ]
 }
