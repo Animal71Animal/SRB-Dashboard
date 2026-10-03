@@ -798,20 +798,6 @@
           "ANIMAL"
         ]
       }
-    },
-    {
-      "id": "1791002602238",
-      "sender": "ANIMAL",
-      "text": "chips purchase should be fixed now guys",
-      "imageUrl": null,
-      "timestamp": "2026-10-03T04:43:22.238Z",
-      "date": "Oct 2, 2026",
-      "time": "10:43 PM",
-      "reactions": {
-        "thumbsup": [
-          "Steven"
-        ]
-      }
     }
   ]
 }
