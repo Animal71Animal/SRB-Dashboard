@@ -84,13 +84,9 @@ export default function LoggedHoursPage() {
     const currentMonth = now.getMonth();
     const currentDay = now.getDate();
 
-    // Map logs to pay periods starting from the earliest log date up to current/next month
-    const earliestTime = logs.length > 0 
-      ? new Date(logs[0].clockIn || logs[0].date).getTime() 
-      : new Date(2026, 6, 1).getTime(); // Default July 1, 2026
-
-    const start = new Date(earliestTime);
-    start.setDate(1); // floor to first of month
+    // Map logs to pay periods starting from July 1, 2026 as the standard start date
+    // (This avoids logs[0] shifting our timeline calculations based on sorting direction)
+    const start = new Date(2026, 6, 1);
     
     const end = new Date(currentYear, currentMonth + 1, 1); // Up to next month
     
