@@ -26,6 +26,15 @@
       "timestamp": "2026-10-04T00:00:50.748Z",
       "date": "Oct 3, 2026",
       "time": "06:00 PM"
+    },
+    {
+      "id": "1791072372377",
+      "sender": "ANIMAL",
+      "text": "Cook",
+      "imageUrl": null,
+      "timestamp": "2026-10-04T00:06:12.377Z",
+      "date": "Oct 3, 2026",
+      "time": "06:06 PM"
     }
   ]
 }
