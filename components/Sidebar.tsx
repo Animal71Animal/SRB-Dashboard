@@ -37,6 +37,7 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
   const [stageExpanded, setStageExpanded] = useState(false);
   const [operationsExpanded, setOperationsExpanded] = useState(false);
+  const [rotationExpanded, setRotationExpanded] = useState(false);
 
   useEffect(() => {
     if (pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")) {
@@ -285,24 +286,59 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                   return (
                     <div key={item.href}>
                       {item.href === "/operations/stage-rotation" ? (
-                        <a
-                          href="https://torchrotation.abacusai.app/"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          onClick={() => setMobileOpen(false)}
-                          style={{
-                            display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
-                            width: "100%", padding: "9px 20px", fontSize: "0.875rem",
-                            color: "var(--text)",
-                            background: "transparent",
-                            border: "none", borderLeft: "2px solid transparent",
-                            textDecoration: "none", transition: "all 0.15s", cursor: "pointer", textAlign: "left",
+                        <>
+                          <button
+                            onClick={() => setRotationExpanded(v => !v)}
+                            style={{
+                              display: "flex", alignItems: "center", justifyContent: "space-between", gap: 10,
+                              width: "100%", padding: "9px 20px", fontSize: "0.875rem",
+                              color: "var(--text)",
+                              background: "transparent",
+                              border: "none", borderLeft: "2px solid transparent",
+                              cursor: "pointer", textAlign: "left",
+                            }}>
+                            <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                              <span style={{ fontSize: "1rem" }}>{item.icon}</span>
+                              {item.title}
+                            </span>
+                            <ChevronIcon expanded={rotationExpanded} />
+                          </button>
+                          <div style={{
+                            maxHeight: rotationExpanded ? "200px" : "0",
+                            overflow: "hidden", transition: "max-height 0.2s ease",
+                            display: "flex", flexDirection: "column",
                           }}>
-                          <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                            <span style={{ fontSize: "1rem" }}>{item.icon}</span>
-                            {item.title}
-                          </span>
-                        </a>
+                            {[
+                              { venue: "TORCH_1", label: "Torch 1", dot: "#fb923c", border: "none" },
+                              { venue: "TORCH_2", label: "Torch 2", dot: "#facc15", border: "1px solid rgba(0,0,0,0.2)" },
+                            ].map(v => (
+                              <button
+                                key={v.venue}
+                                onClick={() => {
+                                  window.open(
+                                    `https://torchrotation.abacusai.app/?venue=${v.venue}`,
+                                    `torch-rotation-${v.venue}`,
+                                    "popup=yes,width=520,height=900"
+                                  );
+                                  setMobileOpen(false);
+                                }}
+                                style={{
+                                  display: "flex", alignItems: "center", gap: 10,
+                                  padding: "6px 20px 6px 45px", fontSize: "0.75rem",
+                                  color: "var(--muted)", background: "transparent",
+                                  border: "none", cursor: "pointer", textAlign: "left",
+                                  transition: "color 0.15s",
+                                }}>
+                                <span style={{
+                                  width: 8, height: 8, borderRadius: "50%",
+                                  background: v.dot, border: v.border,
+                                  display: "inline-block", flexShrink: 0,
+                                }} />
+                                {v.label}
+                              </button>
+                            ))}
+                          </div>
+                        </>
                       ) : (
                         <Link href={item.href} onClick={() => setMobileOpen(false)}
                           style={{
@@ -384,7 +420,6 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                         </div>
                       )}
 
-                      {/* Sub-tabs for Stage Rotation - Hidden */}
                     </div>
                   );
                 })}
