@@ -52,7 +52,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-04T00:09:50.903Z",
       "date": "Oct 3, 2026",
-      "time": "06:09 PM"
+      "time": "06:09 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     }
   ]
 }
