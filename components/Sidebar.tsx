@@ -320,6 +320,8 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
                                     `torch-rotation-${v.venue}`,
                                     "popup=yes,width=520,height=900"
                                   );
+                                  sessionStorage.setItem("torch-rotation-venue", v.venue);
+                                  window.dispatchEvent(new CustomEvent("torch-rotation-venue-selected", { detail: v.venue }));
                                   setMobileOpen(false);
                                 }}
                                 style={{
