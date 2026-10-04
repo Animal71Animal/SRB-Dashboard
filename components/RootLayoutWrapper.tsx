@@ -3,7 +3,6 @@ import Sidebar from "@/components/Sidebar";
 import { useState, useEffect } from "react";
 import type { Role } from "@/lib/auth/roles";
 import VenueSwitcher from "@/components/VenueSwitcher";
-import StageRotationPanel from "@/components/StageRotationPanel";
 
 function LoginPage({ onLogin }: { onLogin: (email: string, opts?: { mustResetPassword?: boolean }) => void }) {
   const [email, setEmail] = useState("");
@@ -135,7 +134,6 @@ export default function RootLayoutWrapper({ children }: { children: React.ReactN
     <>
       <VenueSwitcher />
       <Sidebar onLogout={handleLogout} />
-      <StageRotationPanel />
       {children}
     </>
   );

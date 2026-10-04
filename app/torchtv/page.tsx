@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 const TORCHTV_BASE = "https://12b0afb612.abacusai.cloud/watch";
 
 function buildSrc(venue: string) {
-  if (!venue) return TORCHTV_BASE;
+  // rotation=off tells TorchTV: full screen, no picker, ignore any saved venue.
+  if (!venue) return `${TORCHTV_BASE}?rotation=off`;
   return `${TORCHTV_BASE}?venue=${encodeURIComponent(venue)}`;
 }
 

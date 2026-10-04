@@ -36,15 +36,11 @@ export default function Sidebar({ onLogout }: { onLogout?: () => void }) {
   });
   const [analyticsExpanded, setAnalyticsExpanded] = useState(false);
   const [stageExpanded, setStageExpanded] = useState(false);
-  const [operationsExpanded, setOperationsExpanded] = useState(false);
   const [rotationExpanded, setRotationExpanded] = useState(false);
 
   useEffect(() => {
     if (pathname.startsWith("/dj-mc-communications/stage-announcement-ideas")) {
       setStageExpanded(true);
-    }
-    if (pathname.startsWith("/operations/stage-rotation")) {
-      setOperationsExpanded(true);
     }
   }, [pathname]);
   const [lastMsgId, setLastMsgId] = useState<string | null>(null);
