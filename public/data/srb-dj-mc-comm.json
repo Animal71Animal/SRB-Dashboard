@@ -56,6 +56,9 @@
       "reactions": {
         "thumbsup": [
           "ANIMAL"
+        ],
+        "fire": [
+          "ANIMAL"
         ]
       }
     }
