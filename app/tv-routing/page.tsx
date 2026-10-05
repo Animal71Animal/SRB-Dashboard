@@ -8,194 +8,265 @@ interface Route {
 }
 
 const SOURCES = [
-  { id: "src-1", label: "DirecTV 1", color: "#ef4444" }, // Red
-  { id: "src-2", label: "DirecTV 2", color: "#f97316" }, // Orange
-  { id: "src-3", label: "Music Videos", color: "#f59e0b" }, // Warm Yellow-Orange
-  { id: "src-4", label: "TorchTV/Rotation", color: "#eab308" }, // Bright Yellow
+  { id: "src-1", num: "1", label: "DirecTV 1", desc: "Main sports receiver", color: "#ef4444" },
+  { id: "src-2", num: "2", label: "DirecTV 2", desc: "Auxiliary sports receiver", color: "#f97316" },
+  { id: "src-3", num: "3", label: "Music Videos / Ads", desc: "Computer 1 standard feed", color: "#f59e0b" },
+  { id: "src-4", num: "4", label: "TorchTV / Stage Rotation App", desc: "Computer 2 visualization feed", color: "#10b981" },
 ];
 
 const OUTPUTS = [
-  { id: "out-1", label: "Main Bar L", color: "#ef4444" },
-  { id: "out-2", label: "Main Bar R", color: "#ec4899" },
-  { id: "out-3", label: "DJ Booth", color: "#f97316" },
-  { id: "out-4", label: "Pool Table", color: "#06b6d4" },
+  { id: "out-1", letter: "A", label: "Left Bar TV", color: "#ef4444" },
+  { id: "out-2", letter: "B", label: "Right Bar TV", color: "#ec4899" },
+  { id: "out-3", letter: "C", label: "DJ Booth TV", color: "#3b82f6" },
+  { id: "out-4", letter: "D", label: "Pool Table TV", color: "#06b6d4" },
 ];
 
 export default function TVRoutingPage() {
   const [routes, setRoutes] = useState<Route[]>([
-    { sourceId: "src-1", outputId: "out-1" },
-    { sourceId: "src-2", outputId: "out-2" },
-    { sourceId: "src-3", outputId: "out-3" },
-    { sourceId: "src-4", outputId: "out-4" },
+    { sourceId: "src-1", outputId: "out-1" }, // A1
+    { sourceId: "src-2", outputId: "out-2" }, // B2
+    { sourceId: "src-3", outputId: "out-4" }, // D3
+    { sourceId: "src-4", outputId: "out-3" }, // C4
   ]);
 
-  const isActive = (srcId: string, outId: string) =>
-    routes.some(r => r.sourceId === srcId && r.outputId === outId);
-
-  const toggle = (srcId: string, outId: string) => {
-    setRoutes(prev => {
-      const exists = prev.some(r => r.sourceId === srcId && r.outputId === outId);
-      if (exists) {
-        return prev.filter(r => !(r.sourceId === srcId && r.outputId === outId));
-      }
-      // Each output may have only one input; replace its current route.
-      return [...prev.filter(r => r.outputId !== outId), { sourceId: srcId, outputId: outId }];
-    });
+  const setRoute = (srcId: string, outId: string) => {
+    setRoutes(prev => [
+      ...prev.filter(r => r.outputId !== outId),
+      { sourceId: srcId, outputId: outId }
+    ]);
   };
 
-  const activeSourceForOutput = (outId: string) => {
+  const getSourceForOutput = (outId: string) => {
     const r = routes.find(route => route.outputId === outId);
     return r ? SOURCES.find(s => s.id === r.sourceId) : null;
   };
 
+  const applyMostOfTheTime = () => {
+    // Keep C (DJ Booth) on Computer 2 (src-4) and D (Pool Table) on Computer 1 (src-3)
+    setRoutes(prev => [
+      ...prev.filter(r => r.outputId !== "out-3" && r.outputId !== "out-4"),
+      { sourceId: "src-4", outputId: "out-3" }, // C4
+      { sourceId: "src-3", outputId: "out-4" }, // D3
+    ]);
+  };
+
+  const applyBigGameOverride = (srcId: string) => {
+    // Send every TV to that source
+    setRoutes(
+      OUTPUTS.map(out => ({ sourceId: srcId, outputId: out.id }))
+    );
+  };
+
   return (
-    <div>
-      <div className="toc-header" style={{ marginBottom: 24 }}>
-        <h1 style={{ fontSize: "clamp(1.25rem, 5vw, 1.5rem)", fontWeight: 700, margin: 0 }}>📡 TV Routing</h1>
-        <p style={{ color: "var(--muted)", fontSize: "0.875rem", margin: "4px 0 0" }}>
-          4×4 matrix — tap any cell to route. Each output can receive one input at a time.
+    <div style={{ padding: "12px 4px", maxWidth: 1000, margin: "0 auto" }}>
+      {/* Header section with instructions summary */}
+      <div className="toc-header" style={{ marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid var(--border)" }}>
+        <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", fontWeight: 800, margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
+          📡 4×4 TV Routing System
+        </h1>
+        <p style={{ color: "var(--muted)", fontSize: "0.95rem", margin: "8px 0 0", lineHeight: 1.5 }}>
+          Pick a TV then pick its source. Two steps, every time. A destination letter gets a source number (e.g., <strong style={{ color: "var(--text)" }}>D + 3 = D3</strong>).
         </p>
       </div>
 
-      {/* Output Status Bar — shows what's on each screen right now */}
+      {/* Grid Layout for Configuration Presets and Diagnostic Info */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16, marginBottom: 20 }}>
+        {/* Preset Override Panel */}
+        <div style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+          padding: 20, display: "flex", flexDirection: "column", justifyContent: "space-between"
+        }}>
+          <div>
+            <h2 style={{ margin: "0 0 4px", fontSize: "1.1rem", fontWeight: 700 }}>⚡ Quick Presets</h2>
+            <p style={{ fontSize: "0.8rem", color: "var(--muted)", margin: "0 0 16px" }}>
+              Instant configuration templates for typical shifts and events.
+            </p>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* Most of the time */}
+              <button
+                onClick={applyMostOfTheTime}
+                style={{
+                  background: "rgba(59, 130, 246, 0.1)",
+                  border: "1px solid rgba(59, 130, 246, 0.3)",
+                  borderRadius: 10, padding: "12px 14px", cursor: "pointer",
+                  textAlign: "left", transition: "all 0.2s"
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = "rgba(59, 130, 246, 0.18)"}
+                onMouseOut={(e) => e.currentTarget.style.background = "rgba(59, 130, 246, 0.1)"}
+              >
+                <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text)", display: "flex", justifyContent: "space-between" }}>
+                  <span>✨ Most of the Time Setup</span>
+                  <span style={{ fontSize: "0.75rem", background: "var(--border)", padding: "2px 6px", borderRadius: 4 }}>C4 · D3</span>
+                </div>
+                <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
+                  Default DJ Booth (C) to Computer 2 (TorchTV/Rotation) and Pool Table (D) to Computer 1 (Music Videos).
+                </div>
+              </button>
+
+              {/* Big Game overrides */}
+              <div style={{ display: "flex", gap: 8 }}>
+                <button
+                  onClick={() => applyBigGameOverride("src-1")}
+                  style={{
+                    flex: 1, background: "rgba(239, 68, 68, 0.1)",
+                    border: "1px solid rgba(239, 68, 68, 0.3)",
+                    borderRadius: 10, padding: "10px 12px", cursor: "pointer",
+                    textAlign: "center", transition: "all 0.2s"
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.background = "rgba(239, 68, 68, 0.18)"}
+                  onMouseOut={(e) => e.currentTarget.style.background = "rgba(239, 68, 68, 0.1)"}
+                >
+                  <div style={{ fontWeight: 700, fontSize: "0.8rem", color: "var(--text)" }}>🏈 Big Game (DirecTV 1)</div>
+                  <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: 2 }}>Route all TVs to 1</div>
+                </button>
+
+                <button
+                  onClick={() => applyBigGameOverride("src-2")}
+                  style={{
+                    flex: 1, background: "rgba(249, 115, 22, 0.1)",
+                    border: "1px solid rgba(249, 115, 22, 0.3)",
+                    borderRadius: 10, padding: "10px 12px", cursor: "pointer",
+                    textAlign: "center", transition: "all 0.2s"
+                  }}
+                  onMouseOver={(e) => e.currentTarget.style.background = "rgba(249, 115, 22, 0.18)"}
+                  onMouseOut={(e) => e.currentTarget.style.background = "rgba(249, 115, 22, 0.1)"}
+                >
+                  <div style={{ fontWeight: 700, fontSize: "0.8rem", color: "var(--text)" }}>🏀 Big Game (DirecTV 2)</div>
+                  <div style={{ fontSize: "0.7rem", color: "var(--muted)", marginTop: 2 }}>Route all TVs to 2</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Diagnostic Guide Panel */}
+        <div style={{
+          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+          padding: 20
+        }}>
+          <h2 style={{ margin: "0 0 10px", fontSize: "1.1rem", fontWeight: 700 }}>🔧 Troubleshooting & Verification</h2>
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, fontSize: "0.8rem", lineHeight: 1.4 }}>
+            <div>
+              <strong style={{ color: "#ef4444" }}>Wrong TV changed?</strong>
+              <div style={{ color: "var(--muted)" }}>Check you used the correct destination letter (A, B, C, or D).</div>
+            </div>
+            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 8 }}>
+              <strong style={{ color: "#f59e0b" }}>Right TV, wrong picture?</strong>
+              <div style={{ color: "var(--muted)" }}>Remote: press the correct source number. Switcher: tap output letter repeatedly to cycle.</div>
+            </div>
+            <div style={{ borderTop: "1px solid var(--border)", paddingTop: 8 }}>
+              <strong style={{ color: "#10b981" }}>Screen is blank?</strong>
+              <div style={{ color: "var(--muted)" }}>Check the chosen source is powered on and awake (PC status).</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Interactive Workboard */}
       <div style={{
-        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-        padding: "14px 16px", marginBottom: 16
+        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16,
+        padding: 24, marginBottom: 20
       }}>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 10 }}>
+        <h2 style={{ margin: "0 0 16px", fontSize: "1.2rem", fontWeight: 700 }}>👁️ Active Live Status & Interactive Routing Matrix</h2>
+        <p style={{ color: "var(--muted)", fontSize: "0.8rem", marginTop: -12, marginBottom: 20 }}>
+          The active layout of the venue. Tap any row to re-route that destination immediately.
+        </p>
+
+        {/* Main interactive grid representing the physical outlets */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {OUTPUTS.map(out => {
-            const src = activeSourceForOutput(out.id);
+            const currentSrc = getSourceForOutput(out.id);
             return (
-              <div key={out.id} style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "8px 10px", borderRadius: 8,
-                background: src ? `${src.color}15` : "transparent",
-                border: src ? `1px solid ${src.color}40` : "1px dashed var(--border)",
-              }}>
-                <div style={{
-                  width: 10, height: 10, borderRadius: "50%",
-                  background: src ? src.color : "var(--border)",
-                  boxShadow: src ? `0 0 6px ${src.color}60` : "none",
-                  flexShrink: 0
-                }} />
-                <div style={{ minWidth: 0 }}>
-                  <div style={{ fontSize: "0.75rem", fontWeight: 600, color: out.color, lineHeight: 1.2 }}>
-                    {out.label}
+              <div
+                key={out.id}
+                style={{
+                  background: "rgba(255, 255, 255, 0.02)",
+                  border: `1px solid ${currentSrc ? currentSrc.color : "var(--border)"}`,
+                  borderRadius: 12, padding: "16px 20px",
+                  boxShadow: currentSrc ? `0 0 12px ${currentSrc.color}10` : "none",
+                  transition: "all 0.25s ease-in-out",
+                }}
+              >
+                {/* Header row: TV Info on left, Active Source Indicator on right */}
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14, flexWrap: "wrap", gap: 10 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <div style={{
+                      width: 32, height: 32, borderRadius: 8, background: out.color,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontWeight: 800, fontSize: "1rem", color: "#fff", boxShadow: `0 2px 8px ${out.color}40`
+                    }}>
+                      {out.letter}
+                    </div>
+                    <div>
+                      <div style={{ fontWeight: 700, fontSize: "0.95rem" }}>{out.label}</div>
+                      <div style={{ fontSize: "0.75rem", color: "var(--muted)" }}>Destination Code: <strong style={{ color: out.color }}>{out.letter}</strong></div>
+                    </div>
                   </div>
-                  <div style={{ fontSize: "0.7rem", color: src ? src.color : "var(--muted)", lineHeight: 1.2, marginTop: 2 }}>
-                    {src ? src.label : "No signal"}
-                  </div>
+
+                  {/* Active routing route bubble */}
+                  {currentSrc && (
+                    <div style={{
+                      background: `${currentSrc.color}15`,
+                      border: `1px solid ${currentSrc.color}40`,
+                      borderRadius: 30, padding: "6px 14px",
+                      display: "flex", alignItems: "center", gap: 8
+                    }}>
+                      <div style={{ width: 8, height: 8, borderRadius: "50%", background: currentSrc.color, boxShadow: `0 0 6px ${currentSrc.color}` }} />
+                      <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text)" }}>
+                        ROUTE: {out.letter}{currentSrc.num}
+                      </span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Input selection buttons representing physical inputs for this exact output */}
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 8 }}>
+                  {SOURCES.map(src => {
+                    const isSelected = currentSrc && currentSrc.id === src.id;
+                    return (
+                      <button
+                        key={src.id}
+                        onClick={() => setRoute(src.id, out.id)}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 10,
+                          padding: "10px 14px", borderRadius: 8, cursor: "pointer",
+                          background: isSelected ? src.color : "transparent",
+                          border: `1px solid ${isSelected ? src.color : "var(--border)"}`,
+                          color: isSelected ? "#fff" : "var(--text)",
+                          textAlign: "left", transition: "all 0.15s ease",
+                        }}
+                        onMouseOver={(e) => {
+                          if (!isSelected) e.currentTarget.style.background = "rgba(255, 255, 255, 0.05)";
+                        }}
+                        onMouseOut={(e) => {
+                          if (!isSelected) e.currentTarget.style.background = "transparent";
+                        }}
+                      >
+                        <div style={{
+                          width: 20, height: 20, borderRadius: "50%",
+                          background: isSelected ? "rgba(255,255,255,0.25)" : "var(--border)",
+                          color: isSelected ? "#fff" : "var(--muted)",
+                          display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center",
+                          fontSize: "0.75rem", fontWeight: 700, flexShrink: 0
+                        }}>
+                          {src.num}
+                        </div>
+                        <div style={{ minWidth: 0, flex: 1 }}>
+                          <div style={{ fontSize: "0.8rem", fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {src.label}
+                          </div>
+                          <div style={{ fontSize: "0.65rem", opacity: 0.8, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                            {src.desc}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             );
           })}
-        </div>
-      </div>
-
-      {/* Input / Output Reference */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12, marginBottom: 16 }}>
-        <div style={{
-          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-          padding: "14px 16px"
-        }}>
-          <h3 style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Inputs</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {SOURCES.map((src, i) => (
-              <div key={src.id} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: "50%", background: src.color,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.7rem", fontWeight: 700, color: "#fff", flexShrink: 0
-                }}>
-                  {i + 1}
-                </div>
-                <div style={{ fontWeight: 600, fontSize: "0.85rem", color: src.color, lineHeight: 1.2 }}>
-                  {src.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div style={{
-          background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-          padding: "14px 16px"
-        }}>
-          <h3 style={{ margin: "0 0 10px", fontSize: "0.85rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.03em" }}>Outputs</h3>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {OUTPUTS.map((out, i) => (
-              <div key={out.id} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                <div style={{
-                  width: 24, height: 24, borderRadius: "50%", background: out.color,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: "0.7rem", fontWeight: 700, color: "#fff", flexShrink: 0
-                }}>
-                  {String.fromCharCode(65 + i)}
-                </div>
-                <div style={{ fontWeight: 600, fontSize: "0.85rem", color: out.color, lineHeight: 1.2 }}>
-                  {out.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Matrix — 1:N routing, any source to any output */}
-      <div style={{
-        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
-        padding: "14px 10px", overflowX: "auto"
-      }}>
-        <h3 style={{ margin: "0 0 10px 4px", fontSize: "0.9rem" }}>Live Routing Matrix</h3>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(68px, 1fr))", gap: 5, minWidth: 340 }}>
-          {/* Header row */}
-          <div style={{ fontWeight: 700, fontSize: "0.6rem", color: "var(--muted)", textTransform: "uppercase", padding: "4px 2px" }}>Src \ Out</div>
-          {OUTPUTS.map(out => (
-            <div key={out.id} style={{
-              fontWeight: 700, fontSize: "0.65rem", padding: "4px 2px",
-              textAlign: "center", borderBottom: `2px solid ${out.color}`, color: out.color,
-              lineHeight: 1.2, minHeight: 32, display: "flex", alignItems: "center", justifyContent: "center"
-            }}>
-              {out.label}
-            </div>
-          ))}
-
-          {/* Rows */}
-          {SOURCES.map(src => (
-            <>
-              <div key={`row-${src.id}`} style={{
-                fontWeight: 600, fontSize: "0.7rem", padding: "6px 2px",
-                display: "flex", alignItems: "center", gap: 4,
-                borderRight: `2px solid ${src.color}`, color: src.color,
-                lineHeight: 1.2
-              }}>
-                {src.label}
-              </div>
-              {OUTPUTS.map(out => {
-                const active = isActive(src.id, out.id);
-                return (
-                  <div key={`cell-${src.id}-${out.id}`} style={{
-                    padding: 6, display: "flex", alignItems: "center", justifyContent: "center",
-                    background: active ? `${src.color}30` : "transparent",
-                    border: active ? `2px solid ${src.color}` : "1px dashed var(--border)",
-                    borderRadius: 6, cursor: "pointer", transition: "all 0.15s",
-                    minHeight: 36,
-                  }}
-                    onClick={() => toggle(src.id, out.id)}
-                  >
-                    {active ? (
-                      <span style={{ fontSize: "0.9rem" }}>🔗</span>
-                    ) : (
-                      <span style={{ fontSize: "0.9rem", opacity: 0.3 }}>○</span>
-                    )}
-                  </div>
-                );
-              })}
-            </>
-          ))}
-        </div>
-        <div style={{ marginTop: 8, fontSize: "0.7rem", color: "var(--muted)", paddingLeft: 4 }}>
-          Tap cell to toggle. One source can feed multiple outputs. 🔗 = on, ○ = off.
         </div>
       </div>
     </div>
