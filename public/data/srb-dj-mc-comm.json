@@ -588,7 +588,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-05T04:55:57.713Z",
       "date": "Oct 4, 2026",
-      "time": "10:55 PM"
+      "time": "10:55 PM",
+      "reactions": {
+        "thumbsup": [
+          "DJ"
+        ]
+      }
     }
   ]
 }
