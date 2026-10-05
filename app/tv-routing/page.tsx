@@ -42,16 +42,15 @@ export default function TVRoutingPage() {
   };
 
   const applyMostOfTheTime = () => {
-    // Keep C (DJ Booth) on Computer 2 (src-4) and D (Pool Table) on Computer 1 (src-3)
-    setRoutes(prev => [
-      ...prev.filter(r => r.outputId !== "out-3" && r.outputId !== "out-4"),
+    setRoutes([
+      { sourceId: "src-1", outputId: "out-1" }, // A1
+      { sourceId: "src-2", outputId: "out-2" }, // B2
       { sourceId: "src-4", outputId: "out-3" }, // C4
       { sourceId: "src-3", outputId: "out-4" }, // D3
     ]);
   };
 
   const applyBigGameOverride = (srcId: string) => {
-    // Send every TV to that source
     setRoutes(
       OUTPUTS.map(out => ({ sourceId: srcId, outputId: out.id }))
     );
@@ -62,11 +61,51 @@ export default function TVRoutingPage() {
       {/* Header section with instructions summary */}
       <div className="toc-header" style={{ marginBottom: 24, paddingBottom: 16, borderBottom: "1px solid var(--border)" }}>
         <h1 style={{ fontSize: "clamp(1.5rem, 5vw, 2rem)", fontWeight: 800, margin: 0, display: "flex", alignItems: "center", gap: 10 }}>
-          📡 4×4 TV Routing System
+          📡 TV Routing Staff Guide
         </h1>
         <p style={{ color: "var(--muted)", fontSize: "0.95rem", margin: "8px 0 0", lineHeight: 1.5 }}>
-          Pick a TV then pick its source. Two steps, every time. A destination letter gets a source number (e.g., <strong style={{ color: "var(--text)" }}>D + 3 = D3</strong>).
+          <strong>For Reference Only.</strong> Click buttons below to preview/solve the correct routing logic. Pick a TV then press its source number on the physical remote (e.g., <strong style={{ color: "var(--text)" }}>D + 3 = D3</strong>).
         </p>
+      </div>
+
+      {/* Output Status Bar — ORIGINAL reference headers that show what is actively mapped on each TV/Screen layout */}
+      <div style={{
+        background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12,
+        padding: "14px 16px", marginBottom: 20
+      }}>
+        <h3 style={{ margin: "0 0 12px", fontSize: "0.85rem", color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          📺 Live Screen Layout Reference
+        </h3>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 10 }}>
+          {OUTPUTS.map(out => {
+            const src = getSourceForOutput(out.id);
+            return (
+              <div key={out.id} style={{
+                display: "flex", alignItems: "center", gap: 10,
+                padding: "10px 12px", borderRadius: 8,
+                background: src ? `${src.color}10` : "transparent",
+                border: src ? `1px solid ${src.color}35` : "1px dashed var(--border)",
+              }}>
+                <div style={{
+                  width: 24, height: 24, borderRadius: "50%",
+                  background: out.color, color: "#fff", fontWeight: 700, fontSize: "0.8rem",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  flexShrink: 0
+                }}>
+                  {out.letter}
+                </div>
+                <div style={{ minWidth: 0 }}>
+                  <div style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text)", lineHeight: 1.2 }}>
+                    {out.label}
+                  </div>
+                  <div style={{ fontSize: "0.75rem", color: src ? src.color : "var(--muted)", fontWeight: 600, marginTop: 2, display: "flex", alignItems: "center", gap: 4 }}>
+                    <span>{src ? `${src.label} (${out.letter}${src.num})` : "No signal"}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Grid Layout for Configuration Presets and Diagnostic Info */}
@@ -77,9 +116,9 @@ export default function TVRoutingPage() {
           padding: 20, display: "flex", flexDirection: "column", justifyContent: "space-between"
         }}>
           <div>
-            <h2 style={{ margin: "0 0 4px", fontSize: "1.1rem", fontWeight: 700 }}>⚡ Quick Presets</h2>
+            <h2 style={{ margin: "0 0 4px", fontSize: "1.1rem", fontWeight: 700 }}>⚡ Quick Presets Reference</h2>
             <p style={{ fontSize: "0.8rem", color: "var(--muted)", margin: "0 0 16px" }}>
-              Instant configuration templates for typical shifts and events.
+              Instant template mapping to solve standard configurations.
             </p>
 
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
@@ -97,10 +136,10 @@ export default function TVRoutingPage() {
               >
                 <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text)", display: "flex", justifyContent: "space-between" }}>
                   <span>✨ Most of the Time Setup</span>
-                  <span style={{ fontSize: "0.75rem", background: "var(--border)", padding: "2px 6px", borderRadius: 4 }}>C4 · D3</span>
+                  <span style={{ fontSize: "0.75rem", background: "var(--border)", padding: "2px 6px", borderRadius: 4 }}>A1 · B2 · C4 · D3</span>
                 </div>
                 <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
-                  Default DJ Booth (C) to Computer 2 (TorchTV/Rotation) and Pool Table (D) to Computer 1 (Music Videos).
+                  Default sports on Bar (A/B), Booth (C) to Computer 2 (TorchTV), and Pool Table (D) to Computer 1 (Music Videos).
                 </div>
               </button>
 
@@ -170,7 +209,7 @@ export default function TVRoutingPage() {
       }}>
         <h2 style={{ margin: "0 0 16px", fontSize: "1.2rem", fontWeight: 700 }}>👁️ Active Live Status & Interactive Routing Matrix</h2>
         <p style={{ color: "var(--muted)", fontSize: "0.8rem", marginTop: -12, marginBottom: 20 }}>
-          The active layout of the venue. Tap any row to re-route that destination immediately.
+          Interactive simulator workspace. Select a row below to preview and calculate the ideal remote commands.
         </p>
 
         {/* Main interactive grid representing the physical outlets */}
@@ -214,7 +253,7 @@ export default function TVRoutingPage() {
                     }}>
                       <div style={{ width: 8, height: 8, borderRadius: "50%", background: currentSrc.color, boxShadow: `0 0 6px ${currentSrc.color}` }} />
                       <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--text)" }}>
-                        ROUTE: {out.letter}{currentSrc.num}
+                        ROUTE KEY: {out.letter}{currentSrc.num}
                       </span>
                     </div>
                   )}
