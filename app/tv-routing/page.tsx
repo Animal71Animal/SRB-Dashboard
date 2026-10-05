@@ -25,8 +25,8 @@ export default function TVRoutingPage() {
   const [routes, setRoutes] = useState<Route[]>([
     { sourceId: "src-1", outputId: "out-1" }, // A1
     { sourceId: "src-2", outputId: "out-2" }, // B2
-    { sourceId: "src-3", outputId: "out-4" }, // D3
     { sourceId: "src-4", outputId: "out-3" }, // C4
+    { sourceId: "src-3", outputId: "out-4" }, // D3
   ]);
 
   const setRoute = (srcId: string, outId: string) => {
