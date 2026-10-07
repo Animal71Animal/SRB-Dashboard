@@ -3,7 +3,9 @@
 import { useState } from "react";
 import Link from "next/link";
 
-const templates = [
+type CategoryType = "general" | "sneakerheads";
+
+const generalTemplates = [
   {
     id: "instagram-dm",
     name: "Instagram DM Template",
@@ -84,9 +86,100 @@ Cheers,
   },
 ];
 
+const sneakerheadTemplates = [
+  {
+    id: "instagram-dm-sneakers",
+    name: "Sneakerhead DM Template",
+    icon: "👟",
+    category: "DM",
+    content: `Hey [Name]! 👋
+
+Saw your collection and content — definitely holding down the local shoe game in Boise. 
+
+We are launching a dedicated sneaker culture night called **Chicks 'n' Kicks** on Thursdays at our new venue, **Torch 2**, kicking off on November 12th! 
+
+We're bringing a high-energy pre-2010 throwback music format across all genres and partnering up with the most influential local shops. We'll have dedicated vendor tables where sneakerheads can showcase, buy, sell, and trade. 
+
+**We'd love to host you + a couple friends as our VIP guest.** We'll set you up with free entry and want to hook you up with a feature spot on our new Rhino Radio podcast to talk shop and showcase your favorite pairs. 
+
+Do you guys have any local sneaker drops lined up around mid-November? Let me know if you are curious to partner up!
+
+Best,
+[Your name]`,
+  },
+  {
+    id: "email-sneakers",
+    name: "Consignment/Shop Email Template",
+    icon: "📧",
+    category: "Email",
+    content: `Subject: Local Sneaker Culture Night Partnership — Chicks 'n' Kicks
+
+Hi [Name],
+
+Saw the shop's content and setup — definitely Boise's premier destination for exclusive kicks and streetwear. 
+
+We're launching a brand new weekly Thursday night event called **Chicks 'n' Kicks** starting November 12th at our new venue, **Torch 2** (Boise). The concept is built directly around sneakerhead culture—bringing throwbacks pre-2010 (across all genres) combined with a highly active buy/sell/trade environment.
+
+We are selecting a different high-end local sneaker store/collector group each week to host a dedicated vendor table, promote their brand, and display/sell their inventory right inside the club. 
+
+**What we're offering:**
+- Complimentary premium VIP table/booth for your team + 3 guest passes for launch week
+- Dedicated vendor footprint in the venue to sell, display, or trade your inventory
+- Featured interview segment on our new Rhino Radio podcast
+- Prime placement on our weekly promotional flyer and marketing feeds
+
+**What we're asking:**
+Help us get the word out! Let's co-promote via flyers in-store and share the launch naturally with your local community. No forced posts, just building the culture together.
+
+Would you be open to coordinating a Thursday night slot to showcase the shop or take a walk-through of the venue to talk details?
+
+Looking forward,
+[Your name]
+[Phone]`,
+  },
+  {
+    id: "tiktok-comment-sneakers",
+    name: "Hype / Reseller Comment Template",
+    icon: "💬",
+    category: "Comment",
+    content: `Those pairs are crazy! 🔥 We are launching **Chicks 'n' Kicks** Thursdays at **Torch 2** starting November 12th — dedicated sneaker culture nights with pre-2010 throwbacks, buy/sell/trade vendor setups, and local collectors. DM us to get VIP entry + bring some friends!`,
+  },
+  {
+    id: "followup-1-sneakers",
+    name: "First Follow-Up (3-5 days)",
+    icon: "⏰",
+    category: "Follow-Up",
+    content: `Hey [Name]! Just wanted to circle back about **Chicks 'n' Kicks** starting on November 12th at **Torch 2**. No pressure at all—just wanted to make sure it didn't get buried.
+
+We'd love to secure a VIP spot or discuss setting up a booth for you to showcase. Let me know if you have any questions!
+
+[Your name]`,
+  },
+  {
+    id: "followup-2-sneakers",
+    name: "Second Follow-Up (2 weeks out)",
+    icon: "📅",
+    category: "Follow-Up",
+    content: `Hey [Name] — quick heads up! We are exactly two weeks out from our **Chicks 'n' Kicks** launch on November 12th at **Torch 2**. The response from the local scene has been incredible, and we're locking in VIP space/vendor tables this week.
+
+Let me know if you and your crew are in, and we'll get everything set up for you.
+
+Cheers,
+[Your name]`,
+  },
+];
+
 export default function OutreachTemplatesPage() {
-  const [selected, setSelected] = useState(templates[0]);
+  const [activeCategory, setActiveCategory] = useState<CategoryType>("general");
+  const currentTemplates = activeCategory === "general" ? generalTemplates : sneakerheadTemplates;
+  const [selected, setSelected] = useState(currentTemplates[0]);
   const [copied, setCopied] = useState(false);
+
+  const handleCategoryChange = (cat: CategoryType) => {
+    setActiveCategory(cat);
+    const nextTemplates = cat === "general" ? generalTemplates : sneakerheadTemplates;
+    setSelected(nextTemplates[0]);
+  };
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(selected.content);
@@ -107,6 +200,42 @@ export default function OutreachTemplatesPage() {
         <p style={{ color: "var(--muted)", marginTop: 6, fontSize: "0.9rem" }}>
           Personalize with their name and recent post reference before sending
         </p>
+      </div>
+
+      {/* Segment Switcher */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 24, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>
+        <button
+          onClick={() => handleCategoryChange("general")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 8,
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            cursor: "pointer",
+            background: activeCategory === "general" ? "var(--accent)" : "transparent",
+            color: activeCategory === "general" ? "#fff" : "var(--muted)",
+            border: activeCategory === "general" ? "1px solid var(--accent)" : "1px solid var(--border)",
+            transition: "all 0.15s",
+          }}
+        >
+          ✨ Nightlife & Lifestyle Templates
+        </button>
+        <button
+          onClick={() => handleCategoryChange("sneakerheads")}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 8,
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            cursor: "pointer",
+            background: activeCategory === "sneakerheads" ? "var(--accent2)" : "transparent",
+            color: activeCategory === "sneakerheads" ? "#0d0a0a" : "var(--muted)",
+            border: activeCategory === "sneakerheads" ? "1px solid var(--accent2)" : "1px solid var(--border)",
+            transition: "all 0.15s",
+          }}
+        >
+          👟 Sneakerhead: Chicks 'n' Kicks
+        </button>
       </div>
 
       {/* Cadence */}
@@ -138,8 +267,8 @@ export default function OutreachTemplatesPage() {
         <ul style={{ margin: 0, paddingLeft: 20, fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.8 }}>
           <li>Reference a specific recent post — Shows you actually follow them</li>
           <li>Mention downtown/Boise scene — Localize it</li>
-          <li>Lead with vibe, not strip club — Frame as "party venue" and "entertainment"</li>
-          <li>Keep it short — 3-4 sentences max for DM</li>
+          <li>Lead with vibe, brand-collaborations, or high-end sneaker culture — Frame as a curated throwback party</li>
+          <li>Highlight options for vendor spacing — Let boutiques showcase their inventory</li>
           <li>Use their tone — If they're casual, be casual. If professional, be professional</li>
           <li>Add urgency (softly) — "Starting November 12th" creates a deadline</li>
         </ul>
@@ -150,7 +279,7 @@ export default function OutreachTemplatesPage() {
         <div>
           <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: "0 0 12px", color: "var(--text)" }}>Templates</h2>
           <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {templates.map((t) => (
+            {currentTemplates.map((t) => (
               <button
                 key={t.id}
                 onClick={() => setSelected(t)}
@@ -165,7 +294,7 @@ export default function OutreachTemplatesPage() {
                   fontSize: "0.85rem",
                 }}
               >
-                {t.icon} {t.name}
+                {t.icon || "📝"} {t.name}
               </button>
             ))}
           </div>
@@ -173,7 +302,7 @@ export default function OutreachTemplatesPage() {
 
         <div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-            <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: 0, color: "var(--text)" }}>{selected.icon} {selected.name}</h2>
+            <h2 style={{ fontSize: "1rem", fontWeight: 600, margin: 0, color: "var(--text)" }}>{selected.icon || "📝"} {selected.name}</h2>
             <button
               onClick={copyToClipboard}
               style={{
