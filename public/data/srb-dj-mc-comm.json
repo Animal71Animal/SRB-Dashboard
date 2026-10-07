@@ -7,7 +7,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-07T21:21:21.189Z",
       "date": "Oct 7, 2026",
-      "time": "03:21 PM"
+      "time": "03:21 PM",
+      "reactions": {
+        "thumbsup": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1791411443641",
