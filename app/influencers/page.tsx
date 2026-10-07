@@ -42,10 +42,12 @@ interface Tracking {
   notes: string;
 }
 
+type TabType = "general" | "sneakerheads";
+
 /* ──────────────────────────────────────────────────────────────────────
-   Static data — Top 10 Boise influencers
+   Static data — Top 10 Boise general nightlife/lifestyle influencers
    ────────────────────────────────────────────────────────────────────── */
-const INFLUENCERS: Influencer[] = [
+const GENERAL_INFLUENCERS: Influencer[] = [
   { rank: 1, name: "Caitlin Montoya", handle: "@boisesocialite", platform: "Instagram + TikTok", followers: 19000, niche: "Cocktails / Nightlife / Date Nights", fit: "⭐⭐⭐⭐⭐" },
   { rank: 2, name: "Lauren", handle: "@treasurevalley_treatsandeats", platform: "Instagram", followers: 38000, niche: "Food / Bars / Local Businesses", fit: "⭐⭐⭐⭐" },
   { rank: 3, name: "Heather Sharpe", handle: "@thatboisegirl", platform: "Instagram", followers: 19000, niche: "Food / Bars / Local Events", fit: "⭐⭐⭐⭐" },
@@ -56,6 +58,22 @@ const INFLUENCERS: Influencer[] = [
   { rank: 8, name: "Kali", handle: "@tater_rater_boise", platform: "Instagram", followers: 12500, niche: "Food / Local Hidden Gems", fit: "⭐⭐⭐" },
   { rank: 9, name: "Shane & Natalie Plummer", handle: "@theboisebubble", platform: "Instagram + Podcast", followers: 12800, niche: "Entertainment / Podcast / Lifestyle", fit: "⭐⭐" },
   { rank: 10, name: "Tyler G", handle: "@tastefullytyler", platform: "Instagram", followers: 8900, niche: "Food / Dining", fit: "⭐⭐" },
+];
+
+/* ──────────────────────────────────────────────────────────────────────
+   Static data — Top Boise Sneakerhead / Shoegame Influential Shops & People
+   ────────────────────────────────────────────────────────────────────── */
+const SNEAKER_INFLUENCERS: Influencer[] = [
+  { rank: 1, name: "3Peat Vintage & Streetwear (Store)", handle: "@3peat_vintage", platform: "Instagram", followers: 11000, niche: "Boise's Premier Buy/Sell/Trade Store", fit: "⭐⭐⭐⭐⭐" },
+  { rank: 2, name: "Kicks N Bricks (Store)", handle: "@kicksnbricksboise", platform: "Instagram + TikTok", followers: 6759, niche: "Consignment & Sneaker Boutique", fit: "⭐⭐⭐⭐⭐" },
+  { rank: 3, name: "Pops Consignment & Apparel (Store)", handle: "@popsapparelboise", platform: "Instagram", followers: 3200, niche: "Vintage Clothes, Shoes & Accessories", fit: "⭐⭐⭐⭐" },
+  { rank: 4, name: "Benjamin Davis (3Peat Owner)", handle: "@benjamindavis_id", platform: "Instagram", followers: 4500, niche: "Key Sneakerhead Scene Connector", fit: "⭐⭐⭐⭐" },
+  { rank: 5, name: "Riley Phillips (KNB Co-Owner)", handle: "@rileyphillips_knb", platform: "Instagram", followers: 3800, niche: "Local Sneaker Boutique Founder", fit: "⭐⭐⭐⭐" },
+  { rank: 6, name: "Zane Chastain (KNB Partner)", handle: "@zanechastain_", platform: "Instagram", followers: 2900, niche: "Shoe game curator and reseller", fit: "⭐⭐⭐" },
+  { rank: 7, name: "Sole Syndicate Boise", handle: "@solesyndicate.boise", platform: "Instagram", followers: 2400, niche: "Consignment shoe collectors & events", fit: "⭐⭐⭐" },
+  { rank: 8, name: "Boise Shoe plug (Reseller)", handle: "@boiseshoeplug", platform: "Instagram", followers: 1800, niche: "Hype and sneaker drop sourcing", fit: "⭐⭐⭐" },
+  { rank: 9, name: "Treasure Valley Hype", handle: "@tv_hype", platform: "Instagram", followers: 1500, niche: "Boise sneaker culture & streetwear media", fit: "⭐⭐" },
+  { rank: 10, name: "Idaho Kicks", handle: "@idaho_kicks", platform: "Instagram", followers: 1200, niche: "Local shoe collector buy/sell community", fit: "⭐⭐" },
 ];
 
 const STATUS_OPTIONS: Status[] = [
@@ -78,7 +96,6 @@ const COLLAB_OPTIONS: CollabType[] = [
   "VIP Night",
 ];
 
-/* Color-coded status badge palette (bg tint + solid text/border) */
 const STATUS_COLORS: Record<Status, { color: string; bg: string }> = {
   "Not Contacted": { color: "#9a8a8a", bg: "rgba(154,138,138,0.15)" },
   "DM Sent": { color: "#3b82f6", bg: "rgba(59,130,246,0.15)" },
@@ -130,6 +147,7 @@ function StatusBadge({ status }: { status: Status }) {
 export default function InfluencersPage() {
   const [mounted, setMounted] = useState(false);
   const [tracking, setTracking] = useState<Record<string, Tracking>>({});
+  const [activeTab, setActiveTab] = useState<TabType>("general");
   const [filter, setFilter] = useState<Status | "All">("All");
   const [editHandle, setEditHandle] = useState<string | null>(null);
   const [draft, setDraft] = useState<Tracking>(defaultTracking());
@@ -155,6 +173,10 @@ export default function InfluencersPage() {
     }
   }, [tracking, mounted]);
 
+  const currentInfluencersList = useMemo(() => {
+    return activeTab === "general" ? GENERAL_INFLUENCERS : SNEAKER_INFLUENCERS;
+  }, [activeTab]);
+
   const getTrack = (handle: string): Tracking => tracking[handle] ?? defaultTracking();
 
   const openEdit = (handle: string) => {
@@ -168,7 +190,7 @@ export default function InfluencersPage() {
     setEditHandle(null);
   };
 
-  // Counts per status (across all influencers, using default when untracked)
+  // Counts per status based on the selected tab list
   const counts = useMemo(() => {
     const c: Record<Status, number> = {
       "Not Contacted": 0,
@@ -179,23 +201,23 @@ export default function InfluencersPage() {
       "Declined": 0,
       "On Hold": 0,
     };
-    for (const inf of INFLUENCERS) {
+    for (const inf of currentInfluencersList) {
       const st = (tracking[inf.handle]?.status ?? "Not Contacted") as Status;
       c[st] += 1;
     }
     return c;
-  }, [tracking]);
+  }, [tracking, currentInfluencersList]);
 
   const visible = useMemo(() => {
-    if (filter === "All") return INFLUENCERS;
-    return INFLUENCERS.filter((inf) => (tracking[inf.handle]?.status ?? "Not Contacted") === filter);
-  }, [filter, tracking]);
+    if (filter === "All") return currentInfluencersList;
+    return currentInfluencersList.filter((inf) => (tracking[inf.handle]?.status ?? "Not Contacted") === filter);
+  }, [filter, tracking, currentInfluencersList]);
 
-  const editingInf = editHandle ? INFLUENCERS.find((i) => i.handle === editHandle) : null;
-  const contacted = INFLUENCERS.filter((i) => getTrack(i.handle).status !== "Not Contacted").length;
-  const activePipeline = INFLUENCERS.filter((i) => ["DM Sent", "Replied", "Call / Meeting Scheduled"].includes(getTrack(i.handle).status)).length;
+  const editingInf = editHandle ? (GENERAL_INFLUENCERS.find((i) => i.handle === editHandle) || SNEAKER_INFLUENCERS.find((i) => i.handle === editHandle)) : null;
+  const contacted = currentInfluencersList.filter((i) => getTrack(i.handle).status !== "Not Contacted").length;
+  const activePipeline = currentInfluencersList.filter((i) => ["DM Sent", "Replied", "Call / Meeting Scheduled"].includes(getTrack(i.handle).status)).length;
   const meetingsClosed = counts["Call / Meeting Scheduled"] + counts["Deal Closed"];
-  const totalReach = INFLUENCERS.reduce((sum, i) => sum + i.followers, 0);
+  const totalReach = currentInfluencersList.reduce((sum, i) => sum + i.followers, 0);
 
   const th: React.CSSProperties = {
     textAlign: "left",
@@ -233,19 +255,54 @@ export default function InfluencersPage() {
           📣 Influencers — Outreach Tracker
         </h1>
         <p style={{ color: "var(--muted)", marginTop: 6, fontSize: "0.9rem" }}>
-          Top 10 Boise influencers for The Torch. Track outreach status, contact dates, collab type & notes —
-          everything auto-saves to this browser.
+          Track promotional outreach status, contact dates, collab types, and notes — auto-saved to this browser.
         </p>
+      </div>
+
+      {/* Segment switcher */}
+      <div style={{ display: "flex", gap: 8, marginBottom: 24, borderBottom: "1px solid var(--border)", paddingBottom: 12 }}>
+        <button
+          onClick={() => { setActiveTab("general"); setFilter("All"); }}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 8,
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            cursor: "pointer",
+            background: activeTab === "general" ? "var(--accent)" : "transparent",
+            color: activeTab === "general" ? "#fff" : "var(--muted)",
+            border: activeTab === "general" ? "1px solid var(--accent)" : "1px solid var(--border)",
+            transition: "all 0.15s",
+          }}
+        >
+          ✨ Nightlife & Lifestyle (Top 10)
+        </button>
+        <button
+          onClick={() => { setActiveTab("sneakerheads"); setFilter("All"); }}
+          style={{
+            padding: "8px 16px",
+            borderRadius: 8,
+            fontSize: "0.85rem",
+            fontWeight: 700,
+            cursor: "pointer",
+            background: activeTab === "sneakerheads" ? "var(--accent2)" : "transparent",
+            color: activeTab === "sneakerheads" ? "#0d0a0a" : "var(--muted)",
+            border: activeTab === "sneakerheads" ? "1px solid var(--accent2)" : "1px solid var(--border)",
+            transition: "all 0.15s",
+          }}
+        >
+          👟 Sneakerheads & Shoe Game (Top 10)
+        </button>
       </div>
 
       {/* Dashboard overview */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(145px, 1fr))", gap: 12, marginBottom: 20 }}>
         {[
-          ["Influencers", INFLUENCERS.length, "#e8a020"],
+          ["Segment Pool", currentInfluencersList.length, activeTab === "general" ? "#e8a020" : "#ff8c1a"],
           ["Contacted", contacted, "#3b82f6"],
           ["Active Pipeline", activePipeline, "#9b5de5"],
           ["Meetings / Closed", meetingsClosed, "#22c55e"],
-          ["Total Reach", fmtFollowers(totalReach), "#f59e0b"],
+          ["Total Reach", fmtFollowers(totalReach), "#10b981"],
         ].map(([label, value, color]) => (
           <div key={String(label)} style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 12, padding: 18 }}>
             <div style={{ color: "var(--muted)", fontSize: "0.75rem" }}>{label}</div>
@@ -348,7 +405,7 @@ export default function InfluencersPage() {
               const t = getTrack(inf.handle);
               return (
                 <tr key={inf.handle}>
-                  <td style={{ ...td, fontWeight: 700, color: "var(--accent2)" }}>#{inf.rank}</td>
+                  <td style={{ ...td, fontWeight: 700, color: activeTab === "general" ? "var(--accent2)" : "#ff8c1a" }}>#{inf.rank}</td>
                   <td style={{ ...td, whiteSpace: "nowrap", fontWeight: 600 }}>{inf.name}</td>
                   <td style={td}>
                     <a
@@ -385,7 +442,7 @@ export default function InfluencersPage() {
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
                       }}
-                      title={mounted ? t.notes : ""}
+                      title={mounted && t.notes ? t.notes : ""}
                     >
                       {mounted && t.notes ? t.notes : "—"}
                     </span>
