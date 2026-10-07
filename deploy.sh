@@ -66,7 +66,7 @@ if [ "$PENDING" -gt 0 ] && [ "$1" != "--skip-push" ]; then
 fi
 
 # ── Ensure GITHUB_TOKEN is set on Vercel project (idempotent) ──
-SRB_PROJECT_ID="${SRB_PROJECT_ID:-prj_Adgp3KjYaliK0gAUUBnATDKO7XTN}"
+SRB_PROJECT_ID="${SRB_PROJECT_ID:-prj_AlFFeJ4hxijWFUkV9IeSjMUaTzh2}"
 if [ -n "$GITHUB_TOKEN" ]; then
   EXISTING=$(curl -sf -H "Authorization: Bearer $VERCEL_TOKEN" \
     "https://api.vercel.com/v9/projects/${SRB_PROJECT_ID}/env/GITHUB_TOKEN" \
