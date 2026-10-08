@@ -252,7 +252,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-08T05:12:00.274Z",
       "date": "Oct 7, 2026",
-      "time": "11:12 PM"
+      "time": "11:12 PM",
+      "reactions": {
+        "laugh": [
+          "ANIMAL"
+        ]
+      }
     },
     {
       "id": "1791436331408",
