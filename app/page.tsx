@@ -218,11 +218,7 @@ export default function OverviewPage() {
       )}
 
       {role === "Employee" && (
-        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 40 }}>
-          <Link href="/dj-mc-communications/schedules" style={{ textDecoration: "none" }}>
-            <KpiCard label="View DJ Schedule" value="LIVE" icon="📅" />
-          </Link>
-        </div>
+        <div className="responsive-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(180px, 1fr))", gap: 16, marginBottom: 40 }}>        </div>
       )}
 
       {/* Breadcrumb / back button when inside a group */}
