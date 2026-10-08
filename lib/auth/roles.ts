@@ -21,22 +21,22 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
   Admin: {
     view: ["*"],
     edit: ["*"],
-    special: ["admin-console", "director-admin"]
+    special: ["director-admin"]
   },
   Manager: {
     view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing", "/operations/stage-rotation"],
     edit: ["/events", "/torchtv"],
-    special: ["admin-console", "director-admin"]
+    special: ["director-admin"]
   },
   DJ: {
     view: ["/events", "/torchtv", "/torch-radio", "/influencers", "/dj-mc-communications", "/dj-mc-communications/schedules", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing", "/operations/stage-rotation"],
     edit: ["/torchtv"],
-    special: ["admin-console", "director-admin"]
+    special: ["director-admin"]
   },
   Employee: {
     view: ["/events", "/torchtv", "/influencers", "/tv-routing"],
     edit: [],
-    special: ["admin-console", "director-admin"]
+    special: ["director-admin"]
   },
 };
 
