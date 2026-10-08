@@ -229,7 +229,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-08T05:11:08.581Z",
       "date": "Oct 7, 2026",
-      "time": "11:11 PM"
+      "time": "11:11 PM",
+      "reactions": {
+        "laugh": [
+          "DJ"
+        ]
+      }
     },
     {
       "id": "1791436305279",
