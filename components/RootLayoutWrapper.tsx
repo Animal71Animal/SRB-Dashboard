@@ -41,7 +41,7 @@ function LoginPage({ onLogin }: { onLogin: (email: string, opts?: { mustResetPas
         <div style={{ marginBottom: 20 }}>
           <label style={{ display: "block", fontSize: "0.7rem", fontWeight: 700, textTransform: "uppercase", color: "var(--muted)", marginBottom: 8 }}>Email Address</label>
           <input 
-            type="email" 
+            type="text" 
             required 
             value={email} 
             onChange={e => setEmail(e.target.value)} 
