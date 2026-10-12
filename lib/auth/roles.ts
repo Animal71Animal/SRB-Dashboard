@@ -24,17 +24,17 @@ export const ROLE_PERMISSIONS: Record<Role, Permissions> = {
     special: ["director-admin"]
   },
   Manager: {
-    view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing", "/operations/stage-rotation"],
+    view: ["/events", "/promotional-ideas", "/promo-campaigns", "/feature-shows", "/content-assets", "/influencers", "/attendance", "/analytics", "/torch-radio", "/torchtv", "/staff-notes", "/dj-mc-communications", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing", "/tv-routing/torch-1", "/tv-routing/torch-2", "/operations/stage-rotation"],
     edit: ["/events", "/torchtv"],
     special: ["director-admin"]
   },
   DJ: {
-    view: ["/events", "/torchtv", "/torch-radio", "/influencers", "/dj-mc-communications", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing", "/operations/stage-rotation"],
+    view: ["/events", "/torchtv", "/torch-radio", "/influencers", "/dj-mc-communications", "/dj-mc-communications/promotional-materials", "/dj-mc-communications/stage-announcement-ideas", "/dj-mc-communications/messaging", "/dj-mc-communications/equipment-reports", "/dj-mc-communications/passwords", "/dj-mc-communications/scheduling", "/director-admin", "/tv-routing", "/tv-routing/torch-1", "/tv-routing/torch-2", "/operations/stage-rotation"],
     edit: ["/torchtv"],
     special: ["director-admin"]
   },
   Employee: {
-    view: ["/events", "/torchtv", "/influencers", "/tv-routing"],
+    view: ["/events", "/torchtv", "/influencers", "/tv-routing", "/tv-routing/torch-1", "/tv-routing/torch-2"],
     edit: [],
     special: ["director-admin"]
   },

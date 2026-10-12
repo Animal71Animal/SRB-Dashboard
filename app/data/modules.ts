@@ -11,7 +11,8 @@ export interface Module {
 
 export const groupModules: Record<ModuleGroup, Module[]> = {
   tvrouting: [
-    { href: "/tv-routing", icon: "📡", title: "TV Routing", desc: "Manage TV signal routing and source switching.", group: "tvrouting" },
+    { href: "/tv-routing/torch-1", icon: "🔥", title: "TV Routing — Torch 1", desc: "Signal routing reference for the main bar.", group: "tvrouting" },
+    { href: "/tv-routing/torch-2", icon: "⚡", title: "TV Routing — Torch 2", desc: "Signal routing reference for the new venue.", group: "tvrouting" },
   ],
   administrative: [
     { href: "/builder", icon: "🛡️", title: "Permissions", desc: "Manage staff emails and role-based permissions.", group: "administrative" },
