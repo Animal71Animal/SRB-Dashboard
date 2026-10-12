@@ -57,7 +57,12 @@
       "imageUrl": null,
       "timestamp": "2026-10-12T06:16:55.782Z",
       "date": "Oct 12, 2026",
-      "time": "12:16 AM"
+      "time": "12:16 AM",
+      "reactions": {
+        "thumbsup": [
+          "Star"
+        ]
+      }
     }
   ]
 }
