@@ -87,7 +87,7 @@ export default function TVRoutingTorch1Page() {
           <Link href="/tv-routing" style={{ fontSize: "0.85rem", color: "var(--muted)", textDecoration: "none" }}>← Hub</Link>
         </div>
         <p style={{ color: "var(--muted)", fontSize: "0.95rem", margin: "8px 0 0", lineHeight: 1.5 }}>
-          <strong>For Reference Only.</strong> Click buttons below to preview/solve the correct routing logic. Pick a TV then press its source number on the physical remote (e.g., <strong style={{ color: "var(--text)" }}>D + 3 = D3</strong>).
+          <strong>For Reference Only.</strong> Click buttons below to preview/solve the correct routing logic. Pick a TV (Letter) then press its source number on the physical remote or the physical routing box (e.g., <strong style={{ color: "var(--text)" }}>D + 3 = D3</strong>).
         </p>
       </div>
 
