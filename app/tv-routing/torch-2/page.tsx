@@ -71,6 +71,15 @@ export default function TVRoutingTorch2Page() {
     ]);
   };
 
+  const applyAfter1130pm = () => {
+    setRoutes([
+      { sourceId: "src-3", outputId: "out-1" }, // A3 — Music Videos
+      { sourceId: "src-4", outputId: "out-2" }, // B4 — TorchTV
+      { sourceId: "src-4", outputId: "out-3" }, // C4 — TorchTV (unchanged)
+      { sourceId: "src-3", outputId: "out-4" }, // D3 — Music Videos (unchanged)
+    ]);
+  };
+
   const applyBigGameOverride = (srcId: string) => {
     setRoutes(
       OUTPUTS.map(out => ({ sourceId: srcId, outputId: out.id }))
@@ -158,6 +167,26 @@ export default function TVRoutingTorch2Page() {
                 </div>
                 <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
                   Default sports on Bar (A/B), Booth (C) to Computer 2 (TorchTV), and Pool Table (D) to Computer 1 (Music Videos).
+                </div>
+              </button>
+
+              <button
+                onClick={applyAfter1130pm}
+                style={{
+                  background: "rgba(155, 93, 229, 0.1)",
+                  border: "1px solid rgba(155, 93, 229, 0.3)",
+                  borderRadius: 10, padding: "12px 14px", cursor: "pointer",
+                  textAlign: "left", transition: "all 0.2s"
+                }}
+                onMouseOver={(e) => e.currentTarget.style.background = "rgba(155, 93, 229, 0.18)"}
+                onMouseOut={(e) => e.currentTarget.style.background = "rgba(155, 93, 229, 0.1)"}
+              >
+                <div style={{ fontWeight: 700, fontSize: "0.85rem", color: "var(--text)", display: "flex", justifyContent: "space-between" }}>
+                  <span>🌙 After 11:30pm Setup</span>
+                  <span style={{ fontSize: "0.75rem", background: "var(--border)", padding: "2px 6px", borderRadius: 4 }}>A3 · B4 · C4 · D3</span>
+                </div>
+                <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 4 }}>
+                  After 11:30pm turn A to 3 and B to 4. Remember to turn them back to 1 and 2 respectively when you finish up at the end of the night.
                 </div>
               </button>
               <div style={{ display: "flex", gap: 8 }}>
