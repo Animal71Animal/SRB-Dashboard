@@ -1,12 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 interface Route {
   sourceId: string;
   outputId: string;
 }
+
+const STORAGE_KEY = "srb-tv-routing-torch-1";
+
+const DEFAULT_ROUTES: Route[] = [
+  { sourceId: "src-1", outputId: "out-1" },
+  { sourceId: "src-2", outputId: "out-2" },
+  { sourceId: "src-4", outputId: "out-3" },
+  { sourceId: "src-3", outputId: "out-4" },
+];
 
 const SOURCES = [
   { id: "src-1", num: "1", label: "DirecTV 1", desc: "Main sports receiver", color: "#ef4444" },
@@ -23,12 +32,23 @@ const OUTPUTS = [
 ];
 
 export default function TVRoutingTorch1Page() {
-  const [routes, setRoutes] = useState<Route[]>([
-    { sourceId: "src-1", outputId: "out-1" },
-    { sourceId: "src-2", outputId: "out-2" },
-    { sourceId: "src-4", outputId: "out-3" },
-    { sourceId: "src-3", outputId: "out-4" },
-  ]);
+  const [routes, setRoutes] = useState<Route[]>(() => {
+    if (typeof window === "undefined") return DEFAULT_ROUTES;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      return saved ? JSON.parse(saved) : DEFAULT_ROUTES;
+    } catch {
+      return DEFAULT_ROUTES;
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(routes));
+    } catch {
+      // localStorage unavailable — state stays in-memory only
+    }
+  }, [routes]);
 
   const setRoute = (srcId: string, outId: string) => {
     setRoutes(prev => [
