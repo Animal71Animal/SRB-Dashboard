@@ -144,6 +144,15 @@
       "timestamp": "2026-10-13T04:05:51.901Z",
       "date": "Oct 12, 2026",
       "time": "10:05 PM"
+    },
+    {
+      "id": "1791865498219",
+      "sender": "ANIMAL",
+      "text": "cool",
+      "imageUrl": null,
+      "timestamp": "2026-10-13T04:24:58.219Z",
+      "date": "Oct 12, 2026",
+      "time": "10:24 PM"
     }
   ]
 }
