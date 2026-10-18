@@ -62,13 +62,6 @@
       "name": "Thayne",
       "password": "2b4Buildplatform*!",
       "mustResetPassword": false
-    },
-    {
-      "email": "patrickpreview@preview.com",
-      "role": "Manager",
-      "name": "Patrick",
-      "password": "patrickpreview",
-      "mustResetPassword": false
     }
   ]
 }
