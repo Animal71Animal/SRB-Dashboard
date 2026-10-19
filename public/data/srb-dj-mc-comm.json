@@ -1,3 +1,13 @@
 {
-  "messages": []
+  "messages": [
+    {
+      "id": "1792378340754",
+      "sender": "Star",
+      "text": "How is T2 right now?",
+      "imageUrl": null,
+      "timestamp": "2026-10-19T02:52:20.754Z",
+      "date": "Oct 18, 2026",
+      "time": "08:52 PM"
+    }
+  ]
 }
