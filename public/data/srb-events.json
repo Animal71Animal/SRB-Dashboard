@@ -552,7 +552,6 @@
       "costuming": "Entertainer's choice",
       "flyerImage": "/images/party-flyers/after-dark.jpg",
       "dates": [
-        "2026-11-07",
         "2026-11-14",
         "2026-11-21",
         "2026-11-28",
@@ -613,7 +612,7 @@
         "2027-12-18",
         "2027-12-25"
       ],
-      "startDate": "2026-11-07",
+      "startDate": "2026-11-14",
       "venue": "torch2"
     },
     {
