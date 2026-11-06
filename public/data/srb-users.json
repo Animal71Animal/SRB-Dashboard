@@ -57,13 +57,6 @@
       "mustResetPassword": false
     },
     {
-      "email": "support@buildplatform.com",
-      "role": "Admin",
-      "name": "Thayne",
-      "password": "2b4Buildplatform*!",
-      "mustResetPassword": false
-    },
-    {
       "email": "dave@severanceproductions.com",
       "role": "Admin",
       "name": "Dave",
