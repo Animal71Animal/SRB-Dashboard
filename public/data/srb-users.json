@@ -8,32 +8,11 @@
       "mustResetPassword": false
     },
     {
-      "email": "joannatorchlounge@gmail.com",
-      "role": "Admin",
-      "name": "Joanna",
-      "password": "joannatorchlounge@gmail.com",
-      "mustResetPassword": true
-    },
-    {
       "email": "e.duboise@protonmail.com",
       "role": "DJ",
       "name": "Nico",
       "password": "Wrestling14",
       "mustResetPassword": false
-    },
-    {
-      "email": "robertmares17@gmail.com",
-      "role": "Manager",
-      "name": "Bob",
-      "password": "robertmares17@gmail.com",
-      "mustResetPassword": true
-    },
-    {
-      "email": "meganpilote@gmail.com",
-      "role": "Admin",
-      "name": "Megan",
-      "password": "meganpilote@gmail.com",
-      "mustResetPassword": true
     },
     {
       "email": "stjkstr@gmail.com",
