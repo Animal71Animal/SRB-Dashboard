@@ -29,6 +29,20 @@ export async function POST(req: Request) {
       return NextResponse.json({ ok: false }, { status: 401 });
     }
 
+    // Account suspension: all accounts except SuperAdmin are suspended
+    // until further notice.
+    if (matched.role !== 'SuperAdmin') {
+      return NextResponse.json(
+        {
+          ok: false,
+          suspended: true,
+          error:
+            'This account has been suspended due to an outstanding balance. Access will be restored once payment has been received. Please contact the site administrator to resolve your account status.',
+        },
+        { status: 403 }
+      );
+    }
+
     return NextResponse.json({
       ok: true,
       email: matched.email,

@@ -24,6 +24,8 @@ function LoginPage({ onLogin }: { onLogin: (email: string, opts?: { mustResetPas
         onLogin(data.email || email.toLowerCase().trim(), {
           mustResetPassword: !!data.mustResetPassword,
         });
+      } else if (res.status === 403 && data?.suspended) {
+        setError(data.error || "This account has been suspended. Please contact the site administrator.");
       } else {
         setError("Invalid email or password.");
       }
